@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import styles from "./page.module.css";
-import { Sparkles, Terminal as TerminalIcon, X, Send, Command, ChevronRight, Activity } from "lucide-react";
+import { Sparkles, Terminal as TerminalIcon, X, Send, Command, ChevronRight, Activity, Search } from "lucide-react";
 
 interface RoadmapItem {
   id: string;
@@ -37,13 +37,15 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [expandedLayer, setExpandedLayer] = useState<string | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [searchQuery, setSearchWrapper] = useState("");
   
   // Terminal State
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
+  const [messageQueue, setMessageQueue] = useState<string[]>([]);
   
-  // History State
+  // History State (Arrow Keys)
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [tempInput, setTempInput] = useState("");
@@ -113,6 +115,15 @@ export default function Home() {
     }
   }, [chatInput]);
 
+  // Simple Message Queue Logic
+  useEffect(() => {
+    if (messageQueue.length > 0 && !isChatLoading) {
+      const nextPrompt = messageQueue[0];
+      processAIRequest(nextPrompt);
+      setMessageQueue(prev => prev.slice(1));
+    }
+  }, [messageQueue, isChatLoading]);
+
   const handleHistoryNav = (direction: 'up' | 'down') => {
     if (history.length === 0) return;
     let newIndex = historyIndex;
@@ -124,8 +135,7 @@ export default function Home() {
     }
     if (newIndex !== historyIndex) {
       setHistoryIndex(newIndex);
-      const val = newIndex === -1 ? tempInput : history[history.length - 1 - newIndex];
-      setChatInput(val);
+      setChatInput(newIndex === -1 ? tempInput : history[history.length - 1 - newIndex]);
     }
   };
 
@@ -151,47 +161,13 @@ export default function Home() {
     }
   };
 
-  const handleAskAI = async () => {
-    const input = chatInput.trim();
-    if (!input) return;
-
-    if (input === '/clear') {
-      const newMsgs: ChatMessage[] = [{ role: 'system', content: 'Terminal cleared.' }];
-      const newHist = [input, ...history];
-      setMessages(newMsgs);
-      setHistory(newHist);
-      setHistoryIndex(-1);
-      setChatInput("");
-      await saveHistoryToServer(newMsgs, newHist);
-      return;
-    }
-
-    if (input === '/help') {
-      const helpMsg = `Available Commands:\n/clear - Reset the chat window\n/compress - Summarize session\n/help - Show options`;
-      const newMsgs: ChatMessage[] = [...messages, { role: 'user', content: input }, { role: 'system', content: helpMsg }];
-      const newHist = [input, ...history];
-      setMessages(newMsgs);
-      setHistory(newHist);
-      setHistoryIndex(-1);
-      setChatInput("");
-      await saveHistoryToServer(newMsgs, newHist);
-      return;
-    }
-    
-    const userMsg: ChatMessage = { role: 'user', content: input };
-    const updatedMessages = [...messages, userMsg];
-    const updatedHistory = [input, ...history];
-    setMessages(updatedMessages);
-    setHistory(updatedHistory);
-    setHistoryIndex(-1);
-    setChatInput("");
+  const processAIRequest = async (prompt: string) => {
     setIsChatLoading(true);
-
     try {
       const res = await fetch('/api/ask-gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input })
+        body: JSON.stringify({ prompt })
       });
       const json = await res.json();
       
@@ -200,9 +176,11 @@ export default function Home() {
         content: json.response || json.error,
         command: json.executed_command 
       };
-      const finalMessages = [...updatedMessages, assistantMsg];
-      setMessages(finalMessages);
-      await saveHistoryToServer(finalMessages, updatedHistory);
+      setMessages(prev => {
+         const updated = [...prev, assistantMsg];
+         saveHistoryToServer(updated, history);
+         return updated;
+      });
       fetchRoadmap();
     } catch {
       setMessages(prev => [...prev, { role: 'system', content: 'Bridge error: Failed to connect to local CLI.' }]);
@@ -210,6 +188,46 @@ export default function Home() {
       setIsChatLoading(false);
     }
   };
+
+  const handleAskAI = async () => {
+    const input = chatInput.trim();
+    if (!input) return;
+
+    if (input === '/clear') {
+      const newMsgs: ChatMessage[] = [{ role: 'system', content: 'Terminal cleared.' }];
+      setMessages(newMsgs);
+      setHistory(prev => [input, ...prev]);
+      setHistoryIndex(-1);
+      setChatInput("");
+      await saveHistoryToServer(newMsgs, [input, ...history]);
+      return;
+    }
+
+    if (input === '/help') {
+      const helpMsg = `Available Commands:\n/clear - Reset window\n/help - Show options\nAI can update roadmap: "Mark Python as done"`;
+      setMessages(prev => [...prev, { role: 'user', content: input }, { role: 'system', content: helpMsg }]);
+      setHistory(prev => [input, ...prev]);
+      setHistoryIndex(-1);
+      setChatInput("");
+      return;
+    }
+    
+    const userMsg: ChatMessage = { role: 'user', content: input };
+    setMessages(prev => [...prev, userMsg]);
+    setHistory(prev => [input, ...prev]);
+    setHistoryIndex(-1);
+    setChatInput("");
+    
+    setMessageQueue(prev => [...prev, input]);
+  };
+
+  // Filtered Data for Search
+  const filteredLayers = data?.layers.filter(layer => 
+    layer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  if (loading) return <div className={styles.container}>Loading Roadmap...</div>;
 
   return (
     <div className={styles.container}>
@@ -258,7 +276,7 @@ export default function Home() {
          </div>
 
          <div className={styles.panelFooter}>
-            <div className={`${styles.chatInputWrapper} ${isChatLoading ? styles.loading : ''}`}>
+            <div className={`${styles.chatInputWrapper} ${isChatLoading && messageQueue.length === 0 ? styles.loading : ''}`}>
                <textarea 
                  ref={textareaRef}
                  className={styles.chatInput} 
@@ -280,11 +298,11 @@ export default function Home() {
                  style={{ 
                     resize: 'none', 
                     minHeight: '44px',
-                    color: chatInput.trim().startsWith('/') ? '#ff9f0a' : '#f5f5f7' // Amber if command
+                    color: chatInput.trim().startsWith('/') ? '#ff9f0a' : '#f5f5f7'
                  }}
                />
                <button className={styles.chatSendBtn} onClick={handleAskAI} style={{ alignSelf: 'flex-end', height: '44px' }}>
-                  {isChatLoading ? <Activity size={14} className="animate-spin" /> : <Send size={14} />}
+                  {messageQueue.length > 0 ? <Activity size={14} className="animate-spin" /> : <Send size={14} />}
                </button>
             </div>
          </div>
@@ -306,6 +324,19 @@ export default function Home() {
         </div>
       </header>
 
+      <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}>
+          <div className={styles.searchWrapper}>
+             <Search size={20} className={styles.searchIcon} />
+             <input 
+                type="text" 
+                className={styles.searchInput} 
+                placeholder="Search for skills, technologies, or layers..." 
+                value={searchQuery}
+                onChange={(e) => setSearchWrapper(e.target.value)}
+             />
+          </div>
+      </div>
+
       <section className={styles.dashboard}>
         <div className={styles.sectionLabel}>
           <div className={styles.sectionDot} />
@@ -313,7 +344,7 @@ export default function Home() {
         </div>
 
         <div className={styles.cardsGrid}>
-          {data?.layers.map((layer) => (
+          {filteredLayers?.map((layer) => (
             <div
               key={layer.id}
               className={`${styles.card} ${expandedLayer === layer.id ? styles.cardExpanded : ''}`}
@@ -365,7 +396,7 @@ export default function Home() {
         <div className={styles.cardsGrid}>
             <div className={styles.card} style={{gridColumn: '1 / -1', minHeight: 'auto'}}>
                <div className={styles.itemList}>
-                  {data?.milestones.map(item => (
+                  {data?.milestones.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase())).map(item => (
                     <div key={item.id} className={`${styles.itemRow} ${item.status === 'done' ? styles.itemRowDone : ''}`}>
                       <input 
                         type="checkbox" 
