@@ -5,7 +5,8 @@
     "Machine Learning Engineer",
     "Applied AI + Web3 Engineer",
     "Research-oriented Startup Engineer",
-    "High-Performance Systems Engineer"
+    "High-Performance Systems Engineer",
+    "Distributed Systems Architect"
   ],
   "layers": [
     {
@@ -13,14 +14,15 @@
       "title": "Layer 1 — Core Engineering & Systems (The 2013-2030 Bridge)",
       "description": "Absolute mastery of the metal, the network, and the browser. No black boxes.",
       "items": [
+        { "id": "l1_systems_design", "title": "Systems Design & First Principles", "status": "pending", "notes": "Beyond CRUD: Social network schemas (Graph models), Real-time messaging (Pub/Sub), High-concurrency architectures, Database internals (B-Trees vs LSM Trees), Consistency models (CAP Theorem, PACELC)" },
         { "id": "l1_rust", "title": "Rust Mastery", "status": "pending", "notes": "Ownership, Lifetimes, Fearless Concurrency, Macros, Unsafe Rust, FFI (C/C++ integration)" },
-        { "id": "l1_python_cpp", "title": "Python (Advanced) & C++", "status": "pending", "notes": "Python: Asyncio, GIL bypass, C-extensions. C++: Pointers, Memory Management, SIMD, CMake." },
+        { "id": "l1_python_cpp", "title": "Python (Advanced) & C++", "status": "pending", "notes": "Python: Asyncio, GIL bypass. C++: Memory Management, SIMD, CMake." },
         { "id": "l1_js_ts_engine", "title": "JS/TS & V8 Internals", "status": "pending", "notes": "Event Loop, Micro/Macro-tasks, JIT Compilation, Garbage Collection, ASTs" },
-        { "id": "l1_web_protocols", "title": "Advanced Web Protocols", "status": "pending", "notes": "HTTP/2 & HTTP/3 (QUIC), WebSockets, WebRTC, gRPC, GraphQL, SSE (Server-Sent Events), Webhooks" },
-        { "id": "l1_browser_apis", "title": "Deep Browser APIs", "status": "pending", "notes": "Shadow DOM, Service Workers, Web Workers, IndexedDB, Canvas/WebGL, WebGPU, WebAssembly (Wasm)" },
+        { "id": "l1_web_protocols", "title": "Advanced Web Protocols", "status": "pending", "notes": "HTTP/2 & HTTP/3 (QUIC), WebSockets, WebRTC, gRPC, GraphQL, SSE, Webhooks" },
+        { "id": "l1_browser_apis", "title": "Deep Browser APIs", "status": "pending", "notes": "Shadow DOM, Service Workers, Web Workers, IndexedDB, WebGPU, WebAssembly (Wasm)" },
         { "id": "l1_auth_sec", "title": "Auth & Web Security", "status": "pending", "notes": "JWT, OAuth 2.0, OIDC, CORS, CSRF, XSS, Content Security Policy (CSP), Rate Limiting" },
-        { "id": "l1_infra_scale", "title": "Infrastructure & Scaling", "status": "pending", "notes": "Linux Kernel (eBPF, namespaces, cgroups), Docker, Kubernetes (K8s), Terraform, Nginx/HAProxy" },
-        { "id": "l1_dsa_core", "title": "Data Structures & Algorithms", "status": "pending", "goal": "150 problems", "notes": "Arrays, HashMaps, Two Pointers, Sliding Window, Stacks, Binary Search, Graph Traversals (BFS/DFS), Dynamic Programming, Tries, Disjoint Sets" }
+        { "id": "l1_infra_scale", "title": "Infrastructure & Scaling", "status": "pending", "notes": "Linux Kernel (eBPF, namespaces, cgroups), Docker, K8s, Terraform" },
+        { "id": "l1_dsa_core", "title": "Data Structures & Algorithms", "status": "pending", "goal": "150 problems", "notes": "Arrays, HashMaps, Two Pointers, Sliding Window, Stacks, Binary Search, Graph Traversals (BFS/DFS), Dynamic Programming, Tries" }
       ]
     },
     {
@@ -29,8 +31,8 @@
       "description": "Understanding the calculus of reality before predicting it.",
       "items": [
         { "id": "l2_linear_algebra", "title": "Linear Algebra", "status": "pending", "notes": "Vectors, Matrices, Eigenvalues/Vectors, SVD, PCA, Tensor operations" },
-        { "id": "l2_calculus", "title": "Multivariable Calculus", "status": "pending", "notes": "Partial Derivatives, Gradients, Jacobians, Hessians, Chain Rule (for Backprop)" },
-        { "id": "l2_prob_stat", "title": "Probability & Statistics", "status": "pending", "notes": "Bayes' Theorem, Distributions, Hypothesis Testing, Maximum Likelihood Estimation, Information Theory (Entropy, KL Divergence)" },
+        { "id": "l2_calculus", "title": "Multivariable Calculus", "status": "pending", "notes": "Partial Derivatives, Gradients, Jacobians, Hessians, Chain Rule" },
+        { "id": "l2_prob_stat", "title": "Probability & Statistics", "status": "pending", "notes": "Bayes' Theorem, Distributions, Maximum Likelihood Estimation, Information Theory" },
         { "id": "l2_ml_core", "title": "Classical ML", "status": "pending", "notes": "Linear/Logistic Regression, SVMs, Random Forests, Gradient Boosting (XGBoost, LightGBM)" },
         { "id": "l2_ml_theory", "title": "ML Theory", "status": "pending", "notes": "Bias-Variance Tradeoff, Regularization (L1/L2), Cross-Validation, Loss Functions" },
         { "id": "l2_data_eng", "title": "Data Engineering & Tools", "status": "pending", "notes": "NumPy, Pandas, Polars (Rust), Scikit-learn, Ray, Apache Spark, Kafka pipelines" }
@@ -41,12 +43,12 @@
       "title": "Layer 3 — Deep Learning & Modern AI Architectures",
       "description": "Building and training the brains of 2030.",
       "items": [
-        { "id": "l3_nn_theory", "title": "Neural Network Internals", "status": "pending", "notes": "Perceptrons, Activation Functions, Optimizers (Adam, AdamW), Dropout, Batch Norm" },
-        { "id": "l3_transformers", "title": "Transformer Architectures", "status": "pending", "notes": "Self-Attention, Multi-Head Attention, Positional Encoding, BERT, GPT-n, MoE (Mixture of Experts)" },
-        { "id": "l3_gen_ai", "title": "Generative AI", "status": "pending", "notes": "Diffusion Models (Stable Diffusion, Flux), VAEs, GANs, Multimodal Models (Vision-Language)" },
-        { "id": "l3_rl_alignment", "title": "RL & Alignment", "status": "pending", "notes": "Reinforcement Learning (PPO), RLHF (Human Feedback), DPO (Direct Preference Optimization)" },
-        { "id": "l3_agentic", "title": "Agentic AI & RAG", "status": "pending", "notes": "Vector DBs (Pinecone, Qdrant), Advanced RAG, ReAct, Plan-and-Solve, Tool Calling / Function Calling" },
-        { "id": "l3_frameworks", "title": "DL Frameworks", "status": "pending", "notes": "PyTorch (Internals, Autograd), JAX (XLA compilation), TensorFlow, HuggingFace, vLLM, TensorRT" }
+        { "id": "l3_nn_theory", "title": "Neural Network Internals", "status": "pending", "notes": "Perceptrons, Activation Functions, Optimizers (Adam), Dropout, Batch Norm" },
+        { "id": "l3_transformers", "title": "Transformer Architectures", "status": "pending", "notes": "Self-Attention, Multi-Head Attention, Positional Encoding, BERT, GPT-n, MoE" },
+        { "id": "l3_gen_ai", "title": "Generative AI", "status": "pending", "notes": "Diffusion Models (Stable Diffusion, Flux), VAEs, GANs, Multimodal Models" },
+        { "id": "l3_rl_alignment", "title": "RL & Alignment", "status": "pending", "notes": "Reinforcement Learning (PPO), RLHF, DPO (Direct Preference Optimization)" },
+        { "id": "l3_agentic", "title": "Agentic AI & RAG", "status": "pending", "notes": "Vector DBs (Pinecone, Qdrant), Advanced RAG, ReAct, Plan-and-Solve, Tool Calling" },
+        { "id": "l3_frameworks", "title": "DL Frameworks", "status": "pending", "notes": "PyTorch, JAX (XLA compilation), TensorFlow, HuggingFace, vLLM, TensorRT" }
       ]
     },
     {
@@ -54,11 +56,11 @@
       "title": "Layer 4 — Web3, Blockchain & Decentralized Systems",
       "description": "Engineering trustless, immutable, and uncensorable protocols.",
       "items": [
-        { "id": "l4_eth_evm", "title": "Ethereum & EVM Deep Dive", "status": "pending", "notes": "State Trie, Memory vs Storage vs Calldata, Gas Optimization, Opcode analysis, RPC internals" },
-        { "id": "l4_solidity_sec", "title": "Solidity & Smart Contract Security", "status": "pending", "notes": "Reentrancy, Front-running, MEV (Miner Extractable Value), Auditing tools (Slither, Foundry)" },
-        { "id": "l4_l2_scaling", "title": "Layer 2 & Scaling Solutions", "status": "pending", "notes": "Optimistic Rollups (Arbitrum), ZK-Rollups (StarkNet, zkSync), Data Availability layers (Celestia)" },
+        { "id": "l4_eth_evm", "title": "Ethereum & EVM Deep Dive", "status": "pending", "notes": "State Trie, Memory vs Storage, Gas Optimization, Opcode analysis, RPC internals" },
+        { "id": "l4_solidity_sec", "title": "Solidity & Smart Contract Security", "status": "pending", "notes": "Reentrancy, Front-running, MEV, Auditing tools (Slither, Foundry)" },
+        { "id": "l4_l2_scaling", "title": "Layer 2 & Scaling Solutions", "status": "pending", "notes": "Optimistic Rollups (Arbitrum), ZK-Rollups (StarkNet, zkSync), Data Availability" },
         { "id": "l4_alt_vms", "title": "Alternative VMs & Rust Chains", "status": "pending", "notes": "Solana (Sealevel, Anchor), Polkadot (Substrate), CosmWasm, MoveVM" },
-        { "id": "l4_dapp_arch", "title": "DApp Architecture", "status": "pending", "notes": "Ethers.js/Viem, WalletConnect, IPFS/Arweave, The Graph (Subgraphs), Account Abstraction (ERC-4337)" },
+        { "id": "l4_dapp_arch", "title": "DApp Architecture", "status": "pending", "notes": "Viem, WalletConnect, IPFS/Arweave, The Graph, Account Abstraction (ERC-4337)" },
         { "id": "l4_defi_primitives", "title": "DeFi Primitives", "status": "pending", "notes": "AMMs (Uniswap V2/V3), Lending Pools (Aave), Flash Loans, Oracles (Chainlink)" }
       ]
     },
@@ -69,12 +71,13 @@
       "items": [
         { "id": "l5_zkml", "title": "Zero-Knowledge Machine Learning (ZK-ML)", "status": "pending", "notes": "Proving inference on-chain, SNARKs/STARKs for neural networks, EZKL" },
         { "id": "l5_decent_compute", "title": "Decentralized Compute & Training", "status": "pending", "notes": "Gensyn, Akash, Render, Bittensor (Subnets, incentives for intelligence)" },
-        { "id": "l5_tee_fhe", "title": "Privacy-Preserving AI", "status": "pending", "notes": "Trusted Execution Environments (TEEs), Fully Homomorphic Encryption (FHE), Multi-Party Computation (MPC)" },
-        { "id": "l5_ai_oracles", "title": "AI Oracles & Agents", "status": "pending", "notes": "AI-driven DAO governance, On-chain fraud detection, Autonomous trading agents managing treasuries" }
+        { "id": "l5_tee_fhe", "title": "Privacy-Preserving AI", "status": "pending", "notes": "TEEs, Fully Homomorphic Encryption (FHE), Multi-Party Computation (MPC)" },
+        { "id": "l5_ai_oracles", "title": "AI Oracles & Agents", "status": "pending", "notes": "AI-driven DAO governance, On-chain fraud detection, Autonomous trading agents" }
       ]
     }
   ],
   "milestones": [
+    { "id": "m_sys_design", "title": "Architecture: High-concurrency Social Feed Schema (PostgreSQL + Redis + Graph)", "status": "pending" },
     { "id": "m_web_core", "title": "Web Core: Real-time collaborative canvas (WebSockets + Canvas API)", "status": "pending" },
     { "id": "m_rust_cli", "title": "Rust: High-performance multithreaded network scanner", "status": "pending" },
     { "id": "m_rag_agent", "title": "AI: Full-stack RAG application with custom vector search", "status": "pending" },
@@ -84,11 +87,11 @@
   ],
   "mlops_devops": [
     { "id": "md_pipelines", "title": "CI/CD & Infrastructure as Code", "status": "pending", "notes": "GitHub Actions, Terraform, Ansible, Prometheus, Grafana" },
-    { "id": "md_mlops", "title": "ML Lifecycle Management", "status": "pending", "notes": "MLflow, Weights & Biases, Model Registries, Feature Stores, Data Drift detection" },
-    { "id": "md_gpu_serve", "title": "High-Performance Serving", "status": "pending", "notes": "Triton Inference Server, TensorRT, vLLM, continuous batching, quantization (AWQ, GPTQ)" }
+    { "id": "md_mlops", "title": "ML Lifecycle Management", "status": "pending", "notes": "MLflow, Weights & Biases, Model Registries, Feature Stores" },
+    { "id": "md_gpu_serve", "title": "High-Performance Serving", "status": "pending", "notes": "Triton Inference Server, TensorRT, vLLM, quantization (AWQ, GPTQ)" }
   ],
   "timeline": [
-    { "id": "t1", "months": "1-3", "goals": ["Deep Web Fundamentals (DOM, TCP/UDP, Auth)", "DSA (Arrays/Strings/HashMaps)", "Rust Fundamentals", "Linear Algebra"], "status": "pending" },
+    { "id": "t1", "months": "1-3", "goals": ["Systems Fundamentals (Schema Design, Protocols)", "DSA (Arrays/HashMaps)", "Rust Fundamentals", "Linear Algebra"], "status": "pending" },
     { "id": "t2", "months": "4-6", "goals": ["Advanced Rust (Concurrency/Async)", "Calculus & Prob/Stat", "Classical ML Pipeline", "DSA (Trees/Graphs)"], "status": "pending" },
     { "id": "t3", "months": "7-9", "goals": ["Neural Networks & PyTorch", "EVM & Solidity Fundamentals", "Full-stack Next.js DApps"], "status": "pending" },
     { "id": "t4", "months": "10-12", "goals": ["Transformers & GenAI", "DeFi Protocols & Auditing", "RAG & Agentic AI Systems"], "status": "pending" },
