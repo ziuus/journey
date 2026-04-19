@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import styles from "./page.module.css";
 import { Sparkles, Terminal as TerminalIcon, X, Send, Command, ChevronRight, Activity, Search, Image as ImageIcon } from "lucide-react";
 
@@ -9,6 +9,7 @@ interface RoadmapItem {
   title: string;
   status: 'pending' | 'done';
   goal?: string;
+  notes?: string;
 }
 
 interface LayerData {
@@ -32,6 +33,24 @@ interface ChatMessage {
   command?: string;
   imagePreview?: string;
 }
+
+// Helper to highlight matching text
+const HighlightText = ({ text, query }: { text: string, query: string }) => {
+  if (!query.trim()) return <>{text}</>;
+  
+  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  return (
+    <>
+      {parts.map((part, i) => 
+        part.toLowerCase() === query.toLowerCase() ? (
+          <span key={i} className={styles.highlight}>{part}</span>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+};
 
 export default function Home() {
   const [data, setData] = useState<RoadmapData | null>(null);
@@ -208,7 +227,7 @@ export default function Home() {
     }
 
     if (input === '/help') {
-      const helpMsg = `Available Commands:\n/clear - Reset window\n/help - Show options\nYou can also attach images to queries.`;
+      const helpMsg = `Available Commands:\n/clear - Reset window\n/help - Show options\nAI can update roadmap: "Mark Python as done"`;
       setMessages(prev => [...prev, { role: 'user', content: input }, { role: 'system', content: helpMsg }]);
       setHistory(prev => [input, ...prev]);
       setHistoryIndex(-1);
@@ -402,8 +421,12 @@ export default function Home() {
                 }`}>
                   {layer.id === 'layer1' ? '⚡' : layer.id === 'layer2' ? '🧠' : layer.id === 'layer3' ? '🔮' : layer.id === 'layer4' ? '⛓' : layer.id === 'layer5' ? '🚀' : layer.id === 'layer6' ? '⚙️' : '🔐'}
                 </div>
-                <h3 className={styles.cardTitle}>{layer.title}</h3>
-                <p className={styles.cardDescription}>{layer.description}</p>
+                <h3 className={styles.cardTitle}>
+                  <HighlightText text={layer.title} query={searchQuery} />
+                </h3>
+                <p className={styles.cardDescription}>
+                  <HighlightText text={layer.description} query={searchQuery} />
+                </p>
                 
                 {expandedLayer === layer.id && (
                   <div className={styles.itemList} onClick={(e) => e.stopPropagation()}>
@@ -415,8 +438,14 @@ export default function Home() {
                           checked={item.status === 'done'} 
                           onChange={() => toggleItem('layer', layer.id, item.id)}
                         />
-                        <span className={styles.itemTitle}>{item.title}</span>
-                        {item.goal && <span className={styles.cardLevel} style={{marginLeft: 'auto'}}>{item.goal}</span>}
+                        <span className={styles.itemTitle}>
+                           <HighlightText text={item.title} query={searchQuery} />
+                        </span>
+                        {item.goal && (
+                           <span className={styles.cardLevel} style={{marginLeft: 'auto'}}>
+                              <HighlightText text={item.goal} query={searchQuery} />
+                           </span>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -446,7 +475,9 @@ export default function Home() {
                         checked={item.status === 'done'} 
                         onChange={() => toggleItem('milestone', null, item.id)}
                       />
-                      <span className={styles.itemTitle}>{item.title}</span>
+                      <span className={styles.itemTitle}>
+                         <HighlightText text={item.title} query={searchQuery} />
+                      </span>
                     </div>
                   ))}
                </div>
