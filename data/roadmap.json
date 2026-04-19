@@ -12,12 +12,37 @@
       "title": "Layer 1 — Core Engineering + DSA (Non-Negotiable)",
       "description": "Strong foundations bring stability; rushing ahead brings cracks.",
       "items": [
-        { "id": "l1_python", "title": "Python (Advanced)", "status": "pending" },
-        { "id": "l1_js_ts", "title": "JavaScript / TypeScript", "status": "pending" },
-        { "id": "l1_infra", "title": "Git, Linux, Docker", "status": "pending" },
-        { "id": "l1_apis", "title": "REST APIs, async systems", "status": "pending" },
-        { "id": "l1_dsa_easy", "title": "DSA LeetCode (Easy + Medium)", "status": "pending", "goal": "60-70 problems" },
-        { "id": "l1_dsa_topics", "title": "Topics: Arrays, Strings, HashMap, Two Pointers, Sliding Window, Stack, Queue, Binary Search, Recursion, Sorting", "status": "pending" }
+        {
+          "id": "l1_python",
+          "title": "Python (Advanced)",
+          "status": "pending"
+        },
+        {
+          "id": "l1_js_ts",
+          "title": "JavaScript / TypeScript",
+          "status": "pending"
+        },
+        {
+          "id": "l1_infra",
+          "title": "Git, Linux, Docker",
+          "status": "pending"
+        },
+        {
+          "id": "l1_apis",
+          "title": "REST APIs, async systems",
+          "status": "pending"
+        },
+        {
+          "id": "l1_dsa_easy",
+          "title": "DSA LeetCode (Easy + Medium)",
+          "status": "pending",
+          "goal": "60-70 problems"
+        },
+        {
+          "id": "l1_dsa_topics",
+          "title": "Topics: Arrays, Strings, HashMap, Two Pointers, Sliding Window, Stack, Queue, Binary Search, Recursion, Sorting",
+          "status": "pending"
+        }
       ]
     },
     {
@@ -25,10 +50,27 @@
       "title": "Layer 2 — Math + ML Foundations (+ DSA Continues)",
       "description": "Understanding before prediction.",
       "items": [
-        { "id": "l2_math", "title": "Linear Algebra, Probability, Statistics, Optimization", "status": "pending" },
-        { "id": "l2_ml_core", "title": "Regression, Classification, Bias-Variance, Feature Engineering, Model Evaluation, Regularization", "status": "pending" },
-        { "id": "l2_tools", "title": "NumPy, Pandas, Scikit-learn, Matplotlib", "status": "pending" },
-        { "id": "l2_dsa_addon", "title": "Linked Lists, Trees (DFS, BFS)", "status": "pending", "goal": "30-40 problems" }
+        {
+          "id": "l2_math",
+          "title": "Linear Algebra, Probability, Statistics, Optimization",
+          "status": "pending"
+        },
+        {
+          "id": "l2_ml_core",
+          "title": "Regression, Classification, Bias-Variance, Feature Engineering, Model Evaluation, Regularization",
+          "status": "pending"
+        },
+        {
+          "id": "l2_tools",
+          "title": "NumPy, Pandas, Scikit-learn, Matplotlib",
+          "status": "pending"
+        },
+        {
+          "id": "l2_dsa_addon",
+          "title": "Linked Lists, Trees (DFS, BFS)",
+          "status": "pending",
+          "goal": "30-40 problems"
+        }
       ]
     },
     {
@@ -36,11 +78,32 @@
       "title": "Layer 3 — Deep Learning + Modern AI (+ Light DSA)",
       "description": "Depth matters more than noise.",
       "items": [
-        { "id": "l3_dl_core", "title": "Neural networks, Backpropagation, CNNs, RNNs", "status": "pending" },
-        { "id": "l3_transformers", "title": "Transformers, Attention & Embeddings", "status": "pending" },
-        { "id": "l3_frameworks", "title": "PyTorch (Primary), TensorFlow (Secondary)", "status": "pending" },
-        { "id": "l3_applied", "title": "NLP (LLMs), Computer Vision, Recommendation systems", "status": "pending" },
-        { "id": "l3_dsa_addon", "title": "Heaps / Priority Queue, Basic Graph BFS/DFS", "status": "pending", "goal": "20-30 problems" }
+        {
+          "id": "l3_dl_core",
+          "title": "Neural networks, Backpropagation, CNNs, RNNs",
+          "status": "pending"
+        },
+        {
+          "id": "l3_transformers",
+          "title": "Transformers, Attention & Embeddings",
+          "status": "pending"
+        },
+        {
+          "id": "l3_frameworks",
+          "title": "PyTorch (Primary), TensorFlow (Secondary)",
+          "status": "pending"
+        },
+        {
+          "id": "l3_applied",
+          "title": "NLP (LLMs), Computer Vision, Recommendation systems",
+          "status": "pending"
+        },
+        {
+          "id": "l3_dsa_addon",
+          "title": "Heaps / Priority Queue, Basic Graph BFS/DFS",
+          "status": "pending",
+          "goal": "20-30 problems"
+        }
       ]
     },
     {
@@ -48,9 +111,21 @@
       "title": "Layer 4 — Web3 / DApp Engineering",
       "description": "Build honestly. Securely. Transparently.",
       "items": [
-        { "id": "l4_blockchain_core", "title": "Ethereum Architecture, Gas, Transactions, State, Wallets, RPCs", "status": "pending" },
-        { "id": "l4_smart_contracts", "title": "Solidity, OpenZeppelin, Security patterns", "status": "pending" },
-        { "id": "l4_dapp_stack", "title": "Next.js + TS, Wagmi/Viem, Hardhat/Foundry, IPFS, The Graph", "status": "pending" }
+        {
+          "id": "l4_blockchain_core",
+          "title": "Ethereum Architecture, Gas, Transactions, State, Wallets, RPCs",
+          "status": "pending"
+        },
+        {
+          "id": "l4_smart_contracts",
+          "title": "Solidity, OpenZeppelin, Security patterns",
+          "status": "pending"
+        },
+        {
+          "id": "l4_dapp_stack",
+          "title": "Next.js + TS, Wagmi/Viem, Hardhat/Foundry, IPFS, The Graph",
+          "status": "pending"
+        }
       ]
     },
     {
@@ -58,34 +133,130 @@
       "title": "Layer 5 — AI + Web3 (Rare & Valuable)",
       "description": "Where demand exceeds supply.",
       "items": [
-        { "id": "l5_use_cases", "title": "AI-powered DeFi risk, NFT recommendations, Fraud detection, DAO governance", "status": "pending" },
-        { "id": "l5_tech", "title": "Off-chain inference, On-chain verification, Oracles (Chainlink), ZK-ML (Intro)", "status": "pending" }
+        {
+          "id": "l5_use_cases",
+          "title": "AI-powered DeFi risk, NFT recommendations, Fraud detection, DAO governance",
+          "status": "pending"
+        },
+        {
+          "id": "l5_tech",
+          "title": "Off-chain inference, On-chain verification, Oracles (Chainlink), ZK-ML (Intro)",
+          "status": "pending"
+        }
       ]
     }
   ],
   "milestones": [
-    { "id": "m_beg_ml", "title": "Beginner ML: Spam Classifier", "status": "pending" },
-    { "id": "m_beg_dapp", "title": "Beginner DApp: Wallet-connected To-Do App", "status": "pending" },
-    { "id": "m_int_ml", "title": "Intermediate ML: Recommendation System", "status": "pending" },
-    { "id": "m_int_dapp", "title": "Intermediate DApp: NFT Minting + Marketplace", "status": "pending" },
-    { "id": "m_int_ai", "title": "Intermediate AI: Chatbot with custom dataset", "status": "pending" },
-    { "id": "m_adv_ai_dapp", "title": "Advanced: AI-powered DApp", "status": "pending" },
-    { "id": "m_adv_defi_risk", "title": "Advanced: DeFi risk scoring system", "status": "pending" },
-    { "id": "m_adv_decent_ai", "title": "Advanced: Decentralized AI API", "status": "pending" }
+    {
+      "id": "m_beg_ml",
+      "title": "Beginner ML: Spam Classifier",
+      "status": "pending"
+    },
+    {
+      "id": "m_beg_dapp",
+      "title": "Beginner DApp: Wallet-connected To-Do App",
+      "status": "pending"
+    },
+    {
+      "id": "m_int_ml",
+      "title": "Intermediate ML: Recommendation System",
+      "status": "pending"
+    },
+    {
+      "id": "m_int_dapp",
+      "title": "Intermediate DApp: NFT Minting + Marketplace",
+      "status": "pending"
+    },
+    {
+      "id": "m_int_ai",
+      "title": "Intermediate AI: Chatbot with custom dataset",
+      "status": "pending"
+    },
+    {
+      "id": "m_adv_ai_dapp",
+      "title": "Advanced: AI-powered DApp",
+      "status": "pending"
+    },
+    {
+      "id": "m_adv_defi_risk",
+      "title": "Advanced: DeFi risk scoring system",
+      "status": "pending"
+    },
+    {
+      "id": "m_adv_decent_ai",
+      "title": "Advanced: Decentralized AI API",
+      "status": "pending"
+    }
   ],
   "mlops_devops": [
-    { "id": "md_concepts", "title": "Model Versioning, Experiment Tracking, Deployment Pipelines, Monitoring", "status": "pending" },
-    { "id": "md_tools", "title": "Docker, MLflow, FastAPI, CI/CD, AWS/GCP", "status": "pending" }
+    {
+      "id": "md_concepts",
+      "title": "Model Versioning, Experiment Tracking, Deployment Pipelines, Monitoring",
+      "status": "pending"
+    },
+    {
+      "id": "md_tools",
+      "title": "Docker, MLflow, FastAPI, CI/CD, AWS/GCP",
+      "status": "pending"
+    }
   ],
   "security_ethics": [
-    { "id": "se_topics", "title": "Smart Contract Audits, AI Fairness/Bias, Data Privacy, Explainable AI, Web3 Attack Vectors", "status": "pending" }
+    {
+      "id": "se_topics",
+      "title": "Smart Contract Audits, AI Fairness/Bias, Data Privacy, Explainable AI, Web3 Attack Vectors",
+      "status": "pending"
+    }
   ],
   "timeline": [
-    { "id": "t1", "months": "1-3", "goals": ["Core Engineering", "DSA Basics (Easy)", "Math + ML Fundamentals"], "status": "pending" },
-    { "id": "t2", "months": "4-6", "goals": ["ML Projects", "Trees + Graphs (Medium)", "Solidity Basics"], "status": "pending" },
-    { "id": "t3", "months": "7-9", "goals": ["Deep Learning", "Full DApps", "Selected Medium LeetCode"], "status": "pending" },
-    { "id": "t4", "months": "10-12", "goals": ["AI + Web3 projects", "MLOps & Deployment"], "status": "pending" },
-    { "id": "t5", "months": "13-18", "goals": ["Advanced Specialization", "Open-source Contributions", "Research Startup Grade"], "status": "pending" }
+    {
+      "id": "t1",
+      "months": "1-3",
+      "goals": [
+        "Core Engineering",
+        "DSA Basics (Easy)",
+        "Math + ML Fundamentals"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "t2",
+      "months": "4-6",
+      "goals": [
+        "ML Projects",
+        "Trees + Graphs (Medium)",
+        "Solidity Basics"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "t3",
+      "months": "7-9",
+      "goals": [
+        "Deep Learning",
+        "Full DApps",
+        "Selected Medium LeetCode"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "t4",
+      "months": "10-12",
+      "goals": [
+        "AI + Web3 projects",
+        "MLOps & Deployment"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "t5",
+      "months": "13-18",
+      "goals": [
+        "Advanced Specialization",
+        "Open-source Contributions",
+        "Research Startup Grade"
+      ],
+      "status": "pending"
+    }
   ],
   "leetcode_total_goal": "120-150 problems"
 }

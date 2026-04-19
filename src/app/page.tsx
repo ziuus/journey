@@ -139,7 +139,13 @@ export default function Home() {
               onClick={() => setExpandedLayer(expandedLayer === layer.id ? null : layer.id)}
             >
               <div className={styles.cardContent}>
-                <div className={`${styles.cardIcon} ${styles.cardIconDsa}`}>
+                <div className={`${styles.cardIcon} ${
+                  layer.id === 'layer1' ? styles.cardIconDsa : 
+                  layer.id === 'layer2' ? styles.cardIconMl : 
+                  layer.id === 'layer3' ? styles.cardIconDl : 
+                  layer.id === 'layer4' ? styles.cardIconWeb3 : 
+                  styles.cardIconAiWeb3
+                }`}>
                   {layer.id === 'layer1' ? '⚡' : layer.id === 'layer2' ? '🧠' : layer.id === 'layer3' ? '🔮' : layer.id === 'layer4' ? '⛓' : '🚀'}
                 </div>
                 <h3 className={styles.cardTitle}>{layer.title}</h3>
