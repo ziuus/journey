@@ -4,121 +4,94 @@
     "AI Engineer",
     "Machine Learning Engineer",
     "Applied AI + Web3 Engineer",
-    "Research-oriented Startup Engineer"
+    "Research-oriented Startup Engineer",
+    "High-Performance Systems Engineer"
   ],
   "layers": [
     {
       "id": "layer1",
-      "title": "Layer 1 — Core Engineering + DSA (Non-Negotiable)",
-      "description": "Strong foundations bring stability; rushing ahead brings cracks.",
+      "title": "Layer 1 — Core Engineering & Systems (The 2013-2030 Bridge)",
+      "description": "Absolute mastery of the metal, the network, and the browser. No black boxes.",
       "items": [
-        { "id": "l1_rust", "title": "Rust Language (Fundamentals to Proficiency)", "status": "pending", "notes": "Ownership, Borrowing, Enums, Traits, Macros" },
-        { "id": "l1_python", "title": "Python (Advanced)", "status": "pending" },
-        { "id": "l1_js_ts", "title": "JavaScript / TypeScript", "status": "pending" },
-        { "id": "l1_web_concepts", "title": "Core Web: DOM manipulation, JWT Auth, WebSockets, Webhooks", "status": "pending" },
-        { "id": "l1_cpp", "title": "C++ (DSA heavy lifting)", "status": "pending" },
-        { "id": "l1_infra", "title": "Git, Linux, Docker", "status": "pending" },
-        { "id": "l1_apis", "title": "REST APIs, async systems, Real-time communication", "status": "pending" },
-        { "id": "l1_dsa_easy", "title": "DSA LeetCode (Easy + Medium)", "status": "pending", "goal": "60-70 problems" },
-        { "id": "l1_dsa_topics", "title": "Topics: Arrays, Strings, HashMap, Two Pointers, Sliding Window, Stack, Queue, Binary Search, Recursion, Sorting, Bit Manipulation, String Matching", "status": "pending" }
+        { "id": "l1_rust", "title": "Rust Mastery", "status": "pending", "notes": "Ownership, Lifetimes, Fearless Concurrency, Macros, Unsafe Rust, FFI (C/C++ integration)" },
+        { "id": "l1_python_cpp", "title": "Python (Advanced) & C++", "status": "pending", "notes": "Python: Asyncio, GIL bypass, C-extensions. C++: Pointers, Memory Management, SIMD, CMake." },
+        { "id": "l1_js_ts_engine", "title": "JS/TS & V8 Internals", "status": "pending", "notes": "Event Loop, Micro/Macro-tasks, JIT Compilation, Garbage Collection, ASTs" },
+        { "id": "l1_web_protocols", "title": "Advanced Web Protocols", "status": "pending", "notes": "HTTP/2 & HTTP/3 (QUIC), WebSockets, WebRTC, gRPC, GraphQL, SSE (Server-Sent Events), Webhooks" },
+        { "id": "l1_browser_apis", "title": "Deep Browser APIs", "status": "pending", "notes": "Shadow DOM, Service Workers, Web Workers, IndexedDB, Canvas/WebGL, WebGPU, WebAssembly (Wasm)" },
+        { "id": "l1_auth_sec", "title": "Auth & Web Security", "status": "pending", "notes": "JWT, OAuth 2.0, OIDC, CORS, CSRF, XSS, Content Security Policy (CSP), Rate Limiting" },
+        { "id": "l1_infra_scale", "title": "Infrastructure & Scaling", "status": "pending", "notes": "Linux Kernel (eBPF, namespaces, cgroups), Docker, Kubernetes (K8s), Terraform, Nginx/HAProxy" },
+        { "id": "l1_dsa_core", "title": "Data Structures & Algorithms", "status": "pending", "goal": "150 problems", "notes": "Arrays, HashMaps, Two Pointers, Sliding Window, Stacks, Binary Search, Graph Traversals (BFS/DFS), Dynamic Programming, Tries, Disjoint Sets" }
       ]
     },
     {
       "id": "layer2",
-      "title": "Layer 2 — Math + ML Foundations (+ DSA Continues)",
-      "description": "Understanding before prediction.",
+      "title": "Layer 2 — Mathematics & ML Foundations",
+      "description": "Understanding the calculus of reality before predicting it.",
       "items": [
-        { "id": "l2_math", "title": "Linear Algebra, Probability, Statistics, Optimization", "status": "pending" },
-        { "id": "l2_ml_core", "title": "Regression, Classification, Bias-Variance, Feature Engineering, Model Evaluation, Regularization", "status": "pending" },
-        { "id": "l2_tools", "title": "NumPy, Pandas, Scikit-learn, Matplotlib, Polars (Rust-based DF), Julia/R", "status": "pending" },
-        { "id": "l2_dsa_addon", "title": "Linked Lists, Trees (DFS, BFS), Heaps, Tries, Hash Tables", "status": "pending", "goal": "30-40 problems" }
+        { "id": "l2_linear_algebra", "title": "Linear Algebra", "status": "pending", "notes": "Vectors, Matrices, Eigenvalues/Vectors, SVD, PCA, Tensor operations" },
+        { "id": "l2_calculus", "title": "Multivariable Calculus", "status": "pending", "notes": "Partial Derivatives, Gradients, Jacobians, Hessians, Chain Rule (for Backprop)" },
+        { "id": "l2_prob_stat", "title": "Probability & Statistics", "status": "pending", "notes": "Bayes' Theorem, Distributions, Hypothesis Testing, Maximum Likelihood Estimation, Information Theory (Entropy, KL Divergence)" },
+        { "id": "l2_ml_core", "title": "Classical ML", "status": "pending", "notes": "Linear/Logistic Regression, SVMs, Random Forests, Gradient Boosting (XGBoost, LightGBM)" },
+        { "id": "l2_ml_theory", "title": "ML Theory", "status": "pending", "notes": "Bias-Variance Tradeoff, Regularization (L1/L2), Cross-Validation, Loss Functions" },
+        { "id": "l2_data_eng", "title": "Data Engineering & Tools", "status": "pending", "notes": "NumPy, Pandas, Polars (Rust), Scikit-learn, Ray, Apache Spark, Kafka pipelines" }
       ]
     },
     {
       "id": "layer3",
-      "title": "Layer 3 — Deep Learning + Modern AI (+ Light DSA)",
-      "description": "Depth matters more than noise.",
+      "title": "Layer 3 — Deep Learning & Modern AI Architectures",
+      "description": "Building and training the brains of 2030.",
       "items": [
-        { "id": "l3_dl_core", "title": "Neural networks, Backpropagation, CNNs, RNNs", "status": "pending" },
-        { "id": "l3_transformers", "title": "Transformers, Attention & Embeddings, BERT, GPT, Diffusion Models", "status": "pending" },
-        { "id": "l3_frameworks", "title": "PyTorch (Primary), TensorFlow, JAX (Google), Keras", "status": "pending" },
-        { "id": "l3_applied", "title": "NLP (SpaCy, NLTK), Computer Vision (OpenCV, YOLO, SAM), Recommendation systems", "status": "pending" },
-        { "id": "l3_dsa_addon", "title": "Heaps / Priority Queue, Graph BFS/DFS, Dijkstra, Dynamic Programming", "status": "pending", "goal": "20-30 problems" }
+        { "id": "l3_nn_theory", "title": "Neural Network Internals", "status": "pending", "notes": "Perceptrons, Activation Functions, Optimizers (Adam, AdamW), Dropout, Batch Norm" },
+        { "id": "l3_transformers", "title": "Transformer Architectures", "status": "pending", "notes": "Self-Attention, Multi-Head Attention, Positional Encoding, BERT, GPT-n, MoE (Mixture of Experts)" },
+        { "id": "l3_gen_ai", "title": "Generative AI", "status": "pending", "notes": "Diffusion Models (Stable Diffusion, Flux), VAEs, GANs, Multimodal Models (Vision-Language)" },
+        { "id": "l3_rl_alignment", "title": "RL & Alignment", "status": "pending", "notes": "Reinforcement Learning (PPO), RLHF (Human Feedback), DPO (Direct Preference Optimization)" },
+        { "id": "l3_agentic", "title": "Agentic AI & RAG", "status": "pending", "notes": "Vector DBs (Pinecone, Qdrant), Advanced RAG, ReAct, Plan-and-Solve, Tool Calling / Function Calling" },
+        { "id": "l3_frameworks", "title": "DL Frameworks", "status": "pending", "notes": "PyTorch (Internals, Autograd), JAX (XLA compilation), TensorFlow, HuggingFace, vLLM, TensorRT" }
       ]
     },
     {
       "id": "layer4",
-      "title": "Layer 4 — Web3 / DApp Engineering",
-      "description": "Build honestly. Securely. Transparently.",
+      "title": "Layer 4 — Web3, Blockchain & Decentralized Systems",
+      "description": "Engineering trustless, immutable, and uncensorable protocols.",
       "items": [
-        { "id": "l4_blockchain_core", "title": "Ethereum Architecture, Gas, Transactions, State, Wallets, RPCs", "status": "pending" },
-        { "id": "l4_smart_contracts", "title": "Solidity (EVM), OpenZeppelin, Security patterns", "status": "pending" },
-        { "id": "l4_rust_web3", "title": "Rust for Web3: Solana (Anchor), Polkadot (Substrate), CosmWasm", "status": "pending" },
-        { "id": "l4_dapp_stack", "title": "Next.js + TS, Wagmi/Viem, Hardhat/Foundry, IPFS, The Graph", "status": "pending" }
+        { "id": "l4_eth_evm", "title": "Ethereum & EVM Deep Dive", "status": "pending", "notes": "State Trie, Memory vs Storage vs Calldata, Gas Optimization, Opcode analysis, RPC internals" },
+        { "id": "l4_solidity_sec", "title": "Solidity & Smart Contract Security", "status": "pending", "notes": "Reentrancy, Front-running, MEV (Miner Extractable Value), Auditing tools (Slither, Foundry)" },
+        { "id": "l4_l2_scaling", "title": "Layer 2 & Scaling Solutions", "status": "pending", "notes": "Optimistic Rollups (Arbitrum), ZK-Rollups (StarkNet, zkSync), Data Availability layers (Celestia)" },
+        { "id": "l4_alt_vms", "title": "Alternative VMs & Rust Chains", "status": "pending", "notes": "Solana (Sealevel, Anchor), Polkadot (Substrate), CosmWasm, MoveVM" },
+        { "id": "l4_dapp_arch", "title": "DApp Architecture", "status": "pending", "notes": "Ethers.js/Viem, WalletConnect, IPFS/Arweave, The Graph (Subgraphs), Account Abstraction (ERC-4337)" },
+        { "id": "l4_defi_primitives", "title": "DeFi Primitives", "status": "pending", "notes": "AMMs (Uniswap V2/V3), Lending Pools (Aave), Flash Loans, Oracles (Chainlink)" }
       ]
     },
     {
       "id": "layer5",
-      "title": "Layer 5 — AI + Web3 (Rare & Valuable)",
-      "description": "Where demand exceeds supply.",
+      "title": "Layer 5 — AI x Web3 (The Frontier)",
+      "description": "Where verifiable compute meets artificial intelligence.",
       "items": [
-        { "id": "l5_use_cases", "title": "AI-powered DeFi risk, NFT recommendations, Fraud detection, DAO governance", "status": "pending" },
-        { "id": "l5_tech", "title": "Off-chain inference, On-chain verification, Oracles (Chainlink), ZK-ML (Intro)", "status": "pending" }
-      ]
-    },
-    {
-      "id": "layer6",
-      "title": "Layer 6 — Autonomous Agents & High-Performance Runtimes",
-      "description": "Where autonomous systems meet bare-metal performance.",
-      "items": [
-        { "id": "l6_rust_perf", "title": "Rust Runtimes: Tokio (Async), Rayon (Parallelism), SIMD optimization", "status": "pending" },
-        { "id": "l6_browser_engines", "title": "Browser Engines (V8, WebKit), Language Engine Internals, JIT Compilation", "status": "pending" },
-        { "id": "l6_agents", "title": "Multi-Agent Systems, Cognitive Architectures (LLM Agents), Tool Use", "status": "pending" },
-        { "id": "l6_cuda", "title": "CUDA programming basics, TensorRT, vLLM / ONNX optimization", "status": "pending" }
-      ]
-    },
-    {
-      "id": "layer7",
-      "title": "Layer 7 — Cryptographic AI & Post-State Networks",
-      "description": "Trustless verifiable compute and privacy-preserving intelligence.",
-      "items": [
-        { "id": "l7_zkml", "title": "Advanced ZK-ML pipelines, SNARKs/STARKs for verifiable inference", "status": "pending" },
-        { "id": "l7_fhe", "title": "Fully Homomorphic Encryption (FHE) for privacy-preserving AI", "status": "pending" },
-        { "id": "l7_decentralized_compute", "title": "Decentralized Compute Networks (Akash, Render), Federated Learning", "status": "pending" }
+        { "id": "l5_zkml", "title": "Zero-Knowledge Machine Learning (ZK-ML)", "status": "pending", "notes": "Proving inference on-chain, SNARKs/STARKs for neural networks, EZKL" },
+        { "id": "l5_decent_compute", "title": "Decentralized Compute & Training", "status": "pending", "notes": "Gensyn, Akash, Render, Bittensor (Subnets, incentives for intelligence)" },
+        { "id": "l5_tee_fhe", "title": "Privacy-Preserving AI", "status": "pending", "notes": "Trusted Execution Environments (TEEs), Fully Homomorphic Encryption (FHE), Multi-Party Computation (MPC)" },
+        { "id": "l5_ai_oracles", "title": "AI Oracles & Agents", "status": "pending", "notes": "AI-driven DAO governance, On-chain fraud detection, Autonomous trading agents managing treasuries" }
       ]
     }
   ],
   "milestones": [
-    { "id": "m_beg_ml", "title": "Beginner ML: Spam Classifier", "status": "pending" },
-    { "id": "m_beg_dapp", "title": "Beginner DApp: Wallet-connected To-Do App", "status": "pending" },
-    { "id": "m_int_ml", "title": "Intermediate ML: Recommendation System", "status": "pending" },
-    { "id": "m_int_dapp", "title": "Intermediate DApp: NFT Minting + Marketplace", "status": "pending" },
-    { "id": "m_int_ai", "title": "Intermediate AI: Chatbot with custom dataset", "status": "pending" },
-    { "id": "m_adv_ai_dapp", "title": "Advanced: AI-powered DApp", "status": "pending" },
-    { "id": "m_adv_defi_risk", "title": "Advanced: DeFi risk scoring system", "status": "pending" },
-    { "id": "m_adv_decent_ai", "title": "Advanced: Decentralized AI API", "status": "pending" },
-    { "id": "m_exp_agent", "title": "Expert: Autonomous Rust-based Web3 Agent", "status": "pending" },
-    { "id": "m_exp_zkml", "title": "Expert: Full ZK-ML Verifiable Inference Pipeline", "status": "pending" }
+    { "id": "m_web_core", "title": "Web Core: Real-time collaborative canvas (WebSockets + Canvas API)", "status": "pending" },
+    { "id": "m_rust_cli", "title": "Rust: High-performance multithreaded network scanner", "status": "pending" },
+    { "id": "m_rag_agent", "title": "AI: Full-stack RAG application with custom vector search", "status": "pending" },
+    { "id": "m_defi_bot", "title": "Web3: MEV Searcher / Arbitrage Bot (Rust + EVM)", "status": "pending" },
+    { "id": "m_zk_dapp", "title": "AI+Web3: ZK-ML DApp (Prove you ran a model without revealing inputs)", "status": "pending" },
+    { "id": "m_autonomous_agent", "title": "Capstone: Autonomous On-Chain Agent with Tool Use & Wallet", "status": "pending" }
   ],
   "mlops_devops": [
-    { "id": "md_concepts", "title": "Model Versioning, Experiment Tracking, Deployment Pipelines, Monitoring, Drift Detection", "status": "pending" },
-    { "id": "md_tools", "title": "Docker, MLflow, FastAPI, CI/CD, AWS/GCP, Weights & Biases, Kubeflow", "status": "pending" }
-  ],
-  "security_ethics": [
-    { "id": "se_topics", "title": "Smart Contract Audits, AI Fairness/Bias, Data Privacy, Explainable AI, Web3 Attack Vectors", "status": "pending" }
+    { "id": "md_pipelines", "title": "CI/CD & Infrastructure as Code", "status": "pending", "notes": "GitHub Actions, Terraform, Ansible, Prometheus, Grafana" },
+    { "id": "md_mlops", "title": "ML Lifecycle Management", "status": "pending", "notes": "MLflow, Weights & Biases, Model Registries, Feature Stores, Data Drift detection" },
+    { "id": "md_gpu_serve", "title": "High-Performance Serving", "status": "pending", "notes": "Triton Inference Server, TensorRT, vLLM, continuous batching, quantization (AWQ, GPTQ)" }
   ],
   "timeline": [
-    { "id": "t1", "months": "1-3", "goals": ["Core Engineering", "DSA Basics (Easy)", "Math + ML Fundamentals"], "status": "pending" },
-    { "id": "t2", "months": "4-6", "goals": ["ML Projects", "Trees + Graphs (Medium)", "Solidity Basics"], "status": "pending" },
-    { "id": "t3", "months": "7-9", "goals": ["Deep Learning", "Full DApps", "Selected Medium LeetCode"], "status": "pending" },
-    { "id": "t4", "months": "10-12", "goals": ["AI + Web3 projects", "MLOps & Deployment"], "status": "pending" },
-    { "id": "t5", "months": "13-18", "goals": ["Advanced Specialization", "Open-source Contributions", "Research Startup Grade"], "status": "pending" }
-  ],
-  "suggested_path": [
-     { "phase": 1, "title": "Core Foundations", "items": ["Python (ML) + C++ (DSA)", "Pandas, NumPy, Scikit-learn", "LeetCode Basics"] },
-     { "phase": 2, "title": "Projects & Applications", "items": ["ML projects (Streamlit/FastAPI)", "DSA: Graphs, Trees, DP", "Deploy on Docker"] },
-     { "phase": 3, "title": "Advanced Skills", "items": ["PyTorch/TensorFlow for DL", "LangChain + Hugging Face", "ML Pipelines (Airflow, Kubeflow)"] },
-     { "phase": 4, "title": "Industry Readiness", "items": ["Cloud ML (Vertex AI, SageMaker)", "Full-stack ML App", "Master DP, Graphs for interviews"] }
-  ],
-  "leetcode_total_goal": "120-150 problems"
+    { "id": "t1", "months": "1-3", "goals": ["Deep Web Fundamentals (DOM, TCP/UDP, Auth)", "DSA (Arrays/Strings/HashMaps)", "Rust Fundamentals", "Linear Algebra"], "status": "pending" },
+    { "id": "t2", "months": "4-6", "goals": ["Advanced Rust (Concurrency/Async)", "Calculus & Prob/Stat", "Classical ML Pipeline", "DSA (Trees/Graphs)"], "status": "pending" },
+    { "id": "t3", "months": "7-9", "goals": ["Neural Networks & PyTorch", "EVM & Solidity Fundamentals", "Full-stack Next.js DApps"], "status": "pending" },
+    { "id": "t4", "months": "10-12", "goals": ["Transformers & GenAI", "DeFi Protocols & Auditing", "RAG & Agentic AI Systems"], "status": "pending" },
+    { "id": "t5", "months": "13-18", "goals": ["ZK-ML & Verifiable Compute", "High-Performance GPU Serving", "Autonomous On-Chain Agents"], "status": "pending" }
+  ]
 }
