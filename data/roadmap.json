@@ -12,14 +12,15 @@
       "title": "Layer 1 — Core Engineering + DSA (Non-Negotiable)",
       "description": "Strong foundations bring stability; rushing ahead brings cracks.",
       "items": [
+        { "id": "l1_rust", "title": "Rust Language (Fundamentals to Proficiency)", "status": "pending", "notes": "Ownership, Borrowing, Enums, Traits, Macros" },
         { "id": "l1_python", "title": "Python (Advanced)", "status": "pending" },
         { "id": "l1_js_ts", "title": "JavaScript / TypeScript", "status": "pending" },
-        { "id": "l1_cpp", "title": "C++ (Performance & DSA heavy lifting)", "status": "pending" },
-        { "id": "l1_java_scala", "title": "Java/Scala (Big data + enterprise ML)", "status": "pending" },
+        { "id": "l1_web_concepts", "title": "Core Web: DOM manipulation, JWT Auth, WebSockets, Webhooks", "status": "pending" },
+        { "id": "l1_cpp", "title": "C++ (DSA heavy lifting)", "status": "pending" },
         { "id": "l1_infra", "title": "Git, Linux, Docker", "status": "pending" },
-        { "id": "l1_apis", "title": "REST APIs, async systems", "status": "pending" },
+        { "id": "l1_apis", "title": "REST APIs, async systems, Real-time communication", "status": "pending" },
         { "id": "l1_dsa_easy", "title": "DSA LeetCode (Easy + Medium)", "status": "pending", "goal": "60-70 problems" },
-        { "id": "l1_dsa_topics", "title": "Topics: Arrays, Strings, HashMap, Two Pointers, Sliding Window, Stack, Queue, Binary Search, Recursion, Sorting, Bit Manipulation, String Matching (KMP, Rabin-Karp)", "status": "pending" }
+        { "id": "l1_dsa_topics", "title": "Topics: Arrays, Strings, HashMap, Two Pointers, Sliding Window, Stack, Queue, Binary Search, Recursion, Sorting, Bit Manipulation, String Matching", "status": "pending" }
       ]
     },
     {
@@ -29,7 +30,7 @@
       "items": [
         { "id": "l2_math", "title": "Linear Algebra, Probability, Statistics, Optimization", "status": "pending" },
         { "id": "l2_ml_core", "title": "Regression, Classification, Bias-Variance, Feature Engineering, Model Evaluation, Regularization", "status": "pending" },
-        { "id": "l2_tools", "title": "NumPy, Pandas, Scikit-learn, Matplotlib, Polars (Fast Pandas alternative), Julia/R", "status": "pending" },
+        { "id": "l2_tools", "title": "NumPy, Pandas, Scikit-learn, Matplotlib, Polars (Rust-based DF), Julia/R", "status": "pending" },
         { "id": "l2_dsa_addon", "title": "Linked Lists, Trees (DFS, BFS), Heaps, Tries, Hash Tables", "status": "pending", "goal": "30-40 problems" }
       ]
     },
@@ -42,7 +43,7 @@
         { "id": "l3_transformers", "title": "Transformers, Attention & Embeddings, BERT, GPT, Diffusion Models", "status": "pending" },
         { "id": "l3_frameworks", "title": "PyTorch (Primary), TensorFlow, JAX (Google), Keras", "status": "pending" },
         { "id": "l3_applied", "title": "NLP (SpaCy, NLTK), Computer Vision (OpenCV, YOLO, SAM), Recommendation systems", "status": "pending" },
-        { "id": "l3_dsa_addon", "title": "Heaps / Priority Queue, Graph BFS/DFS, Dijkstra, Union-Find, DSU, Dynamic Programming (Memoization, Tabulation)", "status": "pending", "goal": "20-30 problems" }
+        { "id": "l3_dsa_addon", "title": "Heaps / Priority Queue, Graph BFS/DFS, Dijkstra, Dynamic Programming", "status": "pending", "goal": "20-30 problems" }
       ]
     },
     {
@@ -51,7 +52,8 @@
       "description": "Build honestly. Securely. Transparently.",
       "items": [
         { "id": "l4_blockchain_core", "title": "Ethereum Architecture, Gas, Transactions, State, Wallets, RPCs", "status": "pending" },
-        { "id": "l4_smart_contracts", "title": "Solidity, OpenZeppelin, Security patterns", "status": "pending" },
+        { "id": "l4_smart_contracts", "title": "Solidity (EVM), OpenZeppelin, Security patterns", "status": "pending" },
+        { "id": "l4_rust_web3", "title": "Rust for Web3: Solana (Anchor), Polkadot (Substrate), CosmWasm", "status": "pending" },
         { "id": "l4_dapp_stack", "title": "Next.js + TS, Wagmi/Viem, Hardhat/Foundry, IPFS, The Graph", "status": "pending" }
       ]
     },
@@ -69,11 +71,10 @@
       "title": "Layer 6 — Autonomous Agents & High-Performance Runtimes",
       "description": "Where autonomous systems meet bare-metal performance.",
       "items": [
-        { "id": "l6_runtimes", "title": "Rust-based runtimes, WebAssembly (Wasm) execution", "status": "pending" },
+        { "id": "l6_rust_perf", "title": "Rust Runtimes: Tokio (Async), Rayon (Parallelism), SIMD optimization", "status": "pending" },
         { "id": "l6_browser_engines", "title": "Browser Engines (V8, WebKit), Language Engine Internals, JIT Compilation", "status": "pending" },
         { "id": "l6_agents", "title": "Multi-Agent Systems, Cognitive Architectures (LLM Agents), Tool Use", "status": "pending" },
-        { "id": "l6_cuda", "title": "CUDA programming basics, TensorRT, vLLM / ONNX optimization", "status": "pending" },
-        { "id": "l6_adv_algos", "title": "Advanced Algorithms: Graph Theory (Advanced), Cache-oblivious algos, SIMD optimization", "status": "pending" }
+        { "id": "l6_cuda", "title": "CUDA programming basics, TensorRT, vLLM / ONNX optimization", "status": "pending" }
       ]
     },
     {
