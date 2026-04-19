@@ -74,6 +74,26 @@
         { "id": "l5_tee_fhe", "title": "Privacy-Preserving AI", "status": "pending", "notes": "TEEs, Fully Homomorphic Encryption (FHE), Multi-Party Computation (MPC)" },
         { "id": "l5_ai_oracles", "title": "AI Oracles & Agents", "status": "pending", "notes": "AI-driven DAO governance, On-chain fraud detection, Autonomous trading agents" }
       ]
+    },
+    {
+      "id": "layer6",
+      "title": "Layer 6 — Autonomous Agents & High-Performance Runtimes",
+      "description": "Where autonomous systems meet bare-metal performance.",
+      "items": [
+        { "id": "l6_runtimes", "title": "Rust-based Runtimes & Wasm", "status": "pending", "notes": "Tokio (Async), Rayon (Parallelism), SIMD optimization, Wasm/WASI execution" },
+        { "id": "l6_browser_engines", "title": "Browser Engines & Language Internals", "status": "pending", "notes": "V8 Internals, WebKit, Language Engine design, JIT compilation, Garbage Collection algorithms" },
+        { "id": "l6_multi_agent", "title": "Multi-Agent Systems", "status": "pending", "notes": "Cognitive Architectures, Agent Swarms, AutoGPT patterns, Inter-agent communication protocols" },
+        { "id": "l6_cuda_opt", "title": "Low-level Optimization", "status": "pending", "notes": "CUDA programming, TensorRT, vLLM optimization, Quantization techniques" }
+      ]
+    },
+    {
+      "id": "layer7",
+      "title": "Layer 7 — Cryptographic AI & Post-State Networks",
+      "description": "Trustless verifiable compute and privacy-preserving intelligence.",
+      "items": [
+        { "id": "l7_zk_pipelines", "title": "Advanced ZK-AI Pipelines", "status": "pending", "notes": "SNARKs/STARKs for verifiable inference, Halo2, Proof recursion" },
+        { "id": "l7_privacy_infra", "title": "Post-State Network Infrastructure", "status": "pending", "notes": "FHE for privacy-preserving AI, Decentralized Training Networks, Federated Learning over trustless nodes" }
+      ]
     }
   ],
   "milestones": [
