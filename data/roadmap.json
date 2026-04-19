@@ -15,14 +15,16 @@
       "description": "Absolute mastery of the metal, the network, and the browser. No black boxes.",
       "items": [
         { "id": "l1_systems_design", "title": "Systems Design & First Principles", "status": "pending", "notes": "Beyond CRUD: Social network schemas (Graph models), Real-time messaging (Pub/Sub), High-concurrency architectures, Database internals (B-Trees vs LSM Trees), Consistency models (CAP Theorem, PACELC)" },
-        { "id": "l1_rust", "title": "Rust Mastery", "status": "pending", "notes": "Ownership, Lifetimes, Fearless Concurrency, Macros, Unsafe Rust, FFI (C/C++ integration)" },
+        { "id": "l1_rust_phase0", "title": "Rust Phase 0: The Syntax Sprint", "status": "pending", "notes": "Ownership, Borrowing, Lifetimes (The fundamentals). Learn Strings vs &str, Vecs vs Slices, and Structs/Enums before starting LeetCode." },
+        { "id": "l1_rust_mastery", "title": "Rust Advanced mastery", "status": "pending", "notes": "Fearless Concurrency, Macros, Unsafe Rust, FFI (C/C++ integration)" },
         { "id": "l1_python_cpp", "title": "Python (Advanced) & C++", "status": "pending", "notes": "Python: Asyncio, GIL bypass. C++: Memory Management, SIMD, CMake." },
         { "id": "l1_js_ts_engine", "title": "JS/TS & V8 Internals", "status": "pending", "notes": "Event Loop, Micro/Macro-tasks, JIT Compilation, Garbage Collection, ASTs" },
         { "id": "l1_web_protocols", "title": "Advanced Web Protocols", "status": "pending", "notes": "HTTP/2 & HTTP/3 (QUIC), WebSockets, WebRTC, gRPC, GraphQL, SSE, Webhooks" },
         { "id": "l1_browser_apis", "title": "Deep Browser APIs", "status": "pending", "notes": "Shadow DOM, Service Workers, Web Workers, IndexedDB, WebGPU, WebAssembly (Wasm)" },
         { "id": "l1_auth_sec", "title": "Auth & Web Security", "status": "pending", "notes": "JWT, OAuth 2.0, OIDC, CORS, CSRF, XSS, Content Security Policy (CSP), Rate Limiting" },
         { "id": "l1_infra_scale", "title": "Infrastructure & Scaling", "status": "pending", "notes": "Linux Kernel (eBPF, namespaces, cgroups), Docker, K8s, Terraform" },
-        { "id": "l1_dsa_core", "title": "Data Structures & Algorithms", "status": "pending", "goal": "150 problems", "notes": "Arrays, HashMaps, Two Pointers, Sliding Window, Stacks, Binary Search, Graph Traversals (BFS/DFS), Dynamic Programming, Tries" }
+        { "id": "l1_dsa_rust_arrays", "title": "DSA (Rust Mode): Arrays & Strings", "status": "pending", "notes": "Topics: Two Pointers, Sliding Window. Use Rust iterators (map/fold/filter) for 2030-style performance." },
+        { "id": "l1_dsa_rust_logic", "title": "DSA (Rust Mode): Logic & Sorting", "status": "pending", "notes": "Topics: HashMap, Stack, Queue, Binary Search, Recursion. Focus on 'fighting the borrow checker' until it becomes second nature." }
       ]
     },
     {
@@ -35,7 +37,8 @@
         { "id": "l2_prob_stat", "title": "Probability & Statistics", "status": "pending", "notes": "Bayes' Theorem, Distributions, Maximum Likelihood Estimation, Information Theory" },
         { "id": "l2_ml_core", "title": "Classical ML", "status": "pending", "notes": "Linear/Logistic Regression, SVMs, Random Forests, Gradient Boosting (XGBoost, LightGBM)" },
         { "id": "l2_ml_theory", "title": "ML Theory", "status": "pending", "notes": "Bias-Variance Tradeoff, Regularization (L1/L2), Cross-Validation, Loss Functions" },
-        { "id": "l2_data_eng", "title": "Data Engineering & Tools", "status": "pending", "notes": "NumPy, Pandas, Polars (Rust), Scikit-learn, Ray, Apache Spark, Kafka pipelines" }
+        { "id": "l2_data_eng", "title": "Data Engineering & Tools", "status": "pending", "notes": "NumPy, Pandas, Polars (Rust), Scikit-learn, Ray, Apache Spark, Kafka pipelines" },
+        { "id": "l2_dsa_rust_complex", "title": "DSA (Rust Mode): Complex Structures", "status": "pending", "notes": "Topics: Linked Lists (Box/Option), Trees (Recursive ownership), Graphs (Adjacency lists in Vec). DANGER: Implementation is significantly harder in Rust." }
       ]
     },
     {
@@ -111,9 +114,9 @@
     { "id": "md_gpu_serve", "title": "High-Performance Serving", "status": "pending", "notes": "Triton Inference Server, TensorRT, vLLM, quantization (AWQ, GPTQ)" }
   ],
   "timeline": [
-    { "id": "t1", "months": "1-3", "goals": ["Systems Fundamentals (Schema Design, Protocols)", "DSA (Arrays/HashMaps)", "Rust Fundamentals", "Linear Algebra"], "status": "pending" },
-    { "id": "t2", "months": "4-6", "goals": ["Advanced Rust (Concurrency/Async)", "Calculus & Prob/Stat", "Classical ML Pipeline", "DSA (Trees/Graphs)"], "status": "pending" },
-    { "id": "t3", "months": "7-9", "goals": ["Neural Networks & PyTorch", "EVM & Solidity Fundamentals", "Full-stack Next.js DApps"], "status": "pending" },
+    { "id": "t1", "months": "1-3", "goals": ["Rust Syntax Sprint", "Systems Fundamentals (Schema Design, Protocols)", "DSA: Rust Arrays & Strings", "Linear Algebra"], "status": "pending" },
+    { "id": "t2", "months": "4-6", "goals": ["Advanced Rust (Concurrency/Async)", "Calculus & Prob/Stat", "DSA: Rust Logic & Sorting"], "status": "pending" },
+    { "id": "t3", "months": "7-9", "goals": ["Neural Networks & PyTorch", "EVM & Solidity Fundamentals", "DSA: Complex Structures (Hard Mode)"], "status": "pending" },
     { "id": "t4", "months": "10-12", "goals": ["Transformers & GenAI", "DeFi Protocols & Auditing", "RAG & Agentic AI Systems"], "status": "pending" },
     { "id": "t5", "months": "13-18", "goals": ["ZK-ML & Verifiable Compute", "High-Performance GPU Serving", "Autonomous On-Chain Agents"], "status": "pending" }
   ]
