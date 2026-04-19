@@ -17,14 +17,15 @@
         { "id": "l1_systems_design", "title": "Systems Design & First Principles", "status": "pending", "notes": "Beyond CRUD: Social network schemas (Graph models), Real-time messaging (Pub/Sub), High-concurrency architectures, Database internals (B-Trees vs LSM Trees), Consistency models (CAP Theorem, PACELC)" },
         { "id": "l1_rust_phase0", "title": "Rust Phase 0: The Syntax Sprint", "status": "pending", "notes": "Ownership, Borrowing, Lifetimes (The fundamentals). Learn Strings vs &str, Vecs vs Slices, and Structs/Enums before starting LeetCode." },
         { "id": "l1_rust_mastery", "title": "Rust Advanced mastery", "status": "pending", "notes": "Fearless Concurrency, Macros, Unsafe Rust, FFI (C/C++ integration)" },
-        { "id": "l1_python_cpp", "title": "Python (Advanced) & C++", "status": "pending", "notes": "Python: Asyncio, GIL bypass. C++: Memory Management, SIMD, CMake." },
+        { "id": "l1_python_cpp", "title": "Python (Advanced) & C++", "status": "pending", "notes": "Python: Asyncio, GIL bypass. C++: Performance & DSA heavy lifting, Pointers, Memory Management, SIMD, CMake." },
+        { "id": "l1_other_langs", "title": "Polyglot Proficiency: R, Java/Scala, Julia", "status": "pending", "notes": "R (Statistical modeling), Java/Scala (Big data + enterprise ML), Julia (High-performance numerical ML)" },
         { "id": "l1_js_ts_engine", "title": "JS/TS & V8 Internals", "status": "pending", "notes": "Event Loop, Micro/Macro-tasks, JIT Compilation, Garbage Collection, ASTs" },
         { "id": "l1_web_protocols", "title": "Advanced Web Protocols", "status": "pending", "notes": "HTTP/2 & HTTP/3 (QUIC), WebSockets, WebRTC, gRPC, GraphQL, SSE, Webhooks" },
         { "id": "l1_browser_apis", "title": "Deep Browser APIs", "status": "pending", "notes": "Shadow DOM, Service Workers, Web Workers, IndexedDB, WebGPU, WebAssembly (Wasm)" },
         { "id": "l1_auth_sec", "title": "Auth & Web Security", "status": "pending", "notes": "JWT, OAuth 2.0, OIDC, CORS, CSRF, XSS, Content Security Policy (CSP), Rate Limiting" },
         { "id": "l1_infra_scale", "title": "Infrastructure & Scaling", "status": "pending", "notes": "Linux Kernel (eBPF, namespaces, cgroups), Docker, K8s, Terraform" },
         { "id": "l1_dsa_rust_arrays", "title": "DSA (Rust Mode): Arrays & Strings", "status": "pending", "notes": "Topics: Two Pointers, Sliding Window. Use Rust iterators (map/fold/filter) for 2030-style performance." },
-        { "id": "l1_dsa_rust_logic", "title": "DSA (Rust Mode): Logic & Sorting", "status": "pending", "notes": "Topics: HashMap, Stack, Queue, Binary Search, Recursion. Focus on 'fighting the borrow checker' until it becomes second nature." }
+        { "id": "l1_dsa_rust_logic", "title": "DSA (Rust Mode): Logic & Sorting", "status": "pending", "notes": "Topics: HashMap, Stack, Queue, Binary Search (Quick Sort), Recursion & Backtracking. Bit Manipulation, String Matching (KMP, Rabin-Karp, Z-algorithm)." }
       ]
     },
     {
@@ -34,11 +35,11 @@
       "items": [
         { "id": "l2_linear_algebra", "title": "Linear Algebra", "status": "pending", "notes": "Vectors, Matrices, Eigenvalues/Vectors, SVD, PCA, Tensor operations" },
         { "id": "l2_calculus", "title": "Multivariable Calculus", "status": "pending", "notes": "Partial Derivatives, Gradients, Jacobians, Hessians, Chain Rule" },
-        { "id": "l2_prob_stat", "title": "Probability & Statistics", "status": "pending", "notes": "Bayes' Theorem, Distributions, Maximum Likelihood Estimation, Information Theory" },
-        { "id": "l2_ml_core", "title": "Classical ML", "status": "pending", "notes": "Linear/Logistic Regression, SVMs, Random Forests, Gradient Boosting (XGBoost, LightGBM)" },
-        { "id": "l2_ml_theory", "title": "ML Theory", "status": "pending", "notes": "Bias-Variance Tradeoff, Regularization (L1/L2), Cross-Validation, Loss Functions" },
-        { "id": "l2_data_eng", "title": "Data Engineering & Tools", "status": "pending", "notes": "NumPy, Pandas, Polars (Rust), Scikit-learn, Ray, Apache Spark, Kafka pipelines" },
-        { "id": "l2_dsa_rust_complex", "title": "DSA (Rust Mode): Complex Structures", "status": "pending", "notes": "Topics: Linked Lists (Box/Option), Trees (Recursive ownership), Graphs (Adjacency lists in Vec). DANGER: Implementation is significantly harder in Rust." }
+        { "id": "l2_prob_stat", "title": "Probability & Statistics", "status": "pending", "notes": "Bayes' Theorem, Distributions, Hypothesis Testing, Maximum Likelihood Estimation, Information Theory, Statsmodels" },
+        { "id": "l2_ml_core", "title": "Classical ML Frameworks", "status": "pending", "notes": "Scikit-learn, XGBoost, LightGBM, CatBoost. Regression, Classification, Bias-Variance, Feature Engineering, Model Evaluation, Regularization." },
+        { "id": "l2_ml_theory", "title": "ML Theory & Alignment", "status": "pending", "notes": "Bias-Variance Tradeoff, Regularization (L1/L2), Cross-Validation, Loss Functions" },
+        { "id": "l2_data_eng", "title": "Data Engineering & Viz", "status": "pending", "notes": "NumPy, Pandas, Polars (Rust), Scikit-learn, Ray, Apache Spark, Kafka pipelines. Matplotlib, Seaborn, Plotly, Bokeh, Altair." },
+        { "id": "l2_dsa_rust_complex", "title": "DSA (Rust Mode): Complex Structures", "status": "pending", "notes": "Topics: Linked Lists (Box/Option), Trees & Binary Trees (DFS, BFS, Traversals), Heaps, Tries, Hash Tables, Graphs (Dijkstra, Union-Find, DSU with Path Compression), Dynamic Programming (Memoization, Tabulation), Greedy Algorithms. Advanced: Segment Trees, Fenwick Trees, Matrix Exponentiation, FFT." }
       ]
     },
     {
@@ -46,12 +47,12 @@
       "title": "Layer 3 — Deep Learning & Modern AI Architectures",
       "description": "Building and training the brains of 2030.",
       "items": [
-        { "id": "l3_nn_theory", "title": "Neural Network Internals", "status": "pending", "notes": "Perceptrons, Activation Functions, Optimizers (Adam), Dropout, Batch Norm" },
-        { "id": "l3_transformers", "title": "Transformer Architectures", "status": "pending", "notes": "Self-Attention, Multi-Head Attention, Positional Encoding, BERT, GPT-n, MoE" },
-        { "id": "l3_gen_ai", "title": "Generative AI", "status": "pending", "notes": "Diffusion Models (Stable Diffusion, Flux), VAEs, GANs, Multimodal Models" },
-        { "id": "l3_rl_alignment", "title": "RL & Alignment", "status": "pending", "notes": "Reinforcement Learning (PPO), RLHF, DPO (Direct Preference Optimization)" },
-        { "id": "l3_agentic", "title": "Agentic AI & RAG", "status": "pending", "notes": "Vector DBs (Pinecone, Qdrant), Advanced RAG, ReAct, Plan-and-Solve, Tool Calling" },
-        { "id": "l3_frameworks", "title": "DL Frameworks", "status": "pending", "notes": "PyTorch, JAX (XLA compilation), TensorFlow, HuggingFace, vLLM, TensorRT" }
+        { "id": "l3_nn_theory", "title": "Neural Network Internals", "status": "pending", "notes": "Perceptrons, Activation Functions, Optimizers (Adam), Dropout, Batch Norm, Backpropagation, CNNs, RNNs" },
+        { "id": "l3_transformers", "title": "Transformer Architectures", "status": "pending", "notes": "Self-Attention, Multi-Head Attention, Positional Encoding, BERT, GPT-n, MoE, Diffusion Models" },
+        { "id": "l3_frameworks", "title": "DL Frameworks", "status": "pending", "notes": "PyTorch (Primary), TensorFlow + Keras, JAX (XLA compilation), HuggingFace Transformers, MindSpore, PaddlePaddle" },
+        { "id": "l3_computer_vision", "title": "Computer Vision", "status": "pending", "notes": "OpenCV, YOLO, Detectron2, Segment Anything (SAM)" },
+        { "id": "l3_nlp_llm", "title": "NLP & LLMs", "status": "pending", "notes": "SpaCy, NLTK, Hugging Face, LangChain, Haystack, LangServe" },
+        { "id": "l3_agentic", "title": "Agentic AI & RAG", "status": "pending", "notes": "Vector DBs (Pinecone, Qdrant), Advanced RAG, ReAct, Plan-and-Solve, Tool Calling" }
       ]
     },
     {
@@ -95,9 +96,16 @@
       "description": "Trustless verifiable compute and privacy-preserving intelligence.",
       "items": [
         { "id": "l7_zk_pipelines", "title": "Advanced ZK-AI Pipelines", "status": "pending", "notes": "SNARKs/STARKs for verifiable inference, Halo2, Proof recursion" },
-        { "id": "l7_privacy_infra", "title": "Post-State Network Infrastructure", "status": "pending", "notes": "FHE for privacy-preserving AI, Decentralized Training Networks, Federated Learning over trustless nodes" }
+        { "id": "l7_privacy_infra", "title": "Post-State Network Infrastructure", "status": "pending", "notes": "FHE for privacy-preserving AI, Decentralized Training Networks, Federated Learning over trustless nodes" },
+        { "id": "l7_cloud_platforms", "title": "Cloud ML Platforms", "status": "pending", "notes": "Google Cloud Vertex AI, AWS SageMaker, Azure ML Studio, Kaggle/Colab, HF Inference Endpoints" }
       ]
     }
+  ],
+  "suggested_student_path": [
+     { "phase": 1, "title": "Core Foundations", "items": ["Python (ML) + C++ (DSA)", "Pandas, NumPy, Scikit-learn", "LeetCode Basics (Arrays, Strings, Recursion)"] },
+     { "phase": 2, "title": "Projects & Applications", "items": ["ML projects (Jupyter -> Streamlit -> FastAPI)", "DSA: Graphs, Trees, DP", "Deploy on Docker + Vercel/Streamlit Cloud"] },
+     { "phase": 3, "title": "Advanced Skills", "items": ["PyTorch/TensorFlow for DL", "LangChain + Hugging Face (NLP/LLM Apps)", "ML Pipelines (Airflow, Kubeflow)", "DSA CP on Codeforces/AtCoder"] },
+     { "phase": 4, "title": "Industry Readiness", "items": ["Cloud ML (Vertex AI, SageMaker)", "Experiment Tracking (MLflow/W&B)", "Full-stack ML App (FastAPI + DB + Frontend)", "Master DP, Graphs, Advanced Trees for Interviews"] }
   ],
   "milestones": [
     { "id": "m_sys_design", "title": "Architecture: High-concurrency Social Feed Schema (PostgreSQL + Redis + Graph)", "status": "pending" },
@@ -109,9 +117,9 @@
     { "id": "m_autonomous_agent", "title": "Capstone: Autonomous On-Chain Agent with Tool Use & Wallet", "status": "pending" }
   ],
   "mlops_devops": [
-    { "id": "md_pipelines", "title": "CI/CD & Infrastructure as Code", "status": "pending", "notes": "GitHub Actions, Terraform, Ansible, Prometheus, Grafana" },
-    { "id": "md_mlops", "title": "ML Lifecycle Management", "status": "pending", "notes": "MLflow, Weights & Biases, Model Registries, Feature Stores" },
-    { "id": "md_gpu_serve", "title": "High-Performance Serving", "status": "pending", "notes": "Triton Inference Server, TensorRT, vLLM, quantization (AWQ, GPTQ)" }
+    { "id": "md_pipelines", "title": "CI/CD & Infrastructure as Code", "status": "pending", "notes": "GitHub Actions, Terraform, Ansible, Prometheus, Grafana, Docker/Podman" },
+    { "id": "md_mlops", "title": "ML Lifecycle Management", "status": "pending", "notes": "MLflow, Weights & Biases, Neptune.ai, Model Registries, Feature Stores" },
+    { "id": "md_gpu_serve", "title": "High-Performance Serving", "status": "pending", "notes": "Triton Inference Server, TensorRT, vLLM, quantization, Kubeflow" }
   ],
   "timeline": [
     { "id": "t1", "months": "1-3", "goals": ["Rust Syntax Sprint", "Systems Fundamentals (Schema Design, Protocols)", "DSA: Rust Arrays & Strings", "Linear Algebra"], "status": "pending" },
