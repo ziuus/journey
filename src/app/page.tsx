@@ -43,7 +43,7 @@ export default function Home() {
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
   
-  // History State (Arrow Keys)
+  // History State
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [tempInput, setTempInput] = useState("");
@@ -124,7 +124,8 @@ export default function Home() {
     }
     if (newIndex !== historyIndex) {
       setHistoryIndex(newIndex);
-      setChatInput(newIndex === -1 ? tempInput : history[history.length - 1 - newIndex]);
+      const val = newIndex === -1 ? tempInput : history[history.length - 1 - newIndex];
+      setChatInput(val);
     }
   };
 
@@ -202,19 +203,13 @@ export default function Home() {
       const finalMessages = [...updatedMessages, assistantMsg];
       setMessages(finalMessages);
       await saveHistoryToServer(finalMessages, updatedHistory);
-      
-      // Auto-refresh roadmap in case AI modified it
       fetchRoadmap();
     } catch {
-      const errorMsg: ChatMessage = { role: 'system', content: 'Bridge error: Failed to connect to local CLI.' };
-      setMessages(prev => [...prev, errorMsg]);
+      setMessages(prev => [...prev, { role: 'system', content: 'Bridge error: Failed to connect to local CLI.' }]);
     } finally {
       setIsChatLoading(false);
     }
   };
-
-  if (loading) return <div className={styles.container}>Loading Roadmap...</div>;
-  if (!data) return <div className={styles.container}>Error loading data.</div>;
 
   return (
     <div className={styles.container}>
@@ -238,8 +233,12 @@ export default function Home() {
                   <div className={`${styles.messageRole} ${msg.role === 'system' ? 'opacity-30' : ''}`}>
                      {msg.role}
                   </div>
-                  <div className={`${styles.messageContent} ${msg.content.startsWith('/') ? styles.slashCommand : ''}`}>
-                     {msg.content}
+                  <div className={styles.messageContent}>
+                    {msg.content.split('\n').map((line, li) => (
+                      <div key={li} className={line.trim().startsWith('/') ? styles.slashCommand : ''}>
+                        {line}
+                      </div>
+                    ))}
                   </div>
                   {msg.command && (
                      <div className={styles.commandTag}>
@@ -264,7 +263,6 @@ export default function Home() {
                  ref={textareaRef}
                  className={styles.chatInput} 
                  placeholder="Enter command or goal..." 
-                 rows={1}
                  value={chatInput}
                  onChange={(e) => setChatInput(e.target.value)}
                  onKeyDown={(e) => {
@@ -279,7 +277,11 @@ export default function Home() {
                      handleHistoryNav('down');
                    }
                  }}
-                 style={{ resize: 'none', minHeight: '44px' }}
+                 style={{ 
+                    resize: 'none', 
+                    minHeight: '44px',
+                    color: chatInput.trim().startsWith('/') ? '#ff9f0a' : '#f5f5f7' // Amber if command
+                 }}
                />
                <button className={styles.chatSendBtn} onClick={handleAskAI} style={{ alignSelf: 'flex-end', height: '44px' }}>
                   {isChatLoading ? <Activity size={14} className="animate-spin" /> : <Send size={14} />}
@@ -311,7 +313,7 @@ export default function Home() {
         </div>
 
         <div className={styles.cardsGrid}>
-          {data.layers.map((layer) => (
+          {data?.layers.map((layer) => (
             <div
               key={layer.id}
               className={`${styles.card} ${expandedLayer === layer.id ? styles.cardExpanded : ''}`}
@@ -363,7 +365,7 @@ export default function Home() {
         <div className={styles.cardsGrid}>
             <div className={styles.card} style={{gridColumn: '1 / -1', minHeight: 'auto'}}>
                <div className={styles.itemList}>
-                  {data.milestones.map(item => (
+                  {data?.milestones.map(item => (
                     <div key={item.id} className={`${styles.itemRow} ${item.status === 'done' ? styles.itemRowDone : ''}`}>
                       <input 
                         type="checkbox" 
