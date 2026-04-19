@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./page.module.css";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Terminal as TerminalIcon, X, Send, Command, ChevronRight, Activity } from "lucide-react";
 
 interface RoadmapItem {
   id: string;
@@ -26,14 +26,31 @@ interface RoadmapData {
   security_ethics: RoadmapItem[];
 }
 
+interface ChatMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  command?: string;
+}
+
 export default function Home() {
   const [data, setData] = useState<RoadmapData | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedLayer, setExpandedLayer] = useState<string | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  
+  // Terminal State
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");
-  const [aiResponse, setAiResponse] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
   
+  // History State (Arrow Keys)
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [tempInput, setTempInput] = useState("");
+  
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const fetchRoadmap = async () => {
     try {
       const res = await fetch('/api/roadmap');
@@ -46,36 +63,85 @@ export default function Home() {
     }
   };
 
+  const fetchChatHistory = async () => {
+    try {
+      const res = await fetch('/api/history');
+      const json = await res.json();
+      if (json.messages && json.messages.length > 0) {
+        setMessages(json.messages);
+      } else {
+        setMessages([{ role: 'system', content: 'Gemini CLI Bridge active. Type /help for options.' }]);
+      }
+      if (json.commandHistory) {
+        setHistory(json.commandHistory);
+      }
+    } catch (err) {
+      console.error("Failed to fetch history:", err);
+    }
+  };
+
+  const saveHistoryToServer = async (newMessages: ChatMessage[], newHistory: string[]) => {
+    try {
+      await fetch('/api/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages, commandHistory: newHistory })
+      });
+    } catch (err) {
+      console.error("Failed to persist history:", err);
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
-      await fetchRoadmap();
+      await Promise.all([fetchRoadmap(), fetchChatHistory()]);
     };
     init();
   }, []);
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  // Auto-expand textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    }
+  }, [chatInput]);
+
+  const handleHistoryNav = (direction: 'up' | 'down') => {
+    if (history.length === 0) return;
+    let newIndex = historyIndex;
+    if (direction === 'up') {
+      if (historyIndex === -1) setTempInput(chatInput);
+      newIndex = Math.min(historyIndex + 1, history.length - 1);
+    } else {
+      newIndex = Math.max(historyIndex - 1, -1);
+    }
+    if (newIndex !== historyIndex) {
+      setHistoryIndex(newIndex);
+      setChatInput(newIndex === -1 ? tempInput : history[history.length - 1 - newIndex]);
+    }
+  };
+
   const toggleItem = async (type: string, layerId: string | null, itemId: string) => {
     if (!data) return;
-
     const newData = { ...data };
     let targetItems: RoadmapItem[] = [];
-
     if (type === 'layer' && layerId) {
       const layer = newData.layers.find(l => l.id === layerId);
       if (layer) targetItems = layer.items;
     } else if (type === 'milestone') {
       targetItems = newData.milestones;
-    } else if (type === 'mlops') {
-      targetItems = newData.mlops_devops;
-    } else if (type === 'security') {
-      targetItems = newData.security_ethics;
     }
-
     const item = targetItems.find(i => i.id === itemId);
     if (item) {
       item.status = item.status === 'pending' ? 'done' : 'pending';
       setData(newData);
-      
-      // Persist to server
       await fetch('/api/roadmap', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -85,20 +151,63 @@ export default function Home() {
   };
 
   const handleAskAI = async () => {
-    if (!chatInput.trim()) return;
-    setIsChatLoading(true);
-    setAiResponse("Querying Gemini CLI...");
+    const input = chatInput.trim();
+    if (!input) return;
+
+    if (input === '/clear') {
+      const newMsgs: ChatMessage[] = [{ role: 'system', content: 'Terminal cleared.' }];
+      const newHist = [input, ...history];
+      setMessages(newMsgs);
+      setHistory(newHist);
+      setHistoryIndex(-1);
+      setChatInput("");
+      await saveHistoryToServer(newMsgs, newHist);
+      return;
+    }
+
+    if (input === '/help') {
+      const helpMsg = `Available Commands:\n/clear - Reset the chat window\n/compress - Summarize session\n/help - Show options`;
+      const newMsgs: ChatMessage[] = [...messages, { role: 'user', content: input }, { role: 'system', content: helpMsg }];
+      const newHist = [input, ...history];
+      setMessages(newMsgs);
+      setHistory(newHist);
+      setHistoryIndex(-1);
+      setChatInput("");
+      await saveHistoryToServer(newMsgs, newHist);
+      return;
+    }
     
+    const userMsg: ChatMessage = { role: 'user', content: input };
+    const updatedMessages = [...messages, userMsg];
+    const updatedHistory = [input, ...history];
+    setMessages(updatedMessages);
+    setHistory(updatedHistory);
+    setHistoryIndex(-1);
+    setChatInput("");
+    setIsChatLoading(true);
+
     try {
       const res = await fetch('/api/ask-gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: chatInput })
+        body: JSON.stringify({ prompt: input })
       });
       const json = await res.json();
-      setAiResponse(json.response || json.error);
+      
+      const assistantMsg: ChatMessage = { 
+        role: 'assistant', 
+        content: json.response || json.error,
+        command: json.executed_command 
+      };
+      const finalMessages = [...updatedMessages, assistantMsg];
+      setMessages(finalMessages);
+      await saveHistoryToServer(finalMessages, updatedHistory);
+      
+      // Auto-refresh roadmap in case AI modified it
+      fetchRoadmap();
     } catch {
-      setAiResponse("Failed to connect to AI engine.");
+      const errorMsg: ChatMessage = { role: 'system', content: 'Bridge error: Failed to connect to local CLI.' };
+      setMessages(prev => [...prev, errorMsg]);
     } finally {
       setIsChatLoading(false);
     }
@@ -109,6 +218,76 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
+      <button className={styles.toggleBtn} onClick={() => setIsPanelOpen(true)}>
+         <TerminalIcon size={24} />
+      </button>
+
+      <aside className={`${styles.sidePanel} ${isPanelOpen ? styles.sidePanelOpen : ''}`}>
+         <div className={styles.panelHeader}>
+            <div className={styles.chatTitle} style={{margin:0}}>
+               <Command size={16} /> Agent Command Center
+            </div>
+            <button onClick={() => setIsPanelOpen(false)} style={{background:'none', border:'none', color:'white', cursor:'pointer'}}>
+               <X size={20} />
+            </button>
+         </div>
+
+         <div className={styles.terminalContainer} ref={scrollRef}>
+            {messages.map((msg, i) => (
+               <div key={i} className={styles.terminalMessage}>
+                  <div className={`${styles.messageRole} ${msg.role === 'system' ? 'opacity-30' : ''}`}>
+                     {msg.role}
+                  </div>
+                  <div className={`${styles.messageContent} ${msg.content.startsWith('/') ? styles.slashCommand : ''}`}>
+                     {msg.content}
+                  </div>
+                  {msg.command && (
+                     <div className={styles.commandTag}>
+                        <ChevronRight size={10} /> {msg.command}
+                     </div>
+                  )}
+               </div>
+            ))}
+            {isChatLoading && (
+               <div className={styles.terminalMessage}>
+                  <div className={styles.messageRole}>assistant</div>
+                  <div className={styles.messageContent}>
+                     <span className="animate-pulse">Processing intent...</span>
+                  </div>
+               </div>
+            )}
+         </div>
+
+         <div className={styles.panelFooter}>
+            <div className={`${styles.chatInputWrapper} ${isChatLoading ? styles.loading : ''}`}>
+               <textarea 
+                 ref={textareaRef}
+                 className={styles.chatInput} 
+                 placeholder="Enter command or goal..." 
+                 rows={1}
+                 value={chatInput}
+                 onChange={(e) => setChatInput(e.target.value)}
+                 onKeyDown={(e) => {
+                   if (e.key === 'Enter' && !e.shiftKey) {
+                     e.preventDefault();
+                     handleAskAI();
+                   } else if (e.key === 'ArrowUp' && (chatInput.trim() === '' || historyIndex !== -1)) {
+                     e.preventDefault();
+                     handleHistoryNav('up');
+                   } else if (e.key === 'ArrowDown' && historyIndex !== -1) {
+                     e.preventDefault();
+                     handleHistoryNav('down');
+                   }
+                 }}
+                 style={{ resize: 'none', minHeight: '44px' }}
+               />
+               <button className={styles.chatSendBtn} onClick={handleAskAI} style={{ alignSelf: 'flex-end', height: '44px' }}>
+                  {isChatLoading ? <Activity size={14} className="animate-spin" /> : <Send size={14} />}
+               </button>
+            </div>
+         </div>
+      </aside>
+
       <header className={styles.header}>
         <div className={styles.logoMark}>J</div>
         <h1 className={styles.title}>Journey Portal</h1>
@@ -177,7 +356,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* --- Milestones Section --- */}
         <div className={styles.sectionLabel}>
           <div className={styles.sectionDot} />
           <span className={styles.sectionTitle}>Project Milestones</span>
@@ -200,33 +378,6 @@ export default function Home() {
             </div>
         </div>
       </section>
-
-      {/* --- AI Interaction Float --- */}
-      <div className={styles.chatContainer}>
-         <div className={styles.chatWindow}>
-            <div className={styles.chatTitle}>
-               <Sparkles size={16} /> Gemini System Engine
-            </div>
-            {aiResponse && (
-               <div className={styles.chatResponse}>
-                  {aiResponse}
-               </div>
-            )}
-            <div className={`${styles.chatInputWrapper} ${isChatLoading ? styles.loading : ''}`}>
-               <input 
-                 type="text" 
-                 className={styles.chatInput} 
-                 placeholder="Update roadmap or ask..." 
-                 value={chatInput}
-                 onChange={(e) => setChatInput(e.target.value)}
-                 onKeyDown={(e) => e.key === 'Enter' && handleAskAI()}
-               />
-               <button className={styles.chatSendBtn} onClick={handleAskAI}>
-                  {isChatLoading ? '...' : 'Send'}
-               </button>
-            </div>
-         </div>
-      </div>
 
       <footer className={styles.footer}>
         <p className={styles.footerText}>
