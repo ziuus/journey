@@ -63,6 +63,28 @@
         { "id": "l5_use_cases", "title": "AI-powered DeFi risk, NFT recommendations, Fraud detection, DAO governance", "status": "pending" },
         { "id": "l5_tech", "title": "Off-chain inference, On-chain verification, Oracles (Chainlink), ZK-ML (Intro)", "status": "pending" }
       ]
+    },
+    {
+      "id": "layer6",
+      "title": "Layer 6 — Autonomous Agents & High-Performance Runtimes",
+      "description": "Where autonomous systems meet bare-metal performance.",
+      "items": [
+        { "id": "l6_runtimes", "title": "Rust-based runtimes, WebAssembly (Wasm) execution", "status": "pending" },
+        { "id": "l6_browser_engines", "title": "Browser Engines (V8, WebKit), Language Engine Internals, JIT Compilation", "status": "pending" },
+        { "id": "l6_agents", "title": "Multi-Agent Systems, Cognitive Architectures (LLM Agents), Tool Use", "status": "pending" },
+        { "id": "l6_cuda", "title": "CUDA programming basics, TensorRT, vLLM / ONNX optimization", "status": "pending" },
+        { "id": "l6_adv_algos", "title": "Advanced Algorithms: Graph Theory (Advanced), Cache-oblivious algos, SIMD optimization", "status": "pending" }
+      ]
+    },
+    {
+      "id": "layer7",
+      "title": "Layer 7 — Cryptographic AI & Post-State Networks",
+      "description": "Trustless verifiable compute and privacy-preserving intelligence.",
+      "items": [
+        { "id": "l7_zkml", "title": "Advanced ZK-ML pipelines, SNARKs/STARKs for verifiable inference", "status": "pending" },
+        { "id": "l7_fhe", "title": "Fully Homomorphic Encryption (FHE) for privacy-preserving AI", "status": "pending" },
+        { "id": "l7_decentralized_compute", "title": "Decentralized Compute Networks (Akash, Render), Federated Learning", "status": "pending" }
+      ]
     }
   ],
   "milestones": [
@@ -73,7 +95,9 @@
     { "id": "m_int_ai", "title": "Intermediate AI: Chatbot with custom dataset", "status": "pending" },
     { "id": "m_adv_ai_dapp", "title": "Advanced: AI-powered DApp", "status": "pending" },
     { "id": "m_adv_defi_risk", "title": "Advanced: DeFi risk scoring system", "status": "pending" },
-    { "id": "m_adv_decent_ai", "title": "Advanced: Decentralized AI API", "status": "pending" }
+    { "id": "m_adv_decent_ai", "title": "Advanced: Decentralized AI API", "status": "pending" },
+    { "id": "m_exp_agent", "title": "Expert: Autonomous Rust-based Web3 Agent", "status": "pending" },
+    { "id": "m_exp_zkml", "title": "Expert: Full ZK-ML Verifiable Inference Pipeline", "status": "pending" }
   ],
   "mlops_devops": [
     { "id": "md_concepts", "title": "Model Versioning, Experiment Tracking, Deployment Pipelines, Monitoring, Drift Detection", "status": "pending" },

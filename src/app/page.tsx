@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import styles from "./page.module.css";
-import { Sparkles, Terminal as TerminalIcon, X, Send, Command, ChevronRight, Activity, Search } from "lucide-react";
+import { Sparkles, Terminal as TerminalIcon, X, Send, Command, ChevronRight, Activity, Search, Image as ImageIcon } from "lucide-react";
 
 interface RoadmapItem {
   id: string;
@@ -30,6 +30,7 @@ interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
   command?: string;
+  imagePreview?: string;
 }
 
 export default function Home() {
@@ -43,15 +44,17 @@ export default function Home() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [isChatLoading, setIsChatLoading] = useState(false);
-  const [messageQueue, setMessageQueue] = useState<string[]>([]);
+  const [messageQueue, setMessageQueue] = useState<{prompt: string, image?: string}[]>([]);
+  const [attachedImage, setAttachedImage] = useState<string | null>(null);
   
-  // History State (Arrow Keys)
+  // History State
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [tempInput, setTempInput] = useState("");
   
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchRoadmap = async () => {
     try {
@@ -115,11 +118,11 @@ export default function Home() {
     }
   }, [chatInput]);
 
-  // Simple Message Queue Logic
+  // Message Queue Logic
   useEffect(() => {
     if (messageQueue.length > 0 && !isChatLoading) {
-      const nextPrompt = messageQueue[0];
-      processAIRequest(nextPrompt);
+      const nextRequest = messageQueue[0];
+      processAIRequest(nextRequest.prompt, nextRequest.image);
       setMessageQueue(prev => prev.slice(1));
     }
   }, [messageQueue, isChatLoading]);
@@ -161,13 +164,13 @@ export default function Home() {
     }
   };
 
-  const processAIRequest = async (prompt: string) => {
+  const processAIRequest = async (prompt: string, image?: string) => {
     setIsChatLoading(true);
     try {
       const res = await fetch('/api/ask-gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({ prompt, image })
       });
       const json = await res.json();
       
@@ -199,12 +202,13 @@ export default function Home() {
       setHistory(prev => [input, ...prev]);
       setHistoryIndex(-1);
       setChatInput("");
+      setAttachedImage(null);
       await saveHistoryToServer(newMsgs, [input, ...history]);
       return;
     }
 
     if (input === '/help') {
-      const helpMsg = `Available Commands:\n/clear - Reset window\n/help - Show options\nAI can update roadmap: "Mark Python as done"`;
+      const helpMsg = `Available Commands:\n/clear - Reset window\n/help - Show options\nYou can also attach images to queries.`;
       setMessages(prev => [...prev, { role: 'user', content: input }, { role: 'system', content: helpMsg }]);
       setHistory(prev => [input, ...prev]);
       setHistoryIndex(-1);
@@ -212,13 +216,25 @@ export default function Home() {
       return;
     }
     
-    const userMsg: ChatMessage = { role: 'user', content: input };
+    const userMsg: ChatMessage = { role: 'user', content: input, imagePreview: attachedImage || undefined };
     setMessages(prev => [...prev, userMsg]);
     setHistory(prev => [input, ...prev]);
     setHistoryIndex(-1);
     setChatInput("");
     
-    setMessageQueue(prev => [...prev, input]);
+    setMessageQueue(prev => [...prev, { prompt: input, image: attachedImage || undefined }]);
+    setAttachedImage(null);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAttachedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Filtered Data for Search
@@ -251,6 +267,11 @@ export default function Home() {
                   <div className={`${styles.messageRole} ${msg.role === 'system' ? 'opacity-30' : ''}`}>
                      {msg.role}
                   </div>
+                  {msg.imagePreview && (
+                    <div style={{ marginBottom: '8px' }}>
+                       <img src={msg.imagePreview} alt="upload" style={{ maxWidth: '100%', borderRadius: '12px', border: '1px solid var(--glass-border)' }} />
+                    </div>
+                  )}
                   <div className={styles.messageContent}>
                     {msg.content.split('\n').map((line, li) => (
                       <div key={li} className={line.trim().startsWith('/') ? styles.slashCommand : ''}>
@@ -276,7 +297,26 @@ export default function Home() {
          </div>
 
          <div className={styles.panelFooter}>
+            {attachedImage && (
+               <div style={{ position: 'relative', padding: '12px 12px 0' }}>
+                  <img src={attachedImage} alt="preview" style={{ height: '60px', borderRadius: '8px', border: '1px solid var(--accent-green)' }} />
+                  <button 
+                    onClick={() => setAttachedImage(null)}
+                    style={{ position: 'absolute', top: '4px', left: '64px', background: 'black', borderRadius: '50%', border: 'none', color: 'white', cursor: 'pointer', padding: '2px' }}
+                  >
+                    <X size={12} />
+                  </button>
+               </div>
+            )}
             <div className={`${styles.chatInputWrapper} ${isChatLoading && messageQueue.length === 0 ? styles.loading : ''}`}>
+               <button 
+                 className={styles.chatSendBtn} 
+                 onClick={() => fileInputRef.current?.click()}
+                 style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}
+               >
+                  <ImageIcon size={14} />
+               </button>
+               <input type="file" ref={fileInputRef} hidden accept="image/*" onChange={handleImageUpload} />
                <textarea 
                  ref={textareaRef}
                  className={styles.chatInput} 
@@ -356,9 +396,11 @@ export default function Home() {
                   layer.id === 'layer2' ? styles.cardIconMl : 
                   layer.id === 'layer3' ? styles.cardIconDl : 
                   layer.id === 'layer4' ? styles.cardIconWeb3 : 
-                  styles.cardIconAiWeb3
+                  layer.id === 'layer5' ? styles.cardIconAiWeb3 :
+                  layer.id === 'layer6' ? styles.cardIconDl :
+                  styles.cardIconWeb3
                 }`}>
-                  {layer.id === 'layer1' ? '⚡' : layer.id === 'layer2' ? '🧠' : layer.id === 'layer3' ? '🔮' : layer.id === 'layer4' ? '⛓' : '🚀'}
+                  {layer.id === 'layer1' ? '⚡' : layer.id === 'layer2' ? '🧠' : layer.id === 'layer3' ? '🔮' : layer.id === 'layer4' ? '⛓' : layer.id === 'layer5' ? '🚀' : layer.id === 'layer6' ? '⚙️' : '🔐'}
                 </div>
                 <h3 className={styles.cardTitle}>{layer.title}</h3>
                 <p className={styles.cardDescription}>{layer.description}</p>
