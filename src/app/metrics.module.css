@@ -1,19 +1,29 @@
 .metricsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
   width: 100%;
-  margin-top: 24px;
+  margin-top: 32px;
 }
 
 .metricCard {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 24px;
+  border-radius: 24px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-out-expo);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.metricCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-green);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 .metricHeader {
@@ -24,37 +34,44 @@
 
 .metricLabel {
   font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   color: var(--text-secondary);
 }
 
 .metricValue {
   font-family: var(--font-space-grotesk), sans-serif;
-  font-size: 24px;
+  font-size: 40px;
   font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.metricValueAccent {
   color: var(--accent-green);
+  text-shadow: 0 0 20px var(--accent-green-glow);
 }
 
 .progressTrack {
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  height: 8px;
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 100px;
   overflow: hidden;
 }
 
 .progressBar {
   height: 100%;
-  background: var(--accent-green);
+  background: linear-gradient(90deg, var(--accent-green) 0%, var(--accent-blue) 100%);
   box-shadow: 0 0 15px var(--accent-green-glow);
-  transition: width 1s var(--ease-out-expo);
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .statGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
   margin-top: 8px;
 }
 
@@ -65,11 +82,131 @@
 }
 
 .statValue {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .statLabel {
   font-size: 10px;
+  font-weight: 500;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Layer Mastery Breakdown */
+.layerBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.layerMiniRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.layerMiniHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.layerMiniTrack {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.layerMiniBar {
+  height: 100%;
+  background: var(--accent-green);
+  border-radius: 100px;
+}
+
+/* Radar Chart Simulated */
+.radarContainer {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.radarSvg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 10px var(--accent-green-glow));
+}
+
+.radarGrid {
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 1;
+  fill: none;
+}
+
+.radarArea {
+  fill: var(--accent-green-glow);
+  stroke: var(--accent-green);
+  stroke-width: 2;
+  opacity: 0.6;
+}
+
+.radarLabel {
+  font-size: 8px;
+  fill: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Velocity Indicator */
+.velocityContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 40px;
+}
+
+.velocityBar {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.velocityBarActive {
+  background: var(--accent-green);
+  box-shadow: 0 0 10px var(--accent-green-glow);
+}
+
+/* Agentic Status */
+.agenticBadge {
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.agenticActive {
+  background: var(--accent-green-glow);
+  color: var(--accent-green);
+}
+
+.agenticPulse {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
 }

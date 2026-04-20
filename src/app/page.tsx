@@ -51,6 +51,103 @@ const HighlightText = ({ text, query }: { text: string, query: string }) => {
   );
 };
 
+const UserMetrics = ({ data }: { data: RoadmapData }) => {
+  const totalItems = data.layers.reduce((acc, l) => acc + l.items.length, 0) + data.milestones.length;
+  const doneItems = data.layers.reduce((acc, l) => acc + l.items.filter(i => i.status === 'done').length, 0) + data.milestones.filter(i => i.status === 'done').length;
+  const progressPercent = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
+
+  const layerStats = data.layers.map(l => ({
+    title: l.title.split('—')[0].trim(),
+    percent: Math.round((l.items.filter(i => i.status === 'done').length / l.items.length) * 100)
+  }));
+
+  const currentPhase = layerStats.findIndex(s => s.percent < 100);
+  const phaseTitle = currentPhase !== -1 ? `Phase ${currentPhase + 1}` : "Fully Mastered";
+
+  // Simulate Radar Data based on Layers
+  const skills = [
+    { label: "Systems", val: layerStats[0]?.percent || 0 },
+    { label: "Math/ML", val: layerStats[1]?.percent || 0 },
+    { label: "Deep Learning", val: layerStats[2]?.percent || 0 },
+    { label: "Web3", val: layerStats[3]?.percent || 0 },
+    { label: "Frontier AI", val: layerStats[4]?.percent || 0 },
+    { label: "Runtimes", val: layerStats[5]?.percent || 0 },
+  ];
+
+  const radarPoints = skills.map((s, i) => {
+    const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
+    const r = (s.val / 100) * 40 + 5; // offset 5 for visibility
+    return `${50 + r * Math.cos(angle)},${50 + r * Math.sin(angle)}`;
+  }).join(' ');
+
+  return (
+    <section className={styles.dashboard} style={{marginBottom: '40px'}}>
+      <div className={styles.sectionLabel}><LayoutDashboard size={14} /> <span className={styles.sectionTitle}>Progression Intelligence</span></div>
+      <div className={mStyles.metricsGrid}>
+        <div className={mStyles.metricCard}>
+          <div className={mStyles.metricHeader}>
+            <span className={mStyles.metricLabel}>Core Mastery</span>
+            <div className={mStyles.agenticBadge + ' ' + mStyles.agenticActive}>
+              <div className={mStyles.agenticPulse} /> Agent Active
+            </div>
+          </div>
+          <div className={mStyles.metricValue}>
+            <span className={mStyles.metricValueAccent}>{progressPercent}</span>
+            <span className="text-white/20 text-lg ml-1">/ 100</span>
+          </div>
+          <div className={mStyles.progressTrack}><div className={mStyles.progressBar} style={{width: `${progressPercent}%`}} /></div>
+          <div className={mStyles.statGrid}>
+            <div className={mStyles.statItem}><span className={mStyles.statValue}>{doneItems}</span><span className={mStyles.statLabel}>Completed</span></div>
+            <div className={mStyles.statItem}><span className={mStyles.statValue}>{totalItems - doneItems}</span><span className={mStyles.statLabel}>Remaining</span></div>
+          </div>
+        </div>
+
+        <div className={mStyles.metricCard}>
+          <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Skill Vectors</span><Sparkles size={14} className="text-white/20" /></div>
+          <div className={mStyles.radarContainer}>
+            <svg viewBox="0 0 100 100" className={mStyles.radarSvg}>
+              {/* Radar Grid */}
+              <circle cx="50" cy="50" r="45" className={mStyles.radarGrid} />
+              <circle cx="50" cy="50" r="30" className={mStyles.radarGrid} />
+              <circle cx="50" cy="50" r="15" className={mStyles.radarGrid} />
+              {skills.map((_, i) => {
+                const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
+                return <line key={i} x1="50" y1="50" x2={50 + 45 * Math.cos(angle)} y2={50 + 45 * Math.sin(angle)} className={mStyles.radarGrid} />;
+              })}
+              {/* Radar Area */}
+              <polygon points={radarPoints} className={mStyles.radarArea} />
+              {/* Labels */}
+              {skills.map((s, i) => {
+                const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
+                const x = 50 + 48 * Math.cos(angle);
+                const y = 50 + 48 * Math.sin(angle);
+                return (
+                  <text key={i} x={x} y={y} className={mStyles.radarLabel} textAnchor="middle" dominantBaseline="middle">
+                    {s.label}
+                  </text>
+                );
+              })}
+            </svg>
+          </div>
+        </div>
+
+        <div className={mStyles.metricCard}>
+          <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Phase Status</span><Target size={14} className="text-white/20" /></div>
+          <div className={mStyles.metricValue}>{phaseTitle}</div>
+          <div className={mStyles.layerBreakdown}>
+            {layerStats.slice(0, 4).map((s, i) => (
+              <div key={i} className={mStyles.layerMiniRow}>
+                <div className={mStyles.layerMiniHeader}><span>{s.title}</span><span>{s.percent}%</span></div>
+                <div className={mStyles.layerMiniTrack}><div className={mStyles.layerMiniBar} style={{width: `${s.percent}%`}} /></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 export default function Home() {
   const [data, setData] = useState<RoadmapData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -200,11 +297,6 @@ export default function Home() {
     setAttachedImage(null);
   };
 
-  // Metrics Calculation
-  const totalItems = data ? data.layers.reduce((acc, l) => acc + l.items.length, 0) + data.milestones.length : 0;
-  const doneItems = data ? data.layers.reduce((acc, l) => acc + l.items.filter(i => i.status === 'done').length, 0) + data.milestones.filter(i => i.status === 'done').length : 0;
-  const progressPercent = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
-
   const filteredLayers = data?.layers.filter(layer => 
     layer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -274,25 +366,7 @@ export default function Home() {
       </header>
 
       {/* --- METRICS DASHBOARD --- */}
-      <section className={styles.dashboard} style={{marginBottom: '40px'}}>
-         <div className={styles.sectionLabel}><LayoutDashboard size={14} /> <span className={styles.sectionTitle}>Progression Metrics</span></div>
-         <div className={mStyles.metricsGrid}>
-            <div className={mStyles.metricCard}>
-               <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Total Mastery</span><Target size={14} className="text-white/20" /></div>
-               <div className={mStyles.metricValue}>{progressPercent}%</div>
-               <div className={mStyles.progressTrack}><div className={mStyles.progressBar} style={{width: `${progressPercent}%`}} /></div>
-               <div className={mStyles.statGrid}>
-                  <div className={mStyles.statItem}><span className={mStyles.statValue}>{doneItems}</span><span className={mStyles.statLabel}>Completed</span></div>
-                  <div className={mStyles.statItem}><span className={mStyles.statValue}>{totalItems}</span><span className={mStyles.statLabel}>Total Goals</span></div>
-               </div>
-            </div>
-            <div className={mStyles.metricCard}>
-               <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Current Phase</span><Activity size={14} className="text-white/20" /></div>
-               <div className={mStyles.metricValue}>Phase 0</div>
-               <p className={styles.cardDescription} style={{margin:0, fontSize: '11px'}}>Rust Syntax Sprint & System Design Fundamentals</p>
-            </div>
-         </div>
-      </section>
+      {data && <UserMetrics data={data} />}
 
       <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}><div className={styles.searchWrapper}><Search size={20} className={styles.searchIcon} /><input type="text" className={styles.searchInput} placeholder="Search for skills, technologies, or layers..." value={searchQuery} onChange={(e) => setSearchWrapper(e.target.value)} /></div></div>
 
