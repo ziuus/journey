@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌌 Journey Portal
 
-## Getting Started
+> **Agentic Roadmap Intelligence — Mastering the transition from 2013 fundamentals to 2030 autonomous performance.**
 
-First, run the development server:
+Journey Portal is a high-fidelity roadmap tracking and intelligence system designed for elite engineers. It visualizes the path from legacy software patterns to frontier technologies like **Rust-based runtimes**, **Agentic AI (RAG)**, and **Verifiable Compute (ZK-ML)**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ⚡ Core Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Progression Intelligence**: Real-time metrics dashboard featuring skill radar vectors and phase-completion tracking.
+- **Agent Command Center**: Integrated Gemini CLI bridge for autonomous roadmap updates and technical deep-dives.
+- **Layered Mastery**: A structured, high-concurrency roadmap spanning Systems Design, Mathematical Foundations, and Cryptographic AI.
+- **Clean Premium Aesthetic**: Minimalist, glassmorphic UI built for high-performance focus.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: Next.js 16+ (Turbopack)
+- **Styling**: Vanilla CSS Modules (Glassmorphism / Antigravity Master UI)
+- **Intelligence**: Google Gemini-2.0 via Gemini CLI Bridge
+- **Animations**: GSAP & Framer Motion for kinetic physics
+- **Scrolling**: Lenis Smooth Scroll
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone & Install**:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Configure Environment**:
+   Ensure the **Gemini CLI** is installed and authenticated in your local environment.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Run Development**:
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
+## 📂 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `src/app`: Next.js App Router logic and cinematic views.
+- `src/api`: Local bridge endpoints for roadmap manipulation and history.
+- `data/`: Local JSON-based persistent storage (Roadmap & History).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛡 Security & Privacy
+
+The Journey Portal is designed for private, high-performance use. The `data/` directory is automatically ignored by Git to ensure your personal roadmap and interaction history remain local.
+
+---
+*Built for the 2030 Engineering Frontier.*
