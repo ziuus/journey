@@ -36,11 +36,16 @@ Personamaxing Hub is a high-fidelity engine for technical mastery and biological
 
 ## 🌐 Production & Vercel Deployment
 
-Personamaxing Hub is designed to be production-grade. To deploy on Vercel:
+Personamaxing Hub is production-ready with a multi-user architecture. To enable persistent storage on Vercel:
 
-1. **Persistence**: The current system uses local `fs` storage (`data/roadmap.json`). For Vercel production, it is recommended to integrate a database like **Firebase** or **Vercel KV**. 
-2. **Environment**: Add necessary API keys (Google Gemini, etc.) to your Vercel project environment variables.
-3. **Build**: Run `npm run build` to ensure project integrity.
+1.  **Persistence**: The system is pre-configured for **Vercel KV**. 
+    - Create a Vercel KV database in your project dashboard.
+    - Connect the KV database to your project to automatically inject `KV_REST_API_URL` and `KV_REST_API_TOKEN`.
+    - If these environment variables are missing, the Hub falls back to a local `roadmap.json` template.
+2.  **Multi-User**: Users identify via a `userId` (stored in `localStorage`). Each user has an isolated roadmap in the database.
+3.  **Privacy**: Personal health/biological data in the repository is moved to `data/roadmap.personal.json` (git-ignored) and replaced with a generic template in the public `roadmap.json`.
+4.  **Environment**: Add any required API keys to your Vercel project environment variables.
+5.  **Build**: Run `npm run build` to verify project integrity.
 
 ## 📂 Project Structure
 
