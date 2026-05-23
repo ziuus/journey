@@ -1,24 +1,30 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { getRoadmap, saveRoadmap } from '@/lib/storage';
 
-const DATA_PATH = path.join(process.cwd(), 'data', 'roadmap.json');
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId') || 'default';
 
-export async function GET() {
   try {
-    const data = await fs.readFile(DATA_PATH, 'utf-8');
-    return NextResponse.json(JSON.parse(data));
-  } catch {
+    const data = await getRoadmap(userId);
+    if (!data) {
+      return NextResponse.json({ error: 'Roadmap not found' }, { status: 404 });
+    }
+    return NextResponse.json(data);
+  } catch (error) {
     return NextResponse.json({ error: 'Failed to read roadmap' }, { status: 500 });
   }
 }
 
 export async function PUT(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId') || 'default';
+
   try {
     const body = await request.json();
-    await fs.writeFile(DATA_PATH, JSON.stringify(body, null, 2));
+    await saveRoadmap(userId, body);
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error) {
     return NextResponse.json({ error: 'Failed to update roadmap' }, { status: 500 });
   }
 }

@@ -155,12 +155,34 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [expandedLayer, setExpandedLayer] = useState<string | null>(null);
   const [searchQuery, setSearchWrapper] = useState("");
-  
-  const fetchRoadmap = async () => {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  useEffect(() => {
+    const storedId = localStorage.getItem("personamaxing_user_id");
+    if (storedId) {
+      setUserId(storedId);
+    } else {
+      setIsLoginOpen(true);
+    }
+  }, []);
+
+  const fetchRoadmap = async (id: string) => {
+    setLoading(true);
     try {
-      const res = await fetch('/api/roadmap');
+      const res = await fetch(`/api/roadmap?userId=${id}`);
       const json = await res.json();
-      setData(json);
+      if (json.error && res.status === 404) {
+        setData({
+          target_roles: ["Developer"],
+          layers: [],
+          milestones: [],
+          mlops_devops: [],
+          security_ethics: []
+        });
+      } else {
+        setData(json);
+      }
     } catch (err) {
       console.error("Failed to fetch roadmap:", err);
     } finally {
@@ -169,11 +191,24 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchRoadmap();
-  }, []);
+    if (userId) {
+      fetchRoadmap(userId);
+    }
+  }, [userId]);
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const id = formData.get("userId") as string;
+    if (id) {
+      localStorage.setItem("personamaxing_user_id", id);
+      setUserId(id);
+      setIsLoginOpen(false);
+    }
+  };
 
   const toggleItem = async (type: string, layerId: string | null, itemId: string) => {
-    if (!data) return;
+    if (!data || !userId) return;
     const newData = { ...data };
     let targetItems: RoadmapItem[] = [];
     if (type === 'layer' && layerId) {
@@ -186,7 +221,7 @@ export default function Home() {
     if (item) {
       item.status = item.status === 'pending' ? 'done' : 'pending';
       setData(newData);
-      await fetch('/api/roadmap', {
+      await fetch(`/api/roadmap?userId=${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newData)
@@ -194,16 +229,54 @@ export default function Home() {
     }
   };
 
-  const filteredLayers = data?.layers.filter(layer => 
-    layer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const logout = () => {
+    localStorage.removeItem("personamaxing_user_id");
+    setUserId(null);
+    setIsLoginOpen(true);
+    setData(null);
+  };
+
+  if (isLoginOpen) {
+    return (
+      <div className={styles.container} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className={styles.card} style={{ maxWidth: '400px', width: '90%', padding: '32px' }}>
+          <h2 className={styles.cardTitle} style={{ textAlign: 'center', marginBottom: '16px' }}>Welcome to Personamaxing Hub</h2>
+          <p className={styles.cardDescription} style={{ textAlign: 'center', marginBottom: '24px' }}>Enter your User ID to access your personal biological and technical roadmap.</p>
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <input 
+              name="userId" 
+              type="text" 
+              placeholder="Your ID (e.g. noelyt101)" 
+              className={styles.searchInput} 
+              style={{ width: '100%', margin: 0 }}
+              required 
+            />
+            <button type="submit" className={styles.agenticBadge + ' ' + mStyles.agenticActive} style={{ padding: '12px', cursor: 'pointer', border: 'none', width: '100%' }}>
+              Access Dashboard
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) return <div className={styles.container}>Loading Roadmap...</div>;
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
+        <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span className={styles.cardLevel} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            User: {userId}
+          </span>
+          <button 
+            onClick={logout} 
+            className={styles.agenticBadge} 
+            style={{ cursor: 'pointer', background: 'rgba(255,100,100,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,100,100,0.2)' }}
+          >
+            Logout
+          </button>
+        </div>
         <div className={styles.logoMark}>J</div>
         <h1 className={styles.title}>Personamaxing Hub</h1>
         <p className={styles.subtitle}>Unifying technical mastery and biological optimization for the 2030 autonomous transition.</p>
