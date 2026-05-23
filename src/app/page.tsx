@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./page.module.css";
 import mStyles from "./metrics.module.css";
-import { Sparkles, Terminal as TerminalIcon, X, Send, Command, ChevronRight, Activity, Search, Image as ImageIcon, LayoutDashboard, Target } from "lucide-react";
+import { Sparkles, Search, LayoutDashboard, Target } from "lucide-react";
 
 interface RoadmapItem {
   id: string;
@@ -64,14 +64,16 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
   const currentPhase = layerStats.findIndex(s => s.percent < 100);
   const phaseTitle = currentPhase !== -1 ? `Phase ${currentPhase + 1}` : "Fully Mastered";
 
-  // Simulate Radar Data based on Layers
+  // Radar Data based on Layers
   const skills = [
     { label: "Systems", val: layerStats[0]?.percent || 0 },
     { label: "Math/ML", val: layerStats[1]?.percent || 0 },
     { label: "Deep Learning", val: layerStats[2]?.percent || 0 },
     { label: "Web3", val: layerStats[3]?.percent || 0 },
     { label: "Frontier AI", val: layerStats[4]?.percent || 0 },
-    { label: "Runtimes", val: layerStats[5]?.percent || 0 },
+    { label: "Agents", val: layerStats[5]?.percent || 0 },
+    { label: "Crypto AI", val: layerStats[6]?.percent || 0 },
+    { label: "Biological", val: Math.round(((layerStats[7]?.percent || 0) + (layerStats[8]?.percent || 0) + (layerStats[9]?.percent || 0) + (layerStats[10]?.percent || 0)) / 4) || 0 },
   ];
 
   const radarPoints = skills.map((s, i) => {
@@ -135,7 +137,7 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
           <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Phase Status</span><Target size={14} className="text-white/20" /></div>
           <div className={mStyles.metricValue}>{phaseTitle}</div>
           <div className={mStyles.layerBreakdown}>
-            {layerStats.slice(0, 4).map((s, i) => (
+            {layerStats.map((s, i) => (
               <div key={i} className={mStyles.layerMiniRow}>
                 <div className={mStyles.layerMiniHeader}><span>{s.title}</span><span>{s.percent}%</span></div>
                 <div className={mStyles.layerMiniTrack}><div className={mStyles.layerMiniBar} style={{width: `${s.percent}%`}} /></div>
@@ -152,24 +154,8 @@ export default function Home() {
   const [data, setData] = useState<RoadmapData | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedLayer, setExpandedLayer] = useState<string | null>(null);
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [searchQuery, setSearchWrapper] = useState("");
   
-  // Terminal State
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [chatInput, setChatInput] = useState("");
-  const [isChatLoading, setIsChatLoading] = useState(false);
-  const [messageQueue, setMessageQueue] = useState<{prompt: string, image?: string}[]>([]);
-  const [attachedImage, setAttachedImage] = useState<string | null>(null);
-  
-  const [history, setHistory] = useState<string[]>([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
-  const [tempInput, setTempInput] = useState("");
-  
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   const fetchRoadmap = async () => {
     try {
       const res = await fetch('/api/roadmap');
@@ -182,55 +168,9 @@ export default function Home() {
     }
   };
 
-  const fetchChatHistory = async () => {
-    try {
-      const res = await fetch('/api/history');
-      const json = await res.json();
-      if (json.messages && json.messages.length > 0) setMessages(json.messages);
-      else setMessages([{ role: 'system', content: 'Gemini CLI Bridge active. Type /help for options.' }]);
-      if (json.commandHistory) setHistory(json.commandHistory);
-    } catch (err) {
-      console.error("Failed to fetch history:", err);
-    }
-  };
-
-  const saveHistoryToServer = async (newMessages: ChatMessage[], newHistory: string[]) => {
-    try {
-      await fetch('/api/history', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages, commandHistory: newHistory })
-      });
-    } catch (err) {
-      console.error("Failed to persist history:", err);
-    }
-  };
-
   useEffect(() => {
-    const init = async () => {
-      await Promise.all([fetchRoadmap(), fetchChatHistory()]);
-    };
-    init();
+    fetchRoadmap();
   }, []);
-
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messages]);
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
-    }
-  }, [chatInput]);
-
-  useEffect(() => {
-    if (messageQueue.length > 0 && !isChatLoading) {
-      const nextRequest = messageQueue[0];
-      processAIRequest(nextRequest.prompt, nextRequest.image);
-      setMessageQueue(prev => prev.slice(1));
-    }
-  }, [messageQueue, isChatLoading]);
 
   const toggleItem = async (type: string, layerId: string | null, itemId: string) => {
     if (!data) return;
@@ -254,49 +194,6 @@ export default function Home() {
     }
   };
 
-  const processAIRequest = async (prompt: string, image?: string) => {
-    setIsChatLoading(true);
-    try {
-      const res = await fetch('/api/ask-gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, image })
-      });
-      const json = await res.json();
-      const assistantMsg: ChatMessage = { role: 'assistant', content: json.response || json.error, command: json.executed_command };
-      setMessages(prev => {
-         const updated = [...prev, assistantMsg];
-         saveHistoryToServer(updated, history);
-         return updated;
-      });
-      fetchRoadmap();
-    } catch {
-      setMessages(prev => [...prev, { role: 'system', content: 'Bridge error: Failed to connect to local CLI.' }]);
-    } finally {
-      setIsChatLoading(false);
-    }
-  };
-
-  const handleAskAI = async () => {
-    const input = chatInput.trim();
-    if (!input) return;
-    if (input === '/clear') {
-      const newMsgs: ChatMessage[] = [{ role: 'system', content: 'Terminal cleared.' }];
-      setMessages(newMsgs);
-      setHistory(prev => [input, ...prev]);
-      setChatInput("");
-      setAttachedImage(null);
-      await saveHistoryToServer(newMsgs, [input, ...history]);
-      return;
-    }
-    const userMsg: ChatMessage = { role: 'user', content: input, imagePreview: attachedImage || undefined };
-    setMessages(prev => [...prev, userMsg]);
-    setHistory(prev => [input, ...prev]);
-    setChatInput("");
-    setMessageQueue(prev => [...prev, { prompt: input, image: attachedImage || undefined }]);
-    setAttachedImage(null);
-  };
-
   const filteredLayers = data?.layers.filter(layer => 
     layer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -306,56 +203,10 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <button className={styles.toggleBtn} onClick={() => setIsPanelOpen(true)}>
-         <TerminalIcon size={24} />
-      </button>
-
-      <aside className={`${styles.sidePanel} ${isPanelOpen ? styles.sidePanelOpen : ''}`}>
-         <div className={styles.panelHeader}>
-            <div className={styles.chatTitle} style={{margin:0}}>
-               <Command size={16} /> Agent Command Center
-            </div>
-            <button onClick={() => setIsPanelOpen(false)} style={{background:'none', border:'none', color:'white', cursor:'pointer'}}>
-               <X size={20} />
-            </button>
-         </div>
-         <div className={styles.terminalContainer} ref={scrollRef}>
-            {messages.map((msg, i) => (
-               <div key={i} className={styles.terminalMessage}>
-                  <div className={`${styles.messageRole} ${msg.role === 'system' ? 'opacity-30' : ''}`}>{msg.role}</div>
-                  {msg.imagePreview && <div style={{ marginBottom: '8px' }}><img src={msg.imagePreview} alt="upload" style={{ maxWidth: '100%', borderRadius: '12px', border: '1px solid var(--glass-border)' }} /></div>}
-                  <div className={styles.messageContent}>
-                    {msg.content.split('\n').map((line, li) => <div key={li} className={line.trim().startsWith('/') ? styles.slashCommand : ''}>{line}</div>)}
-                  </div>
-                  {msg.command && <div className={styles.commandTag}><ChevronRight size={10} /> {msg.command}</div>}
-               </div>
-            ))}
-            {isChatLoading && <div className={styles.terminalMessage}><div className={styles.messageRole}>assistant</div><div className={styles.messageContent}><span className="animate-pulse">Processing intent...</span></div></div>}
-         </div>
-         <div className={styles.panelFooter}>
-            {attachedImage && <div style={{ position: 'relative', padding: '12px 12px 0' }}><img src={attachedImage} alt="preview" style={{ height: '60px', borderRadius: '8px', border: '1px solid var(--accent-green)' }} /><button onClick={() => setAttachedImage(null)} style={{ position: 'absolute', top: '4px', left: '64px', background: 'black', borderRadius: '50%', border: 'none', color: 'white', cursor: 'pointer', padding: '2px' }}><X size={12} /></button></div>}
-            <div className={`${styles.chatInputWrapper} ${isChatLoading && messageQueue.length === 0 ? styles.loading : ''}`}>
-               <button className={styles.chatSendBtn} onClick={() => fileInputRef.current?.click()} style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}><ImageIcon size={14} /></button>
-               <input type="file" ref={fileInputRef} hidden accept="image/*" onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => setAttachedImage(reader.result as string);
-                    reader.readAsDataURL(file);
-                  }
-               }} />
-               <textarea ref={textareaRef} className={styles.chatInput} placeholder="Enter command or goal..." value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => {
-                   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAskAI(); }
-                 }} style={{ resize: 'none', minHeight: '44px', color: chatInput.trim().startsWith('/') ? '#ff9f0a' : '#f5f5f7' }} />
-               <button className={styles.chatSendBtn} onClick={handleAskAI} style={{ alignSelf: 'flex-end', height: '44px' }}>{messageQueue.length > 0 ? <Activity size={14} className="animate-spin" /> : <Send size={14} />}</button>
-            </div>
-         </div>
-      </aside>
-
       <header className={styles.header}>
         <div className={styles.logoMark}>J</div>
-        <h1 className={styles.title}>Journey Portal</h1>
-        <p className={styles.subtitle}>Mastering the transition from 2013 fundamentals to 2030 autonomous performance.</p>
+        <h1 className={styles.title}>Personamaxing Hub</h1>
+        <p className={styles.subtitle}>Unifying technical mastery and biological optimization for the 2030 autonomous transition.</p>
         <div className={styles.themeSection}>
           <span className={styles.themeLabel}>Core Theme</span>
           <div className={styles.themeDivider} />
@@ -376,8 +227,29 @@ export default function Home() {
           {filteredLayers?.map((layer) => (
             <div key={layer.id} className={`${styles.card} ${expandedLayer === layer.id ? styles.cardExpanded : ''}`} onClick={() => setExpandedLayer(expandedLayer === layer.id ? null : layer.id)}>
               <div className={styles.cardContent}>
-                <div className={`${styles.cardIcon} ${layer.id === 'layer1' ? styles.cardIconDsa : layer.id === 'layer2' ? styles.cardIconMl : layer.id === 'layer3' ? styles.cardIconDl : layer.id === 'layer4' ? styles.cardIconWeb3 : layer.id === 'layer5' ? styles.cardIconAiWeb3 : layer.id === 'layer6' ? styles.cardIconDl : styles.cardIconWeb3}`}>
-                  {layer.id === 'layer1' ? '⚡' : layer.id === 'layer2' ? '🧠' : layer.id === 'layer3' ? '🔮' : layer.id === 'layer4' ? '⛓' : layer.id === 'layer5' ? '🚀' : layer.id === 'layer6' ? '⚙️' : '🔐'}
+                <div className={`${styles.cardIcon} ${
+                  layer.id === 'layer1' ? styles.cardIconDsa : 
+                  layer.id === 'layer2' ? styles.cardIconMl : 
+                  layer.id === 'layer3' ? styles.cardIconDl : 
+                  layer.id === 'layer4' ? styles.cardIconWeb3 : 
+                  layer.id === 'layer5' ? styles.cardIconAiWeb3 : 
+                  layer.id === 'layer6' ? styles.cardIconDl : 
+                  layer.id === 'layer7' ? styles.cardIconWeb3 :
+                  styles.cardIconDsa
+                }`}>
+                  {
+                    layer.id === 'layer1' ? '⚡' : 
+                    layer.id === 'layer2' ? '🧠' : 
+                    layer.id === 'layer3' ? '🔮' : 
+                    layer.id === 'layer4' ? '⛓' : 
+                    layer.id === 'layer5' ? '🚀' : 
+                    layer.id === 'layer6' ? '⚙️' : 
+                    layer.id === 'layer7' ? '🔐' : 
+                    layer.id === 'layer8' ? '🥗' : 
+                    layer.id === 'layer9' ? '💪' : 
+                    layer.id === 'layer10' ? '💆' : 
+                    layer.id === 'layer11' ? '✨' : '🎯'
+                  }
                 </div>
                 <h3 className={styles.cardTitle}><HighlightText text={layer.title} query={searchQuery} /></h3>
                 <p className={styles.cardDescription}><HighlightText text={layer.description} query={searchQuery} /></p>

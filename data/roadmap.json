@@ -6,7 +6,8 @@
     "Applied AI + Web3 Engineer",
     "Research-oriented Startup Engineer",
     "High-Performance Systems Engineer",
-    "Distributed Systems Architect"
+    "Distributed Systems Architect",
+    "Infrastructure & Platform Engineer"
   ],
   "layers": [
     {
@@ -14,18 +15,108 @@
       "title": "Layer 1 — Core Engineering & Systems (The 2013-2030 Bridge)",
       "description": "Absolute mastery of the metal, the network, and the browser. No black boxes.",
       "items": [
-        { "id": "l1_systems_design", "title": "Systems Design & First Principles", "status": "pending", "notes": "Beyond CRUD: Social network schemas (Graph models), Real-time messaging (Pub/Sub), High-concurrency architectures, Database internals (B-Trees vs LSM Trees), Consistency models (CAP Theorem, PACELC)" },
-        { "id": "l1_rust_phase0", "title": "Rust Phase 0: The Syntax Sprint", "status": "pending", "notes": "Ownership, Borrowing, Lifetimes (The fundamentals). Learn Strings vs &str, Vecs vs Slices, and Structs/Enums before starting LeetCode." },
-        { "id": "l1_rust_mastery", "title": "Rust Advanced mastery", "status": "pending", "notes": "Fearless Concurrency, Macros, Unsafe Rust, FFI (C/C++ integration)" },
-        { "id": "l1_python_cpp", "title": "Python (Advanced) & C++", "status": "pending", "notes": "Python: Asyncio, GIL bypass. C++: Performance & DSA heavy lifting, Pointers, Memory Management, SIMD, CMake." },
-        { "id": "l1_other_langs", "title": "Polyglot Proficiency: R, Java/Scala, Julia", "status": "pending", "notes": "R (Statistical modeling), Java/Scala (Big data + enterprise ML), Julia (High-performance numerical ML)" },
-        { "id": "l1_js_ts_engine", "title": "JS/TS & V8 Internals", "status": "pending", "notes": "Event Loop, Micro/Macro-tasks, JIT Compilation, Garbage Collection, ASTs" },
-        { "id": "l1_web_protocols", "title": "Advanced Web Protocols", "status": "pending", "notes": "HTTP/2 & HTTP/3 (QUIC), WebSockets, WebRTC, gRPC, GraphQL, SSE, Webhooks" },
-        { "id": "l1_browser_apis", "title": "Deep Browser APIs", "status": "pending", "notes": "Shadow DOM, Service Workers, Web Workers, IndexedDB, WebGPU, WebAssembly (Wasm)" },
-        { "id": "l1_auth_sec", "title": "Auth & Web Security", "status": "pending", "notes": "JWT, OAuth 2.0, OIDC, CORS, CSRF, XSS, Content Security Policy (CSP), Rate Limiting" },
-        { "id": "l1_infra_scale", "title": "Infrastructure & Scaling", "status": "pending", "notes": "Linux Kernel (eBPF, namespaces, cgroups), Docker, K8s, Terraform" },
-        { "id": "l1_dsa_rust_arrays", "title": "DSA (Rust Mode): Arrays & Strings", "status": "pending", "notes": "Topics: Two Pointers, Sliding Window. Use Rust iterators (map/fold/filter) for 2030-style performance." },
-        { "id": "l1_dsa_rust_logic", "title": "DSA (Rust Mode): Logic & Sorting", "status": "pending", "notes": "Topics: HashMap, Stack, Queue, Binary Search (Quick Sort), Recursion & Backtracking. Bit Manipulation, String Matching (KMP, Rabin-Karp, Z-algorithm)." }
+        {
+          "id": "l1_sd_fundamentals",
+          "title": "Systems Design: Database Internals & Core Concepts",
+          "status": "pending",
+          "notes": "DB internals (B-Trees vs LSM Trees, indexing strategies, buffer pools), CAP Theorem & PACELC, ACID vs BASE, caching strategies (Redis patterns — cache-aside, write-through, write-behind), CDN architecture & edge caching, DNS resolution & Anycast. Rust implementation: build a B-tree or LSM-based persistent KV store."
+        },
+        {
+          "id": "l1_sd_distributed",
+          "title": "Systems Design: Distributed Systems & Consensus",
+          "status": "pending",
+          "notes": "Consensus algorithms (Raft: leader election, log replication, safety), Paxos variants, gossip protocols (SWIM style), consistent hashing & ring topology, quorum reads/writes (NRW), vector clocks, distributed transactions (2PC, 3PC, SAGA), distributed ID generation (Snowflake, ULID). Rust implementation: implement Raft consensus from scratch."
+        },
+        {
+          "id": "l1_sd_scalable",
+          "title": "Systems Design: Scalable Patterns & Infrastructure",
+          "status": "pending",
+          "notes": "Load balancing (round-robin, least-connections, IP hash, consistent hashing), rate limiting (token bucket, leaky bucket, sliding window), message queues (Kafka partitioning, RabbitMQ exchanges, Pub/Sub), event sourcing & CQRS, database sharding (hash/range/geo), microservices vs monolith, service mesh sidecars, observability (metrics/traces/logs). Rust implementation: build L4/L7 load balancer and rate limiter."
+        },
+        {
+          "id": "l1_sd_real_world",
+          "title": "Systems Design: Real-World Architectures",
+          "status": "pending",
+          "notes": "Twitter (feed fanout, timeline generation, search), YouTube (upload pipeline, CDN streaming), WhatsApp (real-time messaging, E2E encryption, presence), Uber (ride matching, geospatial indexing, ETA), URL shortener, distributed file system (GFS/HDFS), proximity service (quadtrees, geohash, S2), distributed cache (Redis cluster), web crawler (URL frontier, deduplication, politeness), notification system (push/email/SMS). Rust implementation: design prototypes with throughput and latency focus."
+        },
+        {
+          "id": "l1_project_discipline",
+          "title": "Project Discipline & Execution Habits",
+          "status": "pending",
+          "notes": "Practice shipping consistently: scope projects tightly, break work into milestones, write READMEs and issue lists, keep clean commits, document tradeoffs, finish MVPs before adding features, and run retrospectives after each build."
+        },
+        {
+          "id": "l1_communication_skills",
+          "title": "Communication Skills for Engineers",
+          "status": "pending",
+          "notes": "Practice explaining designs, writing concise technical updates, presenting tradeoffs, documenting decisions, asking clear questions, and communicating progress/blockers professionally in interviews, teams, and open-source communities."
+        },
+        {
+          "id": "l1_rust_phase0",
+          "title": "Rust Phase 0: The Syntax Sprint",
+          "status": "pending",
+          "notes": "Ownership, Borrowing, Lifetimes (The fundamentals). Learn Strings vs &str, Vecs vs Slices, and Structs/Enums before starting LeetCode."
+        },
+        {
+          "id": "l1_rust_mastery",
+          "title": "Rust Advanced mastery",
+          "status": "pending",
+          "notes": "Fearless Concurrency; Send/Sync traits; Arc, Mutex, and RwLock; declarative and procedural macros; Unsafe Rust; FFI with C/C++ including bindgen; Pin and Unpin; async Rust with Future and executor basics; profiling with perf, flamegraph, and cachegrind."
+        },
+        {
+          "id": "l1_python_cpp",
+          "title": "Python (Advanced) & C++",
+          "status": "pending",
+          "notes": "Python: Asyncio, GIL bypass, PyO3 for Rust-Python interop. C++: Performance & DSA heavy lifting, Pointers, Memory Management, SIMD, CMake."
+        },
+        {
+          "id": "l1_other_langs",
+          "title": "Polyglot Proficiency: R, Java/Scala, Julia",
+          "status": "pending",
+          "notes": "R (Statistical modeling), Java/Scala (Big data + enterprise ML), Julia (High-performance numerical ML)"
+        },
+        {
+          "id": "l1_js_ts_engine",
+          "title": "JS/TS & V8 Internals",
+          "status": "pending",
+          "notes": "Event Loop, Micro/Macro-tasks, JIT Compilation, Hidden Classes, Inline Caching, Garbage Collection including Orinoco/Oilpan GC, ASTs."
+        },
+        {
+          "id": "l1_web_protocols",
+          "title": "Advanced Web Protocols",
+          "status": "pending",
+          "notes": "HTTP/2 & HTTP/3 (QUIC), WebSockets, WebRTC, gRPC, GraphQL, SSE, Webhooks, RSocket."
+        },
+        {
+          "id": "l1_browser_apis",
+          "title": "Deep Browser APIs",
+          "status": "pending",
+          "notes": "Shadow DOM, Service Workers, Web Workers, IndexedDB, WebGPU, WebAssembly (Wasm), Web Bluetooth, WebUSB, File System Access API."
+        },
+        {
+          "id": "l1_auth_sec",
+          "title": "Auth & Web Security",
+          "status": "pending",
+          "notes": "JWT signing algorithms and key rotation, OAuth 2.0 with PKCE flow, OIDC, WebAuthn and Passkeys, CORS, CSRF, XSS, Content Security Policy (CSP), Rate Limiting."
+        },
+        {
+          "id": "l1_infra_scale",
+          "title": "Infrastructure & Scaling",
+          "status": "pending",
+          "notes": "Linux Kernel deep dive (eBPF, namespaces, cgroups, seccomp, overlayfs), Docker, K8s, Terraform, Pulumi, OpenTelemetry."
+        },
+        {
+          "id": "l1_dsa_rust_arrays",
+          "title": "DSA (Rust Mode): Arrays & Strings",
+          "status": "pending",
+          "notes": "Topics: Two Pointers, Sliding Window. Use Rust iterators (map/fold/filter) for 2030-style performance."
+        },
+        {
+          "id": "l1_dsa_rust_logic",
+          "title": "DSA (Rust Mode): Logic & Sorting",
+          "status": "pending",
+          "notes": "Topics: HashMap, Stack, Queue, Binary Search (Quick Sort), Recursion & Backtracking. Bit Manipulation, String Matching (KMP, Rabin-Karp, Z-algorithm)."
+        }
       ]
     },
     {
@@ -33,13 +124,60 @@
       "title": "Layer 2 — Mathematics & ML Foundations",
       "description": "Understanding the calculus of reality before predicting it.",
       "items": [
-        { "id": "l2_linear_algebra", "title": "Linear Algebra", "status": "pending", "notes": "Vectors, Matrices, Eigenvalues/Vectors, SVD, PCA, Tensor operations" },
-        { "id": "l2_calculus", "title": "Multivariable Calculus", "status": "pending", "notes": "Partial Derivatives, Gradients, Jacobians, Hessians, Chain Rule" },
-        { "id": "l2_prob_stat", "title": "Probability & Statistics", "status": "pending", "notes": "Bayes' Theorem, Distributions, Hypothesis Testing, Maximum Likelihood Estimation, Information Theory, Statsmodels" },
-        { "id": "l2_ml_core", "title": "Classical ML Frameworks", "status": "pending", "notes": "Scikit-learn, XGBoost, LightGBM, CatBoost. Regression, Classification, Bias-Variance, Feature Engineering, Model Evaluation, Regularization." },
-        { "id": "l2_ml_theory", "title": "ML Theory & Alignment", "status": "pending", "notes": "Bias-Variance Tradeoff, Regularization (L1/L2), Cross-Validation, Loss Functions" },
-        { "id": "l2_data_eng", "title": "Data Engineering & Viz", "status": "pending", "notes": "NumPy, Pandas, Polars (Rust), Scikit-learn, Ray, Apache Spark, Kafka pipelines. Matplotlib, Seaborn, Plotly, Bokeh, Altair." },
-        { "id": "l2_dsa_rust_complex", "title": "DSA (Rust Mode): Complex Structures", "status": "pending", "notes": "Topics: Linked Lists (Box/Option), Trees & Binary Trees (DFS, BFS, Traversals), Heaps, Tries, Hash Tables, Graphs (Dijkstra, Union-Find, DSU with Path Compression), Dynamic Programming (Memoization, Tabulation), Greedy Algorithms. Advanced: Segment Trees, Fenwick Trees, Matrix Exponentiation, FFT." }
+        {
+          "id": "l2_linear_algebra",
+          "title": "Linear Algebra",
+          "status": "pending",
+          "notes": "Vectors, Matrices, Eigenvalues/Vectors, SVD, PCA, Tensor operations"
+        },
+        {
+          "id": "l2_calculus",
+          "title": "Multivariable Calculus",
+          "status": "pending",
+          "notes": "Partial Derivatives, Gradients, Jacobians, Hessians, Chain Rule"
+        },
+        {
+          "id": "l2_prob_stat",
+          "title": "Probability & Statistics",
+          "status": "pending",
+          "notes": "Bayes' Theorem, Distributions, Hypothesis Testing, Maximum Likelihood Estimation, Information Theory, Statsmodels"
+        },
+        {
+          "id": "l2_ml_core",
+          "title": "Classical ML Frameworks",
+          "status": "pending",
+          "notes": "Scikit-learn, XGBoost, LightGBM, CatBoost. Regression, Classification, Bias-Variance, Feature Engineering, Model Evaluation, Regularization."
+        },
+        {
+          "id": "l2_ml_theory",
+          "title": "ML Theory & Alignment",
+          "status": "pending",
+          "notes": "Bias-Variance Tradeoff, Regularization (L1/L2), Cross-Validation, Loss Functions"
+        },
+        {
+          "id": "l2_data_eng",
+          "title": "Data Engineering & Viz",
+          "status": "pending",
+          "notes": "NumPy, Pandas, Polars (Rust), Scikit-learn, Ray, Apache Spark, Kafka pipelines. Matplotlib, Seaborn, Plotly, Bokeh, Altair."
+        },
+        {
+          "id": "l2_dsa_rust_complex",
+          "title": "DSA (Rust Mode): Complex Structures",
+          "status": "pending",
+          "notes": "Topics: Linked Lists (Box/Option), Trees & Binary Trees (DFS, BFS, Traversals), Heaps, Tries, Hash Tables, Graphs (Dijkstra, Union-Find, DSU with Path Compression), Dynamic Programming (Memoization, Tabulation), Greedy Algorithms. Advanced: Segment Trees, Fenwick Trees, Matrix Exponentiation, FFT."
+        },
+        {
+          "id": "l2_rust_numerical",
+          "title": "Rust for Numerical & Scientific Computing",
+          "status": "pending",
+          "notes": "ndarray (N-dimensional arrays, similar to NumPy), nalgebra (linear algebra for ML/graphics), linfa (Rust ML toolkit — equivalent to scikit-learn), statrs (statistical distributions), Peroxide (scientific computing), rust-cv (computer vision). Use Rust for performant numerical pipelines — implement PCA or linear regression from scratch."
+        },
+        {
+          "id": "l2_portfolio_building",
+          "title": "Portfolio Building & Public Proof of Work",
+          "status": "pending",
+          "notes": "Turn learning into visible proof: publish polished GitHub repositories, write clear READMEs, add demos/screenshots, explain architecture decisions, document benchmarks, collect certificates, and build a consistent public portfolio."
+        }
       ]
     },
     {
@@ -47,12 +185,48 @@
       "title": "Layer 3 — Deep Learning & Modern AI Architectures",
       "description": "Building and training the brains of 2030.",
       "items": [
-        { "id": "l3_nn_theory", "title": "Neural Network Internals", "status": "pending", "notes": "Perceptrons, Activation Functions, Optimizers (Adam), Dropout, Batch Norm, Backpropagation, CNNs, RNNs" },
-        { "id": "l3_transformers", "title": "Transformer Architectures", "status": "pending", "notes": "Self-Attention, Multi-Head Attention, Positional Encoding, BERT, GPT-n, MoE, Diffusion Models" },
-        { "id": "l3_frameworks", "title": "DL Frameworks", "status": "pending", "notes": "PyTorch (Primary), TensorFlow + Keras, JAX (XLA compilation), HuggingFace Transformers, MindSpore, PaddlePaddle" },
-        { "id": "l3_computer_vision", "title": "Computer Vision", "status": "pending", "notes": "OpenCV, YOLO, Detectron2, Segment Anything (SAM)" },
-        { "id": "l3_nlp_llm", "title": "NLP & LLMs", "status": "pending", "notes": "SpaCy, NLTK, Hugging Face, LangChain, Haystack, LangServe" },
-        { "id": "l3_agentic", "title": "Agentic AI & RAG", "status": "pending", "notes": "Vector DBs (Pinecone, Qdrant), Advanced RAG, ReAct, Plan-and-Solve, Tool Calling" }
+        {
+          "id": "l3_nn_theory",
+          "title": "Neural Network Internals",
+          "status": "pending",
+          "notes": "Perceptrons, Activation Functions, Optimizers (Adam), Dropout, Batch Norm, Backpropagation, CNNs, RNNs"
+        },
+        {
+          "id": "l3_transformers",
+          "title": "Transformer Architectures",
+          "status": "pending",
+          "notes": "Self-Attention, Multi-Head Attention, Positional Encoding, BERT, GPT-n, MoE, Diffusion Models"
+        },
+        {
+          "id": "l3_frameworks",
+          "title": "DL Frameworks",
+          "status": "pending",
+          "notes": "PyTorch (Primary), TensorFlow + Keras, JAX (XLA compilation), HuggingFace Transformers, MindSpore, PaddlePaddle"
+        },
+        {
+          "id": "l3_computer_vision",
+          "title": "Computer Vision",
+          "status": "pending",
+          "notes": "OpenCV, YOLO, Detectron2, Segment Anything (SAM)"
+        },
+        {
+          "id": "l3_nlp_llm",
+          "title": "NLP & LLMs",
+          "status": "pending",
+          "notes": "SpaCy, NLTK, Hugging Face, LangChain, Haystack, LangServe"
+        },
+        {
+          "id": "l3_agentic",
+          "title": "Agentic AI & RAG",
+          "status": "pending",
+          "notes": "Vector DBs (Pinecone, Qdrant), Advanced RAG, ReAct, Plan-and-Solve, Tool Calling"
+        },
+        {
+          "id": "l3_rust_dl",
+          "title": "Rust Deep Learning Ecosystem",
+          "status": "pending",
+          "notes": "Candle (minimalist ML framework by HuggingFace, GPU/CUDA support), Burn (Rust-native DL framework with WGPU backend), tract (ONNX inference engine), ort (ONNX Runtime bindings), safetensors (safe tensor serialization). Use Rust for inference serving — lower latency, smaller footprint than Python."
+        }
       ]
     },
     {
@@ -60,12 +234,42 @@
       "title": "Layer 4 — Web3, Blockchain & Decentralized Systems",
       "description": "Engineering trustless, immutable, and uncensorable protocols.",
       "items": [
-        { "id": "l4_eth_evm", "title": "Ethereum & EVM Deep Dive", "status": "pending", "notes": "State Trie, Memory vs Storage, Gas Optimization, Opcode analysis, RPC internals" },
-        { "id": "l4_solidity_sec", "title": "Solidity & Smart Contract Security", "status": "pending", "notes": "Reentrancy, Front-running, MEV, Auditing tools (Slither, Foundry)" },
-        { "id": "l4_l2_scaling", "title": "Layer 2 & Scaling Solutions", "status": "pending", "notes": "Optimistic Rollups (Arbitrum), ZK-Rollups (StarkNet, zkSync), Data Availability" },
-        { "id": "l4_alt_vms", "title": "Alternative VMs & Rust Chains", "status": "pending", "notes": "Solana (Sealevel, Anchor), Polkadot (Substrate), CosmWasm, MoveVM" },
-        { "id": "l4_dapp_arch", "title": "DApp Architecture", "status": "pending", "notes": "Viem, WalletConnect, IPFS/Arweave, The Graph, Account Abstraction (ERC-4337)" },
-        { "id": "l4_defi_primitives", "title": "DeFi Primitives", "status": "pending", "notes": "AMMs (Uniswap V2/V3), Lending Pools (Aave), Flash Loans, Oracles (Chainlink)" }
+        {
+          "id": "l4_eth_evm",
+          "title": "Ethereum & EVM Deep Dive",
+          "status": "pending",
+          "notes": "State Trie, Memory vs Storage, Gas Optimization, Opcode analysis, RPC internals"
+        },
+        {
+          "id": "l4_solidity_sec",
+          "title": "Solidity & Smart Contract Security",
+          "status": "pending",
+          "notes": "Reentrancy, Front-running, MEV, Auditing tools (Slither, Foundry)"
+        },
+        {
+          "id": "l4_l2_scaling",
+          "title": "Layer 2 & Scaling Solutions",
+          "status": "pending",
+          "notes": "Optimistic Rollups (Arbitrum), ZK-Rollups (StarkNet, zkSync), Data Availability"
+        },
+        {
+          "id": "l4_alt_vms",
+          "title": "Alternative VMs & Rust Chains",
+          "status": "pending",
+          "notes": "Solana Sealevel runtime (BPF, parallel execution), Anchor framework, Polkadot/Substrate FRAME pallets, CosmWasm vs Solidity tradeoffs, MoveVM resource model."
+        },
+        {
+          "id": "l4_dapp_arch",
+          "title": "DApp Architecture",
+          "status": "pending",
+          "notes": "Viem, WalletConnect, IPFS/Arweave, The Graph, Account Abstraction (ERC-4337) including bundlers, paymasters, and smart accounts."
+        },
+        {
+          "id": "l4_defi_primitives",
+          "title": "DeFi Primitives",
+          "status": "pending",
+          "notes": "AMMs (Uniswap V2/V3), Lending Pools (Aave), Flash Loans, Oracles (Chainlink)"
+        }
       ]
     },
     {
@@ -73,10 +277,30 @@
       "title": "Layer 5 — AI x Web3 (The Frontier)",
       "description": "Where verifiable compute meets artificial intelligence.",
       "items": [
-        { "id": "l5_zkml", "title": "Zero-Knowledge Machine Learning (ZK-ML)", "status": "pending", "notes": "Proving inference on-chain, SNARKs/STARKs for neural networks, EZKL" },
-        { "id": "l5_decent_compute", "title": "Decentralized Compute & Training", "status": "pending", "notes": "Gensyn, Akash, Render, Bittensor (Subnets, incentives for intelligence)" },
-        { "id": "l5_tee_fhe", "title": "Privacy-Preserving AI", "status": "pending", "notes": "TEEs, Fully Homomorphic Encryption (FHE), Multi-Party Computation (MPC)" },
-        { "id": "l5_ai_oracles", "title": "AI Oracles & Agents", "status": "pending", "notes": "AI-driven DAO governance, On-chain fraud detection, Autonomous trading agents" }
+        {
+          "id": "l5_zkml",
+          "title": "Zero-Knowledge Machine Learning (ZK-ML)",
+          "status": "pending",
+          "notes": "Proving inference on-chain, SNARKs/STARKs for neural networks, EZKL, arkworks (algebraic Rust), bellman, plonky2, halo2."
+        },
+        {
+          "id": "l5_decent_compute",
+          "title": "Decentralized Compute & Training",
+          "status": "pending",
+          "notes": "Gensyn, Akash, Render, Bittensor (Subnets, incentives for intelligence)"
+        },
+        {
+          "id": "l5_tee_fhe",
+          "title": "Privacy-Preserving AI",
+          "status": "pending",
+          "notes": "TEEs including Intel SGX and AMD SEV, Fully Homomorphic Encryption (FHE), Multi-Party Computation (MPC), privacy-preserving inference patterns."
+        },
+        {
+          "id": "l5_ai_oracles",
+          "title": "AI Oracles & Agents",
+          "status": "pending",
+          "notes": "AI-driven DAO governance, On-chain fraud detection, Autonomous trading agents"
+        }
       ]
     },
     {
@@ -84,10 +308,30 @@
       "title": "Layer 6 — Autonomous Agents & High-Performance Runtimes",
       "description": "Where autonomous systems meet bare-metal performance.",
       "items": [
-        { "id": "l6_runtimes", "title": "Rust-based Runtimes & Wasm", "status": "pending", "notes": "Tokio (Async), Rayon (Parallelism), SIMD optimization, Wasm/WASI execution" },
-        { "id": "l6_browser_engines", "title": "Browser Engines & Language Internals", "status": "pending", "notes": "V8 Internals, WebKit, Language Engine design, JIT compilation, Garbage Collection algorithms" },
-        { "id": "l6_multi_agent", "title": "Multi-Agent Systems", "status": "pending", "notes": "Cognitive Architectures, Agent Swarms, AutoGPT patterns, Inter-agent communication protocols" },
-        { "id": "l6_cuda_opt", "title": "Low-level Optimization", "status": "pending", "notes": "CUDA programming, TensorRT, vLLM optimization, Quantization techniques" }
+        {
+          "id": "l6_runtimes",
+          "title": "Rust-based Runtimes & Wasm",
+          "status": "pending",
+          "notes": "Tokio (Async), Rayon (Parallelism), SIMD optimization, Wasm/WASI execution, hyper (HTTP), axum (web framework), tonic (gRPC), tower (middleware)."
+        },
+        {
+          "id": "l6_browser_engines",
+          "title": "Browser Engines & Language Internals",
+          "status": "pending",
+          "notes": "V8 Internals, WebKit, Language Engine design, JIT compilation, Garbage Collection algorithms"
+        },
+        {
+          "id": "l6_multi_agent",
+          "title": "Multi-Agent Systems",
+          "status": "pending",
+          "notes": "Cognitive architectures (SOAR, ACT-R), Agent Swarms, AutoGPT patterns, inter-agent communication protocols, swarming patterns, coordination and delegation strategies."
+        },
+        {
+          "id": "l6_cuda_opt",
+          "title": "Low-level Optimization",
+          "status": "pending",
+          "notes": "CUDA programming, TensorRT, vLLM optimization, Quantization techniques"
+        }
       ]
     },
     {
@@ -95,37 +339,346 @@
       "title": "Layer 7 — Cryptographic AI & Post-State Networks",
       "description": "Trustless verifiable compute and privacy-preserving intelligence.",
       "items": [
-        { "id": "l7_zk_pipelines", "title": "Advanced ZK-AI Pipelines", "status": "pending", "notes": "SNARKs/STARKs for verifiable inference, Halo2, Proof recursion" },
-        { "id": "l7_privacy_infra", "title": "Post-State Network Infrastructure", "status": "pending", "notes": "FHE for privacy-preserving AI, Decentralized Training Networks, Federated Learning over trustless nodes" },
-        { "id": "l7_cloud_platforms", "title": "Cloud ML Platforms", "status": "pending", "notes": "Google Cloud Vertex AI, AWS SageMaker, Azure ML Studio, Kaggle/Colab, HF Inference Endpoints" }
+        {
+          "id": "l7_zk_pipelines",
+          "title": "Advanced ZK-AI Pipelines",
+          "status": "pending",
+          "notes": "SNARKs/STARKs for verifiable inference, arkworks, snarkVM, bellman, halo2, plonky2, winterfell (STARK prover/verifier), proof recursion."
+        },
+        {
+          "id": "l7_privacy_infra",
+          "title": "Post-State Network Infrastructure",
+          "status": "pending",
+          "notes": "FHE for privacy-preserving AI, Decentralized Training Networks, Federated Learning over trustless nodes"
+        },
+        {
+          "id": "l7_cloud_platforms",
+          "title": "Cloud ML Platforms",
+          "status": "pending",
+          "notes": "Google Cloud Vertex AI, AWS SageMaker, Azure ML Studio, Kaggle/Colab, HF Inference Endpoints"
+        }
+      ]
+    },
+    {
+      "id": "layer8",
+      "title": "Layer 8 — Biological Nutrition (Fuel)",
+      "description": "Optimizing the body's internal chemistry and energy supply for sustained peak performance.",
+      "items": [
+        {
+          "id": "l8_nutrition_surplus",
+          "title": "Achieve 3000+ kcal surplus daily",
+          "status": "pending",
+          "notes": "Focus on nutrient-dense foods to support muscle growth and recovery, ensuring adequate protein, complex carbohydrates, and healthy fats. Track intake rigorously."
+        },
+        {
+          "id": "l8_macro_optimization",
+          "title": "Macronutrient Ratio Optimization",
+          "status": "pending",
+          "notes": "Refine protein, carbohydrate, and fat ratios to maximize anabolism and minimize fat gain, tailored to training intensity and body composition goals."
+        },
+        {
+          "id": "l8_hydration_electrolytes",
+          "title": "Advanced Hydration & Electrolyte Balance",
+          "status": "pending",
+          "notes": "Implement a precise hydration strategy, including electrolyte supplementation, to support cellular function, nerve impulses, and prevent fatigue."
+        },
+        {
+          "id": "l8_gut_health",
+          "title": "Gut Microbiome Optimization",
+          "status": "pending",
+          "notes": "Integrate probiotics, prebiotics, and fermented foods to enhance nutrient absorption, immune function, and overall digestive health."
+        }
+      ]
+    },
+    {
+      "id": "layer9",
+      "title": "Layer 9 — Physical Frame (Hardware)",
+      "description": "Developing a robust, functional, and aesthetically balanced physical structure.",
+      "items": [
+        {
+          "id": "l9_calisthenics_v_taper",
+          "title": "Master V-Taper Calisthenics Program",
+          "status": "pending",
+          "notes": "Execute a progressive calisthenics program focused on developing a V-taper physique, emphasizing back, shoulder, and core strength. Track progress in reps, sets, and form."
+        },
+        {
+          "id": "l9_mobility_flexibility",
+          "title": "Enhanced Mobility & Flexibility",
+          "status": "pending",
+          "notes": "Incorporate daily mobility drills and stretching routines to improve range of motion, prevent injury, and support advanced calisthenics movements."
+        },
+        {
+          "id": "l9_posture_alignment",
+          "title": "Posture & Structural Alignment Correction",
+          "status": "pending",
+          "notes": "Address postural imbalances through targeted exercises and awareness, promoting optimal spinal alignment and reducing strain during prolonged work sessions."
+        },
+        {
+          "id": "l9_recovery_protocols",
+          "title": "Active Recovery & Injury Prevention Protocols",
+          "status": "pending",
+          "notes": "Implement active recovery techniques (e.g., foam rolling, massage, cold therapy) and prehab exercises to accelerate recovery and mitigate injury risk."
+        }
+      ]
+    },
+    {
+      "id": "layer10",
+      "title": "Layer 10 — Scalp & Follicle Recovery (Maintenance)",
+      "description": "Implementing a dedicated regimen for optimal hair and scalp health.",
+      "items": [
+        {
+          "id": "l10_medicated_treatment",
+          "title": "Consistent Medicated Recovery Regimen",
+          "status": "pending",
+          "notes": "Adhere strictly to prescribed medicated treatments (e.g., topical solutions, oral supplements) to stimulate follicle health and prevent further loss. Document progress monthly."
+        },
+        {
+          "id": "l10_scalp_microcirculation",
+          "title": "Scalp Microcirculation Enhancement",
+          "status": "pending",
+          "notes": "Integrate daily scalp massage and specialized tools to improve blood flow to hair follicles, promoting nutrient delivery and waste removal."
+        },
+        {
+          "id": "l10_nutrient_support",
+          "title": "Targeted Follicle Nutrient Support",
+          "status": "pending",
+          "notes": "Ensure adequate intake of vitamins and minerals critical for hair health (e.g., Biotin, Zinc, Iron, Vitamin D) through diet and supplementation."
+        },
+        {
+          "id": "l10_stress_management",
+          "title": "Stress-Induced Hair Loss Mitigation",
+          "status": "pending",
+          "notes": "Implement stress reduction techniques (e.g., meditation, mindfulness, adequate sleep) to minimize the impact of stress hormones on hair follicle cycles."
+        }
+      ]
+    },
+    {
+      "id": "layer11",
+      "title": "Layer 11 — Aesthetic & Facial Balancing (Interface)",
+      "description": "Refining personal presentation and optimizing facial architecture for enhanced confidence and presence.",
+      "items": [
+        {
+          "id": "l11_facial_architecture",
+          "title": "Facial Architecture Definition & Symmetry",
+          "status": "pending",
+          "notes": "Explore and implement techniques (e.g., jawline exercises, facial massage, strategic grooming) to enhance facial bone structure and symmetry."
+        },
+        {
+          "id": "l11_hair_volume_styling",
+          "title": "Hair Volume & Styling Optimization",
+          "status": "pending",
+          "notes": "Experiment with styling products and techniques to maximize hair volume and achieve a desired aesthetic, complementing facial features."
+        },
+        {
+          "id": "l11_skin_health_complexion",
+          "title": "Skin Health & Complexion Refinement",
+          "status": "pending",
+          "notes": "Establish a consistent skincare routine targeting clarity, tone, and texture to present a polished and healthy complexion."
+        },
+        {
+          "id": "l11_wardrobe_personal_branding",
+          "title": "Wardrobe & Personal Branding Alignment",
+          "status": "pending",
+          "notes": "Curate a wardrobe that aligns with personal aesthetic goals and professional presence, reinforcing a cohesive personal brand."
+        }
       ]
     }
   ],
   "suggested_student_path": [
-     { "phase": 1, "title": "Core Foundations", "items": ["Python (ML) + C++ (DSA)", "Pandas, NumPy, Scikit-learn", "LeetCode Basics (Arrays, Strings, Recursion)"] },
-     { "phase": 2, "title": "Projects & Applications", "items": ["ML projects (Jupyter -> Streamlit -> FastAPI)", "DSA: Graphs, Trees, DP", "Deploy on Docker + Vercel/Streamlit Cloud"] },
-     { "phase": 3, "title": "Advanced Skills", "items": ["PyTorch/TensorFlow for DL", "LangChain + Hugging Face (NLP/LLM Apps)", "ML Pipelines (Airflow, Kubeflow)", "DSA CP on Codeforces/AtCoder"] },
-     { "phase": 4, "title": "Industry Readiness", "items": ["Cloud ML (Vertex AI, SageMaker)", "Experiment Tracking (MLflow/W&B)", "Full-stack ML App (FastAPI + DB + Frontend)", "Master DP, Graphs, Advanced Trees for Interviews"] }
+    {
+      "phase": 1,
+      "title": "Core Foundations",
+      "items": [
+        "Python (ML) + C++ (DSA)",
+        "Pandas, NumPy, Scikit-learn",
+        "LeetCode Basics (Arrays, Strings, Recursion)",
+        "Communication practice"
+      ]
+    },
+    {
+      "phase": 2,
+      "title": "Projects & Applications",
+      "items": [
+        "ML projects (Jupyter -> Streamlit -> FastAPI)",
+        "DSA: Graphs, Trees, DP",
+        "Deploy on Docker + Vercel/Streamlit Cloud",
+        "Systems Design: DB internals & CAP"
+      ]
+    },
+    {
+      "phase": 3,
+      "title": "Advanced Skills",
+      "items": [
+        "PyTorch/TensorFlow for DL",
+        "LangChain + Hugging Face (NLP/LLM Apps)",
+        "ML Pipelines (Airflow, Kubeflow)",
+        "DSA CP on Codeforces/AtCoder",
+        "Systems Design: Distributed consensus"
+      ]
+    },
+    {
+      "phase": 4,
+      "title": "Industry Readiness",
+      "items": [
+        "Cloud ML (Vertex AI, SageMaker)",
+        "Experiment Tracking (MLflow/W&B)",
+        "Full-stack ML App (FastAPI + DB + Frontend)",
+        "Master DP, Graphs, Advanced Trees for Interviews",
+        "Systems Design: Scalable patterns & real-world architectures",
+        "Portfolio project",
+        "Publish 3 projects",
+        "Complete 2 courses with certificates"
+      ]
+    }
   ],
   "milestones": [
-    { "id": "m_sys_design", "title": "Architecture: High-concurrency Social Feed Schema (PostgreSQL + Redis + Graph)", "status": "pending" },
-    { "id": "m_web_core", "title": "Web Core: Real-time collaborative canvas (WebSockets + Canvas API)", "status": "pending" },
-    { "id": "m_rust_cli", "title": "Rust: High-performance multithreaded network scanner", "status": "pending" },
-    { "id": "m_rag_agent", "title": "AI: Full-stack RAG application with custom vector search", "status": "pending" },
-    { "id": "m_defi_bot", "title": "Web3: MEV Searcher / Arbitrage Bot (Rust + EVM)", "status": "pending" },
-    { "id": "m_zk_dapp", "title": "AI+Web3: ZK-ML DApp (Prove you ran a model without revealing inputs)", "status": "pending" },
-    { "id": "m_autonomous_agent", "title": "Capstone: Autonomous On-Chain Agent with Tool Use & Wallet", "status": "pending" }
+    {
+      "id": "m_rust_kv_store",
+      "title": "Build a Rust-based KV store",
+      "status": "pending"
+    },
+    {
+      "id": "m_rust_raft",
+      "title": "Implement Raft consensus in Rust",
+      "status": "pending"
+    },
+    {
+      "id": "m_sd_load_balancer",
+      "title": "Design a load balancer",
+      "status": "pending"
+    },
+    {
+      "id": "m_sd_twitter",
+      "title": "Design Twitter's architecture",
+      "status": "pending"
+    },
+    {
+      "id": "m_publish_projects",
+      "title": "Publish 3 projects to GitHub",
+      "status": "pending"
+    },
+    {
+      "id": "m_sys_design",
+      "title": "Architecture: High-concurrency Social Feed Schema (PostgreSQL + Redis + Graph)",
+      "status": "pending"
+    },
+    {
+      "id": "m_web_core",
+      "title": "Web Core: Real-time collaborative canvas (WebSockets + Canvas API)",
+      "status": "pending"
+    },
+    {
+      "id": "m_rust_cli",
+      "title": "Rust: High-performance multithreaded network scanner",
+      "status": "pending"
+    },
+    {
+      "id": "m_rag_agent",
+      "title": "AI: Full-stack RAG application with custom vector search",
+      "status": "pending"
+    },
+    {
+      "id": "m_defi_bot",
+      "title": "Web3: MEV Searcher / Arbitrage Bot (Rust + EVM)",
+      "status": "pending"
+    },
+    {
+      "id": "m_zk_dapp",
+      "title": "AI+Web3: ZK-ML DApp (Prove you ran a model without revealing inputs)",
+      "status": "pending"
+    },
+    {
+      "id": "m_autonomous_agent",
+      "title": "Capstone: Autonomous On-Chain Agent with Tool Use & Wallet",
+      "status": "pending"
+    },
+    {
+      "id": "m_target_mass",
+      "title": "Physical: Reach 65kg lean body mass",
+      "status": "pending"
+    }
   ],
   "mlops_devops": [
-    { "id": "md_pipelines", "title": "CI/CD & Infrastructure as Code", "status": "pending", "notes": "GitHub Actions, Terraform, Ansible, Prometheus, Grafana, Docker/Podman" },
-    { "id": "md_mlops", "title": "ML Lifecycle Management", "status": "pending", "notes": "MLflow, Weights & Biases, Neptune.ai, Model Registries, Feature Stores" },
-    { "id": "md_gpu_serve", "title": "High-Performance Serving", "status": "pending", "notes": "Triton Inference Server, TensorRT, vLLM, quantization, Kubeflow" }
+    {
+      "id": "md_pipelines",
+      "title": "CI/CD & Infrastructure as Code",
+      "status": "pending",
+      "notes": "GitHub Actions, Terraform, Ansible, Prometheus, Grafana, Docker/Podman"
+    },
+    {
+      "id": "md_mlops",
+      "title": "ML Lifecycle Management",
+      "status": "pending",
+      "notes": "MLflow, Weights & Biases, Neptune.ai, Model Registries, Feature Stores"
+    },
+    {
+      "id": "md_gpu_serve",
+      "title": "High-Performance Serving",
+      "status": "pending",
+      "notes": "Triton Inference Server, TensorRT, vLLM, quantization, Kubeflow"
+    }
   ],
   "timeline": [
-    { "id": "t1", "months": "1-3", "goals": ["Rust Syntax Sprint", "Systems Fundamentals (Schema Design, Protocols)", "DSA: Rust Arrays & Strings", "Linear Algebra"], "status": "pending" },
-    { "id": "t2", "months": "4-6", "goals": ["Advanced Rust (Concurrency/Async)", "Calculus & Prob/Stat", "DSA: Rust Logic & Sorting"], "status": "pending" },
-    { "id": "t3", "months": "7-9", "goals": ["Neural Networks & PyTorch", "EVM & Solidity Fundamentals", "DSA: Complex Structures (Hard Mode)"], "status": "pending" },
-    { "id": "t4", "months": "10-12", "goals": ["Transformers & GenAI", "DeFi Protocols & Auditing", "RAG & Agentic AI Systems"], "status": "pending" },
-    { "id": "t5", "months": "13-18", "goals": ["ZK-ML & Verifiable Compute", "High-Performance GPU Serving", "Autonomous On-Chain Agents"], "status": "pending" }
+    {
+      "id": "t1",
+      "months": "1-3",
+      "goals": [
+        "Rust Syntax Sprint",
+        "Systems Fundamentals (Schema Design, Protocols)",
+        "DSA: Rust Arrays & Strings",
+        "Linear Algebra",
+        "Systems Design: DB Internals & CAP Theorem"
+      ],
+      "status": "pending",
+      "focus_area": "Core Rust, DSA, math, and system design fundamentals"
+    },
+    {
+      "id": "t2",
+      "months": "4-6",
+      "goals": [
+        "Advanced Rust (Concurrency/Async)",
+        "Calculus & Prob/Stat",
+        "DSA: Rust Logic & Sorting",
+        "Systems Design: Distributed Consensus & Raft in Rust"
+      ],
+      "status": "pending",
+      "focus_area": "Advanced Rust, statistics, and distributed systems"
+    },
+    {
+      "id": "t3",
+      "months": "7-9",
+      "goals": [
+        "Neural Networks & PyTorch",
+        "EVM & Solidity Fundamentals",
+        "DSA: Complex Structures (Hard Mode)",
+        "Systems Design: Scalable Patterns & Load Balancing"
+      ],
+      "status": "pending",
+      "focus_area": "Deep learning, Web3 basics, and scalable infrastructure patterns"
+    },
+    {
+      "id": "t4",
+      "months": "10-12",
+      "goals": [
+        "Transformers & GenAI",
+        "DeFi Protocols & Auditing",
+        "RAG & Agentic AI Systems",
+        "Systems Design: Real-World Architectures (Twitter, YouTube, WhatsApp)"
+      ],
+      "status": "pending",
+      "focus_area": "GenAI, DeFi, agents, and real-world architecture design"
+    },
+    {
+      "id": "t5",
+      "months": "13-18",
+      "goals": [
+        "ZK-ML & Verifiable Compute",
+        "High-Performance GPU Serving",
+        "Autonomous On-Chain Agents",
+        "Systems Design: Distributed AI Inference Architecture"
+      ],
+      "status": "pending",
+      "focus_area": "Verifiable AI, GPU serving, and distributed AI platforms"
+    }
   ]
 }

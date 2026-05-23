@@ -15,8 +15,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Journey - 5 Layers of Mastery",
-  description: "Master DSA, ML, DL, Web3, AI+Web3 - The path from 2013 to 2030",
+  title: "Personamaxing Hub - Unified Mastery",
+  description: "Unifying technical mastery and biological optimization for the 2030 autonomous transition.",
 };
 
 export default function RootLayout({
