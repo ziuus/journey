@@ -236,6 +236,39 @@ export default function Home() {
     setData(null);
   };
 
+  const exportData = () => {
+    if (!data) return;
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `roadmap_${userId}_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importData = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !userId) return;
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const importedData = JSON.parse(event.target?.result as string);
+        setData(importedData);
+        await fetch(`/api/roadmap?userId=${userId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(importedData)
+        });
+        alert('Roadmap imported successfully!');
+      } catch (err) {
+        console.error('Failed to import data', err);
+        alert('Failed to parse JSON file');
+      }
+    };
+    reader.readAsText(file);
+  };
+
   const filteredLayers = data?.layers.filter(layer => 
     layer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -274,6 +307,13 @@ export default function Home() {
           <span className={styles.cardLevel} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
             User: {userId}
           </span>
+          <button onClick={exportData} className={styles.agenticBadge} style={{ cursor: 'pointer', background: 'rgba(100,200,255,0.1)', color: '#64c8ff', border: '1px solid rgba(100,200,255,0.2)' }}>
+            Export JSON
+          </button>
+          <label className={styles.agenticBadge} style={{ cursor: 'pointer', background: 'rgba(100,255,150,0.1)', color: '#64ff96', border: '1px solid rgba(100,255,150,0.2)' }}>
+            Import JSON
+            <input type="file" accept=".json" onChange={importData} style={{ display: 'none' }} />
+          </label>
           <button 
             onClick={logout} 
             className={styles.agenticBadge} 
