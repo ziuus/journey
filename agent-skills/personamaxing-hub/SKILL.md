@@ -1,57 +1,20 @@
 # Personamaxing Hub
 
-This skill allows you to dynamically manage your user's biological and technical roadmap on the Personamaxing Hub. Use this when the user asks to add a new skill to their roadmap, mark a milestone as complete, or check their progression.
+This skill teaches you how to dynamically manage your user's biological and technical roadmap on the Personamaxing Hub. Use this when the user asks to add a new skill to their roadmap, mark a milestone as complete, or check their progression.
 
-## API Endpoint
-- **Base URL:** `https://personamaxing-hub.vercel.app/api/roadmap`
-- **Authentication:** Append `?userId=<user_id>` to the URL. (Always ask the user for their Personamaxing Hub ID if you don't know it, or check your memory).
+## MCP Tools Integration
+The user has installed an MCP Server (`Personamaxing Hub Engine`) that gives you direct access to their live database. 
 
-## How to Read the Roadmap
-To view the user's current progress and roadmap structure, make a GET request:
-```bash
-curl -s "https://personamaxing-hub.vercel.app/api/roadmap?userId={user_id}"
-```
+**Always ask the user for their Personamaxing Hub `user_id`** (e.g., their Google email or chosen username) if you don't already know it, or check your core memory.
 
-## Data Structure
-The roadmap is a JSON object. Here is the structure:
-```json
-{
-  "target_roles": ["Developer"],
-  "layers": [
-    {
-      "id": "layer1",
-      "title": "Layer 1: System Fundamentals",
-      "description": "...",
-      "items": [
-        {
-          "id": "item_123",
-          "title": "Learn Rust",
-          "status": "pending", // Can be "pending" or "done"
-          "goal": "Build a CLI tool"
-        }
-      ]
-    }
-  ],
-  "milestones": [],
-  "mlops_devops": [],
-  "security_ethics": []
-}
-```
-
-## How to Update the Roadmap
-If you need to add a new skill, mark an item as done, or create a new layer:
-1. **Fetch** the current roadmap using the GET request above.
-2. **Modify** the JSON object in memory (e.g., add an item to a layer's `items` array, or flip `"status": "pending"` to `"status": "done"`).
-3. **Save** the updated roadmap by sending a PUT request with the modified JSON:
-
-```bash
-curl -X PUT "https://personamaxing-hub.vercel.app/api/roadmap?userId={user_id}" \
-  -H "Content-Type: application/json" \
-  -d '{"target_roles": [...], "layers": [...], "milestones": [...], "mlops_devops": [...], "security_ethics": [...]}'
-```
-*(Tip: Save the JSON to a temporary file first, then use `curl -d @temp.json` to avoid escaping issues in bash).*
+### Available Tools:
+1. `get_roadmap(user_id)`: Fetches the full JSON of the user's roadmap. Use this to understand their current structure, what layers exist, and what goals are pending.
+2. `get_summary(user_id)`: Fetches a quick percentage completion summary of all layers.
+3. `add_goal(user_id, layer_id, title, notes)`: Appends a new goal to a specific layer.
+4. `update_goal_status(user_id, layer_id, item_id, status)`: Marks a goal as `"done"` or `"pending"`.
 
 ## Agent Workflows
-- **"Add X to my roadmap"**: Fetch the roadmap, determine which `layer` best fits the new skill (or create a new layer), append a new item object with a unique `id`, `"status": "pending"`, and `"title": "X"`. Then PUT the updated JSON.
-- **"I finished learning X"**: Fetch the roadmap, search the layers for the item titled "X", change its status to `"done"`, and PUT the updated JSON.
-- **"What should I learn next?"**: Fetch the roadmap, find the first layer that has items with `"status": "pending"`, and recommend those to the user.
+- **"Add X to my roadmap"**: First, call `get_roadmap` to see the available `layer_id`s. Find the most appropriate layer (e.g., `layer1` for tech, `layer2` for bio). Then call `add_goal` with the new skill.
+- **"I finished learning X"**: First, call `get_roadmap` to find the exact `item_id` and `layer_id` for "X". Then call `update_goal_status` to mark it as `"done"`.
+- **"What should I learn next?"**: Call `get_roadmap`, find the first layer that has items with `"status": "pending"`, and recommend those to the user.
+- **"How am I doing?"**: Call `get_summary` and present the progress to the user.
