@@ -209,7 +209,10 @@ export default function Home() {
 
   const toggleItem = async (type: string, layerId: string | null, itemId: string) => {
     if (!data || !userId) return;
-    const newData = { ...data };
+    
+    const newData: RoadmapData = JSON.parse(JSON.stringify(data));
+    const previousData = data;
+
     let targetItems: RoadmapItem[] = [];
     if (type === 'layer' && layerId) {
       const layer = newData.layers.find(l => l.id === layerId);
@@ -217,15 +220,28 @@ export default function Home() {
     } else if (type === 'milestone') {
       targetItems = newData.milestones;
     }
+
     const item = targetItems.find(i => i.id === itemId);
     if (item) {
       item.status = item.status === 'pending' ? 'done' : 'pending';
+      
       setData(newData);
-      await fetch(`/api/roadmap?userId=${userId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newData)
-      });
+
+      try {
+        const res = await fetch(`/api/roadmap?userId=${userId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newData)
+        });
+        
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}`);
+        }
+      } catch (err) {
+        console.error('Failed to sync changes with cloud. Reverting...', err);
+        setData(previousData);
+        alert('Network error: Failed to save changes to the cloud. Changes reverted.');
+      }
     }
   };
 
