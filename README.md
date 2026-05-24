@@ -38,14 +38,18 @@ Personamaxing Hub is a high-fidelity engine for technical mastery and biological
 
 Personamaxing Hub is production-ready with a multi-user architecture. To enable persistent storage on Vercel:
 
-1.  **Persistence**: The system is pre-configured for **Vercel KV**. 
-    - Create a Vercel KV database in your project dashboard.
-    - Connect the KV database to your project to automatically inject `KV_REST_API_URL` and `KV_REST_API_TOKEN`.
-    - If these environment variables are missing, the Hub falls back to a local `roadmap.json` template.
-2.  **Multi-User**: Users identify via a `userId` (stored in `localStorage`). Each user has an isolated roadmap in the database.
-3.  **Privacy**: Personal health/biological data in the repository is moved to `data/roadmap.personal.json` (git-ignored) and replaced with a generic template in the public `roadmap.json`.
-4.  **Environment**: Add any required API keys to your Vercel project environment variables.
-5.  **Build**: Run `npm run build` to verify project integrity.
+1.  **Persistence**: The system is pre-configured for **Firebase Firestore via REST API**.
+    - Firebase project: `projects-fff6a`
+    - Firestore collection: `journ_roadmaps` by default
+    - If Firebase environment variables are missing, the Hub falls back to the local `data/roadmap.json` template.
+2.  **Required Environment Variables**:
+    - `FIREBASE_PROJECT_ID`
+    - `FIREBASE_WEB_API_KEY`
+    - `FIREBASE_COLLECTION_PREFIX` (optional, defaults to `journ`)
+    - Copy `.env.example` to `.env.local` for local development.
+3.  **Multi-User**: Users identify via a `userId` stored in `localStorage`. Each user gets an isolated roadmap document in Firestore.
+4.  **Privacy**: Personal health and roadmap data should live in Firestore per user. The repository keeps only a generic public template in `data/roadmap.json`.
+5.  **Build**: Run `npm run build` to verify project integrity before deploy.
 
 ## 📂 Project Structure
 
