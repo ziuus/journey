@@ -17,6 +17,7 @@ interface LayerData {
   id: string;
   title: string;
   description: string;
+  category?: string;
   items: RoadmapItem[];
 }
 
@@ -285,7 +286,41 @@ export default function Home() {
     reader.readAsText(file);
   };
 
-  const filteredLayers = data?.layers.filter(layer => 
+  const [activeTrack, setActiveTrack] = useState<string>("Career & Tech");
+
+  const groupedLayers = React.useMemo(() => {
+    if (!data) return { "Career & Tech": [], "Health & Fitness": [], "Other": [] };
+    const groups: Record<string, LayerData[]> = { "Career & Tech": [], "Health & Fitness": [], "Other": [] };
+    
+    data.layers.forEach(layer => {
+      let category = layer.category;
+      if (!category) {
+        if (['layer1', 'layer2', 'layer3', 'layer4', 'layer5', 'layer6', 'layer7'].includes(layer.id)) {
+          category = "Career & Tech";
+        } else if (['layer8', 'layer9', 'layer10', 'layer11'].includes(layer.id)) {
+          category = "Health & Fitness";
+        } else {
+          category = "Other";
+        }
+      }
+      if (!groups[category]) groups[category] = [];
+      groups[category].push(layer);
+    });
+    
+    Object.keys(groups).forEach(k => { if (groups[k].length === 0) delete groups[k]; });
+    return groups;
+  }, [data]);
+
+  const tracks = Object.keys(groupedLayers);
+
+  useEffect(() => {
+    if (tracks.length > 0 && !tracks.includes(activeTrack)) {
+      setActiveTrack(tracks[0]);
+    }
+  }, [tracks, activeTrack]);
+
+  const currentLayers = groupedLayers[activeTrack] || [];
+  const filteredLayers = currentLayers.filter(layer => 
     layer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
   );
@@ -353,10 +388,38 @@ export default function Home() {
       {/* --- METRICS DASHBOARD --- */}
       {data && <UserMetrics data={data} />}
 
-      <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}><div className={styles.searchWrapper}><Search size={20} className={styles.searchIcon} /><input type="text" className={styles.searchInput} placeholder="Search for skills, technologies, or layers..." value={searchQuery} onChange={(e) => setSearchWrapper(e.target.value)} /></div></div>
+      <div style={{display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '16px'}}>
+        <div className={styles.searchWrapper}>
+          <Search size={20} className={styles.searchIcon} />
+          <input type="text" className={styles.searchInput} placeholder="Search for skills, technologies, or layers..." value={searchQuery} onChange={(e) => setSearchWrapper(e.target.value)} />
+        </div>
+      </div>
+
+      {tracks.length > 1 && (
+        <div style={{display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '32px'}}>
+          {tracks.map(track => (
+            <button 
+              key={track}
+              onClick={() => setActiveTrack(track)}
+              className={styles.agenticBadge}
+              style={{ 
+                cursor: 'pointer', 
+                background: activeTrack === track ? 'rgba(100,200,255,0.15)' : 'rgba(255,255,255,0.05)', 
+                color: activeTrack === track ? '#64c8ff' : '#aaa', 
+                border: activeTrack === track ? '1px solid rgba(100,200,255,0.3)' : '1px solid rgba(255,255,255,0.1)',
+                padding: '10px 20px',
+                fontSize: '15px',
+                fontWeight: activeTrack === track ? 'bold' : 'normal'
+              }}
+            >
+              {track}
+            </button>
+          ))}
+        </div>
+      )}
 
       <section className={styles.dashboard}>
-        <div className={styles.sectionLabel}><div className={styles.sectionDot} /> <span className={styles.sectionTitle}>The Mastery Layers</span></div>
+        <div className={styles.sectionLabel}><div className={styles.sectionDot} /> <span className={styles.sectionTitle}>{activeTrack} Layers</span></div>
         <div className={styles.cardsGrid}>
           {filteredLayers?.map((layer) => (
             <div key={layer.id} className={`${styles.card} ${expandedLayer === layer.id ? styles.cardExpanded : ''}`} onClick={() => setExpandedLayer(expandedLayer === layer.id ? null : layer.id)}>
