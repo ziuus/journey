@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./page.module.css";
 import mStyles from "./metrics.module.css";
 import { Sparkles, Search, LayoutDashboard, Target } from "lucide-react";
+import { signInWithGoogle, logOut, auth } from "@/lib/firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
 
 interface RoadmapItem {
   id: string;
@@ -160,12 +162,21 @@ export default function Home() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   useEffect(() => {
-    const storedId = localStorage.getItem("personamaxing_user_id");
-    if (storedId) {
-      setUserId(storedId);
-    } else {
-      setIsLoginOpen(true);
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && user.email) {
+        // Use email prefix as the document ID for consistency
+        const id = user.email.split('@')[0];
+        setUserId(id);
+        localStorage.setItem("personamaxing_user_id", id);
+        setIsLoginOpen(false);
+      } else {
+        setUserId(null);
+        localStorage.removeItem("personamaxing_user_id");
+        setIsLoginOpen(true);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const fetchRoadmap = async (id: string) => {
@@ -197,14 +208,13 @@ export default function Home() {
     }
   }, [userId]);
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const id = formData.get("userId") as string;
-    if (id) {
-      localStorage.setItem("personamaxing_user_id", id);
-      setUserId(id);
-      setIsLoginOpen(false);
+    try {
+      await signInWithGoogle();
+    } catch (err) {
+      console.error("Google Sign-In failed", err);
+      alert("Failed to sign in with Google.");
     }
   };
 
@@ -246,11 +256,13 @@ export default function Home() {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("personamaxing_user_id");
-    setUserId(null);
-    setIsLoginOpen(true);
-    setData(null);
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      setData(null);
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
   };
 
   const exportData = () => {
@@ -330,18 +342,10 @@ export default function Home() {
       <div className={styles.container} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className={styles.card} style={{ maxWidth: '400px', width: '90%', padding: '32px' }}>
           <h2 className={styles.cardTitle} style={{ textAlign: 'center', marginBottom: '16px' }}>Welcome to Personamaxing Hub</h2>
-          <p className={styles.cardDescription} style={{ textAlign: 'center', marginBottom: '24px' }}>Enter your User ID to access your personal biological and technical roadmap.</p>
+          <p className={styles.cardDescription} style={{ textAlign: 'center', marginBottom: '24px' }}>Sign in to access your personal biological and technical roadmap.</p>
           <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <input 
-              name="userId" 
-              type="text" 
-              placeholder="Your ID (e.g. noelyt101)" 
-              className={styles.searchInput} 
-              style={{ width: '100%', margin: 0 }}
-              required 
-            />
-            <button type="submit" className={styles.agenticBadge + ' ' + mStyles.agenticActive} style={{ padding: '12px', cursor: 'pointer', border: 'none', width: '100%' }}>
-              Access Dashboard
+            <button type="submit" className={styles.agenticBadge + ' ' + mStyles.agenticActive} style={{ padding: '12px', cursor: 'pointer', border: 'none', width: '100%', fontSize: '16px' }}>
+              Sign In with Google
             </button>
           </form>
         </div>
@@ -366,7 +370,7 @@ export default function Home() {
             <input type="file" accept=".json" onChange={importData} style={{ display: 'none' }} />
           </label>
           <button 
-            onClick={logout} 
+            onClick={handleLogout} 
             className={styles.agenticBadge} 
             style={{ cursor: 'pointer', background: 'rgba(255,100,100,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,100,100,0.2)' }}
           >
