@@ -58,12 +58,13 @@ Personamaxing Hub is production-ready with a multi-user architecture. To enable 
 - `data/`: Local JSON-based persistent storage (Roadmap & History).
 - `mcp/`: Personamaxing Hub MCP Engine for cross-agent roadmap interaction.
 
-## 🛠 MCP Integration
+## 🤖 AI Agent Integration (Skills)
 
-The Hub includes a built-in MCP server for direct interaction with AI agents.
-- **Server**: `mcp/server.py`
-- **Capabilities**: `get_roadmap`, `update_goal_status`, `add_goal`, `get_summary`.
-- **Registration**: Ensure it's registered in your `opencode.json` for agentic autonomy.
+Users can connect their own AI agents (like OpenCode) to Personamaxing Hub so the agent can dynamically create and manage their roadmaps based on conversations.
+
+1. Tell your AI Agent to read the skill instructions located at:
+   `agent-skills/personamaxing-hub/SKILL.md`
+2. The agent will learn the API structure and use the Hub's REST API (`/api/roadmap?userId=...`) to autonomously update your goals as you chat.
 
 ---
 *Built for the 2030 Engineering Frontier.*
