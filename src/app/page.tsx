@@ -236,6 +236,11 @@ export default function Home() {
     setData(null);
   };
 
+  const filteredLayers = data?.layers.filter(layer => 
+    layer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
   if (isLoginOpen) {
     return (
       <div className={styles.container} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
