@@ -1,24 +1,37 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { getHistory, saveHistory } from '@/lib/storage';
 
-const HISTORY_PATH = path.join(process.cwd(), 'data', 'history.json');
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
 
-export async function GET() {
+  if (!userId || userId.trim() === '') {
+    return NextResponse.json({ error: 'Valid userId is required' }, { status: 400 });
+  }
+
   try {
-    const data = await fs.readFile(HISTORY_PATH, 'utf-8');
-    return NextResponse.json(JSON.parse(data));
-  } catch {
-    return NextResponse.json({ messages: [], commandHistory: [] });
+    const data = await getHistory(userId);
+    return NextResponse.json(data);
+  } catch (err) {
+    console.error('History GET Error:', err);
+    return NextResponse.json({ chats: [] });
   }
 }
 
 export async function POST(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
+
+  if (!userId || userId.trim() === '') {
+    return NextResponse.json({ error: 'Valid userId is required' }, { status: 400 });
+  }
+
   try {
     const body = await request.json();
-    await fs.writeFile(HISTORY_PATH, JSON.stringify(body, null, 2));
+    await saveHistory(userId, body);
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.error('History POST Error:', err);
     return NextResponse.json({ error: 'Failed to save history' }, { status: 500 });
   }
 }

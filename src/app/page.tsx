@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import styles from "./page.module.css";
 import mStyles from "./metrics.module.css";
-import { Sparkles, Search, LayoutDashboard, Target } from "lucide-react";
+import { Sparkles, Search, LayoutDashboard, Target, Clock, CheckCircle2, PlusCircle, Zap, ChevronRight, ChevronUp } from "lucide-react";
 import { signInWithGoogle, logOut, auth } from "@/lib/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
+import { gsap } from "gsap";
 
 interface RoadmapItem {
   id: string;
@@ -31,11 +32,17 @@ interface RoadmapData {
   security_ethics: RoadmapItem[];
 }
 
-interface ChatMessage {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  command?: string;
-  imagePreview?: string;
+interface HistoryEntry {
+  timestamp: string;
+  action: 'update_status' | 'add_goal';
+  details: {
+    type?: string;
+    itemId: string;
+    title: string;
+    status: string;
+    layerId?: string;
+    goal?: string;
+  };
 }
 
 const HighlightText = ({ text, query }: { text: string, query: string }) => {
@@ -54,6 +61,43 @@ const HighlightText = ({ text, query }: { text: string, query: string }) => {
   );
 };
 
+const ProgressTimeline = ({ history }: { history: HistoryEntry[] }) => {
+  if (history.length === 0) {
+    return (
+      <div className={styles.timelineEmpty}>
+        <Clock size={16} />
+        <span>No recent activity recorded.</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.timeline}>
+      {history.slice(-8).reverse().map((entry, i) => (
+        <div key={i} className={styles.timelineItem}>
+          <div className={styles.timelineIndicator}>
+            <div className={styles.timelineLine} />
+            <div className={styles.timelineDot}>
+              {entry.action === 'update_status' ? <CheckCircle2 size={12} /> : <PlusCircle size={12} />}
+            </div>
+          </div>
+          <div className={styles.timelineContent}>
+            <div className={styles.timelineHeader}>
+              <span className={styles.timelineAction}>
+                {entry.action === 'update_status' ? 'Updated' : 'Added'}
+              </span>
+              <span className={styles.timelineTime}>
+                {new Date(entry.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+              </span>
+            </div>
+            <div className={styles.timelineTitle}>{entry.details.title}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const UserMetrics = ({ data }: { data: RoadmapData }) => {
   const totalItems = data.layers.reduce((acc, l) => acc + l.items.length, 0) + data.milestones.length;
   const doneItems = data.layers.reduce((acc, l) => acc + l.items.filter(i => i.status === 'done').length, 0) + data.milestones.filter(i => i.status === 'done').length;
@@ -67,7 +111,6 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
   const currentPhase = layerStats.findIndex(s => s.percent < 100);
   const phaseTitle = currentPhase !== -1 ? `Phase ${currentPhase + 1}` : "Fully Mastered";
 
-  // Radar Data based on Layers
   const skills = [
     { label: "Systems", val: layerStats[0]?.percent || 0 },
     { label: "Math/ML", val: layerStats[1]?.percent || 0 },
@@ -81,24 +124,23 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
 
   const radarPoints = skills.map((s, i) => {
     const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
-    const r = (s.val / 100) * 40 + 5; // offset 5 for visibility
+    const r = (s.val / 100) * 40 + 5;
     return `${50 + r * Math.cos(angle)},${50 + r * Math.sin(angle)}`;
   }).join(' ');
 
   return (
-    <section className={styles.dashboard} style={{marginBottom: '40px'}}>
-      <div className={styles.sectionLabel}><LayoutDashboard size={14} /> <span className={styles.sectionTitle}>Progression Intelligence</span></div>
+    <section className={styles.metricsSection}>
       <div className={mStyles.metricsGrid}>
         <div className={mStyles.metricCard}>
           <div className={mStyles.metricHeader}>
             <span className={mStyles.metricLabel}>Core Mastery</span>
-            <div className={mStyles.agenticBadge + ' ' + mStyles.agenticActive}>
-              <div className={mStyles.agenticPulse} /> Agent Active
+            <div className={mStyles.liveBadge}>
+              <div className={mStyles.pulse} /> Live
             </div>
           </div>
           <div className={mStyles.metricValue}>
-            <span className={mStyles.metricValueAccent}>{progressPercent}</span>
-            <span className="text-white/20 text-lg ml-1">/ 100</span>
+            <span className={mStyles.valueAccent}>{progressPercent}</span>
+            <span className={mStyles.valueTotal}>/ 100</span>
           </div>
           <div className={mStyles.progressTrack}><div className={mStyles.progressBar} style={{width: `${progressPercent}%`}} /></div>
           <div className={mStyles.statGrid}>
@@ -108,10 +150,9 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
         </div>
 
         <div className={mStyles.metricCard}>
-          <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Skill Vectors</span><Sparkles size={14} className="text-white/20" /></div>
+          <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Skill Vectors</span><Sparkles size={14} className={mStyles.headerIcon} /></div>
           <div className={mStyles.radarContainer}>
             <svg viewBox="0 0 100 100" className={mStyles.radarSvg}>
-              {/* Radar Grid */}
               <circle cx="50" cy="50" r="45" className={mStyles.radarGrid} />
               <circle cx="50" cy="50" r="30" className={mStyles.radarGrid} />
               <circle cx="50" cy="50" r="15" className={mStyles.radarGrid} />
@@ -119,9 +160,7 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
                 const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
                 return <line key={i} x1="50" y1="50" x2={50 + 45 * Math.cos(angle)} y2={50 + 45 * Math.sin(angle)} className={mStyles.radarGrid} />;
               })}
-              {/* Radar Area */}
               <polygon points={radarPoints} className={mStyles.radarArea} />
-              {/* Labels */}
               {skills.map((s, i) => {
                 const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
                 const x = 50 + 48 * Math.cos(angle);
@@ -137,7 +176,7 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
         </div>
 
         <div className={mStyles.metricCard}>
-          <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Phase Status</span><Target size={14} className="text-white/20" /></div>
+          <div className={mStyles.metricHeader}><span className={mStyles.metricLabel}>Phase Status</span><Target size={14} className={mStyles.headerIcon} /></div>
           <div className={mStyles.metricValue}>{phaseTitle}</div>
           <div className={mStyles.layerBreakdown}>
             {layerStats.map((s, i) => (
@@ -155,16 +194,20 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
 
 export default function Home() {
   const [data, setData] = useState<RoadmapData | null>(null);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedLayer, setExpandedLayer] = useState<string | null>(null);
   const [searchQuery, setSearchWrapper] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [newGoalByLayer, setNewGoalByLayer] = useState<Record<string, string>>({});
+  const [focusMode, setFocusMode] = useState(false);
+  
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && user.email) {
-        // Use email prefix as the document ID for consistency
         const id = user.email.split('@')[0];
         setUserId(id);
         localStorage.setItem("personamaxing_user_id", id);
@@ -175,7 +218,6 @@ export default function Home() {
         setIsLoginOpen(true);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -202,11 +244,33 @@ export default function Home() {
     }
   };
 
+  const fetchHistory = async () => {
+    try {
+      const res = await fetch('/api/progress-history');
+      if (res.ok) {
+        const json = await res.json();
+        setHistory(json);
+      }
+    } catch (err) {
+      console.error("Failed to fetch history:", err);
+    }
+  };
+
   useEffect(() => {
     if (userId) {
-      fetchRoadmap(userId);
+      void fetchRoadmap(userId);
+      void fetchHistory();
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (!loading && data && containerRef.current) {
+      gsap.fromTo(`.${styles.card}`, 
+        { opacity: 0, y: 20 }, 
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.05, ease: "power2.out" }
+      );
+    }
+  }, [loading, data]);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -214,13 +278,11 @@ export default function Home() {
       await signInWithGoogle();
     } catch (err) {
       console.error("Google Sign-In failed", err);
-      alert("Failed to sign in with Google.");
     }
   };
 
   const toggleItem = async (type: string, layerId: string | null, itemId: string) => {
     if (!data || !userId) return;
-    
     const newData: RoadmapData = JSON.parse(JSON.stringify(data));
     const previousData = data;
 
@@ -235,23 +297,49 @@ export default function Home() {
     const item = targetItems.find(i => i.id === itemId);
     if (item) {
       item.status = item.status === 'pending' ? 'done' : 'pending';
-      
       setData(newData);
-
       try {
         const res = await fetch(`/api/roadmap?userId=${userId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newData)
         });
-        
-        if (!res.ok) {
-          throw new Error(`Server returned ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        void fetchHistory();
       } catch (err) {
-        console.error('Failed to sync changes with cloud. Reverting...', err);
+        console.error('Failed to sync changes:', err);
         setData(previousData);
-        alert('Network error: Failed to save changes to the cloud. Changes reverted.');
+      }
+    }
+  };
+
+  const addGoal = async (layerId: string, title: string) => {
+    if (!data || !userId || !title.trim()) return;
+    const newData: RoadmapData = JSON.parse(JSON.stringify(data));
+    const previousData = data;
+    const layer = newData.layers.find(l => l.id === layerId);
+    
+    if (layer) {
+      const newItem: RoadmapItem = {
+        id: `item_${layer.id}_${layer.items.length + 1}_${title.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '')}`,
+        title: title.trim(),
+        status: 'pending'
+      };
+      layer.items.push(newItem);
+      setData(newData);
+      setNewGoalByLayer((current) => ({ ...current, [layerId]: '' }));
+      try {
+        const res = await fetch(`/api/roadmap?userId=${userId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newData)
+        });
+        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        void fetchHistory();
+      } catch (err) {
+        console.error('Failed to add goal:', err);
+        setData(previousData);
+        setNewGoalByLayer((current) => ({ ...current, [layerId]: title }));
       }
     }
   };
@@ -265,45 +353,11 @@ export default function Home() {
     }
   };
 
-  const exportData = () => {
-    if (!data) return;
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `roadmap_${userId}_${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const importData = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !userId) return;
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const importedData = JSON.parse(event.target?.result as string);
-        setData(importedData);
-        await fetch(`/api/roadmap?userId=${userId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(importedData)
-        });
-        alert('Roadmap imported successfully!');
-      } catch (err) {
-        console.error('Failed to import data', err);
-        alert('Failed to parse JSON file');
-      }
-    };
-    reader.readAsText(file);
-  };
-
   const [activeTrack, setActiveTrack] = useState<string>("Career & Tech");
 
-  const groupedLayers = React.useMemo(() => {
+  const groupedLayers = useMemo(() => {
     if (!data) return { "Career & Tech": [], "Health & Fitness": [], "Other": [] };
     const groups: Record<string, LayerData[]> = { "Career & Tech": [], "Health & Fitness": [], "Other": [] };
-    
     data.layers.forEach(layer => {
       let category = layer.category;
       if (!category) {
@@ -318,33 +372,32 @@ export default function Home() {
       if (!groups[category]) groups[category] = [];
       groups[category].push(layer);
     });
-    
     Object.keys(groups).forEach(k => { if (groups[k].length === 0) delete groups[k]; });
     return groups;
   }, [data]);
 
   const tracks = Object.keys(groupedLayers);
-
-  useEffect(() => {
-    if (tracks.length > 0 && !tracks.includes(activeTrack)) {
-      setActiveTrack(tracks[0]);
-    }
-  }, [tracks, activeTrack]);
-
-  const currentLayers = groupedLayers[activeTrack] || [];
+  const selectedTrack = tracks.includes(activeTrack) ? activeTrack : tracks[0];
+  const currentLayers = groupedLayers[selectedTrack] || [];
   const filteredLayers = currentLayers.filter(layer => 
     layer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const activeMilestoneId = useMemo(() => {
+    if (!data) return null;
+    return data.milestones.find(m => m.status === 'pending')?.id || null;
+  }, [data]);
+
   if (isLoginOpen) {
     return (
-      <div className={styles.container} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div className={styles.card} style={{ maxWidth: '400px', width: '90%', padding: '32px' }}>
-          <h2 className={styles.cardTitle} style={{ textAlign: 'center', marginBottom: '16px' }}>Welcome to Personamaxing Hub</h2>
-          <p className={styles.cardDescription} style={{ textAlign: 'center', marginBottom: '24px' }}>Sign in to access your personal biological and technical roadmap.</p>
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <button type="submit" className={styles.agenticBadge + ' ' + mStyles.agenticActive} style={{ padding: '12px', cursor: 'pointer', border: 'none', width: '100%', fontSize: '16px' }}>
+      <div className={styles.loginContainer}>
+        <div className={styles.loginCard}>
+          <div className={styles.logoMark}>J</div>
+          <h2 className={styles.cardTitle}>Journey Portal</h2>
+          <p className={styles.cardDescription}>Sign in to access your personal biological and technical roadmap.</p>
+          <form onSubmit={handleLogin}>
+            <button type="submit" className={styles.loginBtn}>
               Sign In with Google
             </button>
           </form>
@@ -353,126 +406,169 @@ export default function Home() {
     );
   }
 
-  if (loading) return <div className={styles.container}>Loading Roadmap...</div>;
+  if (loading) return <div className={styles.loadingScreen}>Initializing Journey...</div>;
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={containerRef}>
       <header className={styles.header}>
-        <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span className={styles.cardLevel} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            User: {userId}
-          </span>
-          <button onClick={exportData} className={styles.agenticBadge} style={{ cursor: 'pointer', background: 'rgba(100,200,255,0.1)', color: '#64c8ff', border: '1px solid rgba(100,200,255,0.2)' }}>
-            Export JSON
-          </button>
-          <label className={styles.agenticBadge} style={{ cursor: 'pointer', background: 'rgba(100,255,150,0.1)', color: '#64ff96', border: '1px solid rgba(100,255,150,0.2)' }}>
-            Import JSON
-            <input type="file" accept=".json" onChange={importData} style={{ display: 'none' }} />
-          </label>
-          <button 
-            onClick={handleLogout} 
-            className={styles.agenticBadge} 
-            style={{ cursor: 'pointer', background: 'rgba(255,100,100,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,100,100,0.2)' }}
-          >
-            Logout
-          </button>
+        <div className={styles.topBar}>
+          <div className={styles.brand}>
+            <div className={styles.logoMarkSmall}>J</div>
+            <span className={styles.brandName}>Journey</span>
+          </div>
+          <div className={styles.headerActions}>
+            <button onClick={() => setFocusMode(!focusMode)} className={`${styles.actionBtn} ${focusMode ? styles.actionBtnActive : ''}`}>
+              <Zap size={14} /> {focusMode ? 'Focus Active' : 'Focus Mode'}
+            </button>
+            <div className={styles.userSection}>
+              <span className={styles.userId}>{userId}</span>
+              <button onClick={handleLogout} className={styles.logoutBtn}>Logout</button>
+            </div>
+          </div>
         </div>
-        <div className={styles.logoMark}>J</div>
-        <h1 className={styles.title}>Personamaxing Hub</h1>
-        <p className={styles.subtitle}>Unifying technical mastery and biological optimization for the 2030 autonomous transition.</p>
-        <div className={styles.themeSection}>
-          <span className={styles.themeLabel}>Core Theme</span>
-          <div className={styles.themeDivider} />
-          <span className={`${styles.themeYear} ${styles.themeYearOld}`}>Interview Core</span>
-          <span className={styles.themeArrow}>⟹</span>
-          <span className={`${styles.themeYear} ${styles.themeYearNew}`}>Production AI</span>
+        
+        <div className={styles.hero}>
+          <h1 className={styles.title}>Autonomous Performance 2030</h1>
+          <p className={styles.subtitle}>Unifying technical mastery and biological optimization for the next decade of engineering.</p>
         </div>
       </header>
 
-      {/* --- METRICS DASHBOARD --- */}
-      {data && <UserMetrics data={data} />}
+      <main className={styles.main}>
+        <div className={styles.layoutGrid}>
+          <div className={styles.contentColumn}>
+            {data && <UserMetrics data={data} />}
 
-      <div style={{display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '16px'}}>
-        <div className={styles.searchWrapper}>
-          <Search size={20} className={styles.searchIcon} />
-          <input type="text" className={styles.searchInput} placeholder="Search for skills, technologies, or layers..." value={searchQuery} onChange={(e) => setSearchWrapper(e.target.value)} />
-        </div>
-      </div>
-
-      {tracks.length > 1 && (
-        <div style={{display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '32px'}}>
-          {tracks.map(track => (
-            <button 
-              key={track}
-              onClick={() => setActiveTrack(track)}
-              className={styles.agenticBadge}
-              style={{ 
-                cursor: 'pointer', 
-                background: activeTrack === track ? 'rgba(100,200,255,0.15)' : 'rgba(255,255,255,0.05)', 
-                color: activeTrack === track ? '#64c8ff' : '#aaa', 
-                border: activeTrack === track ? '1px solid rgba(100,200,255,0.3)' : '1px solid rgba(255,255,255,0.1)',
-                padding: '10px 20px',
-                fontSize: '15px',
-                fontWeight: activeTrack === track ? 'bold' : 'normal'
-              }}
-            >
-              {track}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <section className={styles.dashboard}>
-        <div className={styles.sectionLabel}><div className={styles.sectionDot} /> <span className={styles.sectionTitle}>{activeTrack} Layers</span></div>
-        <div className={styles.cardsGrid}>
-          {filteredLayers?.map((layer) => (
-            <div key={layer.id} className={`${styles.card} ${expandedLayer === layer.id ? styles.cardExpanded : ''}`} onClick={() => setExpandedLayer(expandedLayer === layer.id ? null : layer.id)}>
-              <div className={styles.cardContent}>
-                <div className={`${styles.cardIcon} ${
-                  layer.id === 'layer1' ? styles.cardIconDsa : 
-                  layer.id === 'layer2' ? styles.cardIconMl : 
-                  layer.id === 'layer3' ? styles.cardIconDl : 
-                  layer.id === 'layer4' ? styles.cardIconWeb3 : 
-                  layer.id === 'layer5' ? styles.cardIconAiWeb3 : 
-                  layer.id === 'layer6' ? styles.cardIconDl : 
-                  layer.id === 'layer7' ? styles.cardIconWeb3 :
-                  styles.cardIconDsa
-                }`}>
-                  {
-                    layer.id === 'layer1' ? '⚡' : 
-                    layer.id === 'layer2' ? '🧠' : 
-                    layer.id === 'layer3' ? '🔮' : 
-                    layer.id === 'layer4' ? '⛓' : 
-                    layer.id === 'layer5' ? '🚀' : 
-                    layer.id === 'layer6' ? '⚙️' : 
-                    layer.id === 'layer7' ? '🔐' : 
-                    layer.id === 'layer8' ? '🥗' : 
-                    layer.id === 'layer9' ? '💪' : 
-                    layer.id === 'layer10' ? '💆' : 
-                    layer.id === 'layer11' ? '✨' : '🎯'
-                  }
-                </div>
-                <h3 className={styles.cardTitle}><HighlightText text={layer.title} query={searchQuery} /></h3>
-                <p className={styles.cardDescription}><HighlightText text={layer.description} query={searchQuery} /></p>
-                {expandedLayer === layer.id && (
-                  <div className={styles.itemList} onClick={(e) => e.stopPropagation()}>
-                    {layer.items.map(item => (
-                      <div key={item.id} className={`${styles.itemRow} ${item.status === 'done' ? styles.itemRowDone : ''}`}>
-                        <input type="checkbox" className={styles.checkbox} checked={item.status === 'done'} onChange={() => toggleItem('layer', layer.id, item.id)} />
-                        <span className={styles.itemTitle}><HighlightText text={item.title} query={searchQuery} /></span>
-                        {item.goal && <span className={styles.cardLevel} style={{marginLeft: 'auto'}}><HighlightText text={item.goal} query={searchQuery} /></span>}
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <div className={styles.cardMeta}><span className={styles.cardLevel}>{expandedLayer === layer.id ? 'Collapse' : 'Expand'}</span><span className={styles.cardArrow}>{expandedLayer === layer.id ? '↑' : '→'}</span></div>
+            <div className={styles.controlsRow}>
+              <div className={styles.searchBox}>
+                <Search size={18} className={styles.searchIcon} />
+                <input 
+                  type="text" 
+                  className={styles.searchInput} 
+                  placeholder="Search skills, tech, or layers..." 
+                  value={searchQuery} 
+                  onChange={(e) => setSearchWrapper(e.target.value)} 
+                />
+              </div>
+              
+              <div className={styles.trackTabs}>
+                {tracks.map(track => (
+                  <button 
+                    key={track}
+                    onClick={() => setActiveTrack(track)}
+                    className={`${styles.trackTab} ${selectedTrack === track ? styles.trackTabActive : ''}`}
+                  >
+                    {track}
+                  </button>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </section>
 
-      <footer className={styles.footer}><p className={styles.footerText}><span className={styles.footerAccent}>Journey</span> — AI Goal Center 2026</p></footer>
+            <section className={styles.layersGrid}>
+              {filteredLayers?.map((layer) => (
+                <div 
+                  key={layer.id} 
+                  className={`${styles.card} ${expandedLayer === layer.id ? styles.cardExpanded : ''}`} 
+                  onClick={() => setExpandedLayer(expandedLayer === layer.id ? null : layer.id)}
+                >
+                  <div className={styles.cardGlow} />
+                  <div className={styles.cardContent}>
+                    <div className={`${styles.cardIcon} ${styles[`icon_${layer.id}`] || styles.iconDefault}`}>
+                      {layer.id === 'layer1' ? '⚡' : layer.id === 'layer2' ? '🧠' : layer.id === 'layer3' ? '🔮' : '🎯'}
+                    </div>
+                    <div className={styles.cardHeader}>
+                      <h3 className={styles.cardTitle}><HighlightText text={layer.title} query={searchQuery} /></h3>
+                      <p className={styles.cardDescription}><HighlightText text={layer.description} query={searchQuery} /></p>
+                    </div>
+                    
+                    {expandedLayer === layer.id && (
+                      <div className={styles.expandedContent} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.itemList}>
+                          {layer.items.map(item => (
+                            <div key={item.id} className={`${styles.itemRow} ${item.status === 'done' ? styles.itemRowDone : ''}`}>
+                              <div className={styles.checkboxWrapper}>
+                                <input type="checkbox" className={styles.checkbox} checked={item.status === 'done'} onChange={() => toggleItem('layer', layer.id, item.id)} />
+                              </div>
+                              <div className={styles.itemInfo}>
+                                <span className={styles.itemTitle}><HighlightText text={item.title} query={searchQuery} /></span>
+                                {item.goal && <span className={styles.itemGoal}>{item.goal}</span>}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            addGoal(layer.id, newGoalByLayer[layer.id] || '');
+                          }}
+                          className={styles.addGoalForm}
+                        >
+                          <input
+                            value={newGoalByLayer[layer.id] || ''}
+                            onChange={(e) => setNewGoalByLayer((current) => ({ ...current, [layer.id]: e.target.value }))}
+                            placeholder="Add custom goal..."
+                            className={styles.addGoalInput}
+                          />
+                          <button type="submit" className={styles.addGoalBtn}>Add</button>
+                        </form>
+                      </div>
+                    )}
+                    
+                    <div className={styles.cardFooter}>
+                      <span className={styles.itemCount}>{layer.items.length} Items</span>
+                      <div className={styles.expandIndicator}>
+                        {expandedLayer === layer.id ? <ChevronUp size={16} /> : <ChevronRight size={16} />}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </section>
+          </div>
+
+          <aside className={styles.sideColumn}>
+            <div className={styles.sideSticky}>
+              <section className={styles.sideSection}>
+                <div className={styles.sideSectionHeader}>
+                  <Target size={16} className={styles.sideIcon} />
+                  <h2 className={styles.sideSectionTitle}>Milestones</h2>
+                </div>
+                <div className={styles.milestoneList}>
+                  {data?.milestones.map((m) => (
+                    <div 
+                      key={m.id} 
+                      className={`${styles.milestoneCard} ${m.status === 'done' ? styles.milestoneDone : ''} ${focusMode && m.id === activeMilestoneId ? styles.milestoneFocused : ''}`}
+                      onClick={() => toggleItem('milestone', null, m.id)}
+                    >
+                      <div className={styles.milestoneStatus}>
+                        {m.status === 'done' ? <CheckCircle2 size={16} /> : <div className={styles.milestoneDot} />}
+                      </div>
+                      <div className={styles.milestoneInfo}>
+                        <div className={styles.milestoneTitle}>{m.title}</div>
+                        {focusMode && m.id === activeMilestoneId && <div className={styles.focusTag}>Active Target</div>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section className={styles.sideSection}>
+                <div className={styles.sideSectionHeader}>
+                  <Clock size={16} className={styles.sideIcon} />
+                  <h2 className={styles.sideSectionTitle}>Recent Activity</h2>
+                </div>
+                <ProgressTimeline history={history} />
+              </section>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <footer className={styles.footer}>
+        <div className={styles.footerContent}>
+          <span className={styles.footerBrand}>Journey Portal</span>
+          <span className={styles.footerYear}>2026 Edition</span>
+        </div>
+      </footer>
     </div>
   );
 }

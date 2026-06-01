@@ -2,13 +2,19 @@
   "name": "journey",
   "version": "0.1.0",
   "private": true,
+  "bin": {
+    "start-roadmap": "./scripts/start-roadmap.js",
+    "journey-mcp": "./scripts/mcp-server.js"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "start-mcp": "node ./scripts/mcp-server.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@tauri-apps/api": "^2.10.1",
     "@tauri-apps/plugin-opener": "^2.5.3",
     "@tauri-apps/plugin-shell": "^2.3.5",

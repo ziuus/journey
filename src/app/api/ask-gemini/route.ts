@@ -1,47 +1,83 @@
+import { GoogleGenerativeAI, type Part } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import fs from 'fs/promises';
-import path from 'path';
-import os from 'os';
 
-const execAsync = promisify(exec);
+function parseDataUrl(dataUrl: string) {
+  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+  if (!match) return null;
+
+  return {
+    data: match[2],
+    mimeType: match[1],
+  };
+}
 
 export async function POST(request: Request) {
-  let tempImagePath = '';
   try {
-    const { prompt, image } = await request.json();
-    
-    if (!prompt) {
+    const { apiKey, image, messages, model: requestedModel, prompt, roadmapContext } = (await request.json()) as {
+      apiKey?: string;
+      image?: string;
+      messages?: { role: 'user' | 'assistant' | 'system'; content: string }[];
+      model?: string;
+      prompt?: string;
+      roadmapContext?: string;
+    };
+
+    const userPrompt = prompt?.trim() || messages?.at(-1)?.content?.trim();
+
+    if (!userPrompt) {
       return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
     }
 
-    let command = `gemini -p "${prompt.replace(/"/g, '\\"')}"`;
+    if (!apiKey?.trim()) {
+      return NextResponse.json({ error: 'Add your Gemini API key first. This app uses BYOK.' }, { status: 400 });
+    }
+
+    const modelName = requestedModel?.trim() || 'gemini-2.5-flash';
+    const model = new GoogleGenerativeAI(apiKey.trim()).getGenerativeModel({
+      model: modelName,
+    });
+
+    const conversationText = (messages || [])
+      .filter((message) => message.content?.trim())
+      .slice(-16)
+      .map((message) => `${message.role.toUpperCase()}: ${message.content}`)
+      .join('\n\n');
+
+    const agenticPrompt = [
+      'You are Journey Agent, an agentic personal roadmap coach inside Personamaxing Hub.',
+      'Help the user plan, break down goals, reflect on progress, and suggest concrete next actions.',
+      'When useful, reference their roadmap context. Be concise, practical, and action-oriented.',
+      roadmapContext ? `Current roadmap context:\n${roadmapContext}` : '',
+      conversationText ? `Conversation so far:\n${conversationText}` : '',
+      `Latest user request:\n${userPrompt}`,
+    ].filter(Boolean).join('\n\n---\n\n');
+
+    const parts: Part[] = [{ text: agenticPrompt }];
 
     if (image) {
-      // image is expected to be a base64 string (data:image/png;base64,...)
-      const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
-      const buffer = Buffer.from(base64Data, 'base64');
-      tempImagePath = path.join(os.tmpdir(), `journey_upload_${Date.now()}.png`);
-      await fs.writeFile(tempImagePath, buffer);
-      command += ` @${tempImagePath}`;
+      const parsedImage = parseDataUrl(image);
+      if (!parsedImage) {
+        return NextResponse.json({ error: 'Image must be a base64 data URL' }, { status: 400 });
+      }
+
+      parts.push({
+        inlineData: {
+          data: parsedImage.data,
+          mimeType: parsedImage.mimeType,
+        },
+      });
     }
 
-    const { stdout, stderr } = await execAsync(command);
+    const result = await model.generateContent(parts);
+    const response = result.response.text();
 
-    if (stderr) {
-      console.error('Gemini CLI stderr:', stderr);
-    }
-
-    return NextResponse.json({ response: stdout, executed_command: command });
+    return NextResponse.json({
+      response,
+      executed_command: `gemini-sdk-byok:${modelName}`,
+    });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Gemini CLI execution error:', error);
-    return NextResponse.json({ error: 'Failed to execute Gemini CLI', details: errorMessage }, { status: 500 });
-  } finally {
-    // Clean up temp image if created
-    if (tempImagePath) {
-      try { await fs.unlink(tempImagePath); } catch {}
-    }
+    console.error('Gemini SDK execution error:', error);
+    return NextResponse.json({ error: 'Failed to call Gemini API', details: errorMessage }, { status: 500 });
   }
 }
