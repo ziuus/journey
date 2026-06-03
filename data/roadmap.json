@@ -358,6 +358,130 @@
           "notes": "Google Cloud Vertex AI, AWS SageMaker, Azure ML Studio, Kaggle/Colab, HF Inference Endpoints"
         }
       ]
+    },
+    {
+      "id": "layer8",
+      "title": "Layer 8 — Biological Nutrition (Fuel)",
+      "description": "Optimizing the body's internal chemistry and energy supply for sustained peak performance.",
+      "items": [
+        {
+          "id": "l8_nutrition_surplus",
+          "title": "Achieve 3000+ kcal surplus daily",
+          "status": "pending",
+          "notes": "Focus on nutrient-dense foods to support muscle growth and recovery, ensuring adequate protein, complex carbohydrates, and healthy fats. Track intake rigorously."
+        },
+        {
+          "id": "l8_macro_optimization",
+          "title": "Macronutrient Ratio Optimization",
+          "status": "pending",
+          "notes": "Refine protein, carbohydrate, and fat ratios to maximize anabolism and minimize fat gain, tailored to training intensity and body composition goals."
+        },
+        {
+          "id": "l8_hydration_electrolytes",
+          "title": "Advanced Hydration & Electrolyte Balance",
+          "status": "pending",
+          "notes": "Implement a precise hydration strategy, including electrolyte supplementation, to support cellular function, nerve impulses, and prevent fatigue."
+        },
+        {
+          "id": "l8_gut_health",
+          "title": "Gut Microbiome Optimization",
+          "status": "pending",
+          "notes": "Integrate probiotics, prebiotics, and fermented foods to enhance nutrient absorption, immune function, and overall digestive health."
+        }
+      ]
+    },
+    {
+      "id": "layer9",
+      "title": "Layer 9 — Physical Frame (Hardware)",
+      "description": "Developing a robust, functional, and aesthetically balanced physical structure.",
+      "items": [
+        {
+          "id": "l9_calisthenics_v_taper",
+          "title": "Master V-Taper Calisthenics Program",
+          "status": "pending",
+          "notes": "Execute a progressive calisthenics program focused on developing a V-taper physique, emphasizing back, shoulder, and core strength. Track progress in reps, sets, and form."
+        },
+        {
+          "id": "l9_mobility_flexibility",
+          "title": "Enhanced Mobility & Flexibility",
+          "status": "pending",
+          "notes": "Incorporate daily mobility drills and stretching routines to improve range of motion, prevent injury, and support advanced calisthenics movements."
+        },
+        {
+          "id": "l9_posture_alignment",
+          "title": "Posture & Structural Alignment Correction",
+          "status": "pending",
+          "notes": "Address postural imbalances through targeted exercises and awareness, promoting optimal spinal alignment and reducing strain during prolonged work sessions."
+        },
+        {
+          "id": "l9_recovery_protocols",
+          "title": "Active Recovery & Injury Prevention Protocols",
+          "status": "pending",
+          "notes": "Implement active recovery techniques (e.g., foam rolling, massage, cold therapy) and prehab exercises to accelerate recovery and mitigate injury risk."
+        }
+      ]
+    },
+    {
+      "id": "layer10",
+      "title": "Layer 10 — Scalp & Follicle Recovery (Maintenance)",
+      "description": "Implementing a dedicated regimen for optimal hair and scalp health.",
+      "items": [
+        {
+          "id": "l10_medicated_treatment",
+          "title": "Consistent Medicated Recovery Regimen",
+          "status": "pending",
+          "notes": "Adhere strictly to prescribed medicated treatments (e.g., topical solutions, oral supplements) to stimulate follicle health and prevent further loss. Document progress monthly."
+        },
+        {
+          "id": "l10_scalp_microcirculation",
+          "title": "Scalp Microcirculation Enhancement",
+          "status": "pending",
+          "notes": "Integrate daily scalp massage and specialized tools to improve blood flow to hair follicles, promoting nutrient delivery and waste removal."
+        },
+        {
+          "id": "l10_nutrient_support",
+          "title": "Targeted Follicle Nutrient Support",
+          "status": "pending",
+          "notes": "Ensure adequate intake of vitamins and minerals critical for hair health (e.g., Biotin, Zinc, Iron, Vitamin D) through diet and supplementation."
+        },
+        {
+          "id": "l10_stress_management",
+          "title": "Stress-Induced Hair Loss Mitigation",
+          "status": "pending",
+          "notes": "Implement stress reduction techniques (e.g., meditation, mindfulness, adequate sleep) to minimize the impact of stress hormones on hair follicle cycles."
+        }
+      ]
+    },
+    {
+      "id": "layer11",
+      "title": "Layer 11 — Aesthetic & Facial Balancing (Interface)",
+      "description": "Refining personal presentation and optimizing facial architecture for enhanced confidence and presence.",
+      "items": [
+        {
+          "id": "l11_facial_architecture",
+          "title": "Facial Architecture Definition & Symmetry",
+          "status": "pending",
+          "notes": "Explore and implement techniques (e.g., jawline exercises, facial massage, strategic grooming) to enhance facial bone structure and symmetry."
+        },
+        {
+          "id": "l11_hair_volume_styling",
+          "title": "Hair Volume & Styling Optimization",
+          "status": "pending",
+          "notes": "Experiment with styling products and techniques to maximize hair volume and achieve a desired aesthetic, complementing facial features."
+        },
+        {
+          "id": "l11_skin_health_complexion",
+          "title": "Skin Health & Complexion Refinement",
+          "status": "pending",
+          "notes": "Establish a consistent skincare routine targeting clarity, tone, and texture to present a polished and healthy complexion."
+        },
+        {
+          "id": "l11_wardrobe_personal_branding",
+          "title": "Wardrobe & Personal Branding Alignment",
+          "status": "pending",
+          "notes": "Curate a wardrobe that aligns with personal aesthetic goals and professional presence, reinforcing a cohesive personal brand."
+        }
+      ]
     }
   ],
   "suggested_student_path": [
@@ -467,6 +591,11 @@
       "id": "m_autonomous_agent",
       "title": "Capstone: Autonomous On-Chain Agent with Tool Use & Wallet",
       "status": "pending"
+    },
+    {
+      "id": "m_target_mass",
+      "title": "Physical: Reach 65kg lean body mass",
+      "status": "pending"
     }
   ],
   "mlops_devops": [
@@ -551,5 +680,6 @@
       "status": "pending",
       "focus_area": "Verifiable AI, GPU serving, and distributed AI platforms"
     }
-  ]
+  ],
+  "security_ethics": []
 }
