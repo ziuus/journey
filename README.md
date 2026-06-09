@@ -1,13 +1,14 @@
-# 🌌 Personamaxing Hub
+# 🌌 Journey: Universal Goal Engine
 
-> **Unified Mastery Engine — Mastering the transition from 2013 fundamentals to 2030 autonomous performance.**
+> **Universal Mastery Engine — Achieving any goal through structured layers, milestones, and AI assistance.**
 
-Personamaxing Hub is a high-fidelity engine for technical mastery and biological optimization. It visualizes the path from legacy software patterns to frontier technologies like **Rust-based runtimes**, **Agentic AI (RAG)**, and **Verifiable Compute (ZK-ML)**, integrated with a foundations of a **Biological Stack** (Nutrition, Fitness, Grooming).
+Journey is a high-fidelity platform for tracking and achieving any type of goal—whether it's technical mastery, biological optimization, personal projects, or life milestones. It breaks down massive ambitions into structured **Layers** and actionable **Sub-tasks (Milestones)**, designed to be accomplished with the help of AI agents. 
 
 ## ⚡ Core Features
 
-- **Progression Intelligence**: Real-time metrics dashboard featuring skill radar vectors and phase-completion tracking.
-- **Unified Mastery**: A structured roadmap spanning Systems Design, Cryptographic AI, and Biological Performance.
+- **Universal Goal Tracking**: Create custom layers for any domain (Career, Health, Personal, etc.) and track progress through actionable sub-tasks.
+- **AI-Assisted Execution**: Built from the ground up to integrate with AI agents (like OpenCode or Gemini) that can dynamically create, update, and manage your goals based on conversation.
+- **Progression Intelligence**: Real-time metrics dashboard featuring category radar vectors and phase-completion tracking.
 - **MCP Integration**: Direct tool-based access for AI agents to interact with and update the roadmap.
 - **Clean Premium Aesthetic**: Minimalist, glassmorphic UI built for high-performance focus.
 
@@ -36,12 +37,12 @@ Personamaxing Hub is a high-fidelity engine for technical mastery and biological
 
 ## 🌐 Production & Vercel Deployment
 
-Personamaxing Hub is production-ready with a multi-user architecture. To enable persistent storage on Vercel:
+Journey is production-ready with a multi-user architecture. To enable persistent storage on Vercel:
 
 1.  **Persistence**: The system is pre-configured for **Firebase Firestore via REST API**.
     - Firebase project: `projects-fff6a`
     - Firestore collection: `journ_roadmaps` by default
-    - If Firebase environment variables are missing, the Hub falls back to the local `data/roadmap.json` template.
+    - If Firebase environment variables are missing, the app falls back to the local `data/roadmap.json` template.
 2.  **Required Environment Variables**:
     - `FIREBASE_PROJECT_ID`
     - `FIREBASE_WEB_API_KEY`
@@ -56,15 +57,15 @@ Personamaxing Hub is production-ready with a multi-user architecture. To enable 
 - `src/app`: Next.js App Router logic and cinematic views.
 - `src/app/api`: Local bridge endpoints for roadmap manipulation and history.
 - `data/`: Local JSON-based persistent storage (Roadmap & History).
-- `mcp/`: Personamaxing Hub MCP Engine for cross-agent roadmap interaction.
+- `mcp/`: Journey MCP Engine for cross-agent roadmap interaction.
 
 ## 🤖 AI Agent Integration (Skills)
 
-Users can connect their own AI agents (like OpenCode) to Personamaxing Hub so the agent can dynamically create and manage their roadmaps based on conversations.
+Users can connect their own AI agents (like OpenCode) to Journey so the agent can dynamically create and manage their roadmaps based on conversations.
 
 1. Tell your AI Agent to read the skill instructions located at:
-   `agent-skills/personamaxing-hub/SKILL.md`
-2. The agent will learn the API structure and use the Hub's REST API (`/api/roadmap?userId=...`) to autonomously update your goals as you chat.
+   `agent-skills/journey/SKILL.md`
+2. The agent will learn the API structure and use the app's REST API (`/api/roadmap?userId=...`) to autonomously update your goals as you chat.
 
 ---
 *Built for the 2030 Engineering Frontier.*
