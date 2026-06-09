@@ -4,8 +4,6 @@ import React, { useEffect, useState, useMemo, useRef } from "react";
 import styles from "./page.module.css";
 import mStyles from "./metrics.module.css";
 import { Sparkles, Search, LayoutDashboard, Target, Clock, CheckCircle2, PlusCircle, Zap, ChevronRight, ChevronUp } from "lucide-react";
-import { signInWithGoogle, logOut, auth } from "@/lib/firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
 import { gsap } from "gsap";
 
 interface RoadmapItem {
@@ -206,19 +204,8 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && user.email) {
-        const id = user.email.split('@')[0];
-        setUserId(id);
-        localStorage.setItem("personamaxing_user_id", id);
-        setIsLoginOpen(false);
-      } else {
-        setUserId(null);
-        localStorage.removeItem("personamaxing_user_id");
-        setIsLoginOpen(true);
-      }
-    });
-    return () => unsubscribe();
+    setUserId("local_user");
+    setIsLoginOpen(false);
   }, []);
 
   const fetchRoadmap = async (id: string) => {
@@ -271,15 +258,6 @@ export default function Home() {
       );
     }
   }, [loading, data]);
-
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      await signInWithGoogle();
-    } catch (err) {
-      console.error("Google Sign-In failed", err);
-    }
-  };
 
   const toggleItem = async (type: string, layerId: string | null, itemId: string) => {
     if (!data || !userId) return;
@@ -344,16 +322,21 @@ export default function Home() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      setData(null);
-    } catch (err) {
-      console.error("Logout failed", err);
-    }
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setUserId("local_user");
+    setIsLoginOpen(false);
+  };
+
+  const handleLogout = () => {
+    setData(null);
+    setHistory([]);
+    setUserId(null);
+    setIsLoginOpen(true);
   };
 
   const [activeTrack, setActiveTrack] = useState<string>("Career & Tech");
+  const [viewMode, setViewMode] = useState<'grid' | 'tree'>('grid');
 
   const groupedLayers = useMemo(() => {
     if (!data) return { "Career & Tech": [], "Health & Fitness": [], "Other": [] };
@@ -361,10 +344,10 @@ export default function Home() {
     data.layers.forEach(layer => {
       let category = layer.category;
       if (!category) {
-        if (['layer1', 'layer2', 'layer3', 'layer4', 'layer5', 'layer6', 'layer7'].includes(layer.id)) {
-          category = "Career & Tech";
-        } else if (['layer8', 'layer9', 'layer10', 'layer11'].includes(layer.id)) {
+        if (['layer8', 'layer9', 'layer10', 'layer11'].includes(layer.id)) {
           category = "Health & Fitness";
+        } else if (layer.id.startsWith('layer')) {
+          category = "Career & Tech";
         } else {
           category = "Other";
         }
@@ -387,6 +370,25 @@ export default function Home() {
   const activeMilestoneId = useMemo(() => {
     if (!data) return null;
     return data.milestones.find(m => m.status === 'pending')?.id || null;
+  }, [data]);
+
+  const overview = useMemo(() => {
+    if (!data) return null;
+
+    const layerItems = data.layers.reduce((acc, layer) => acc + layer.items.length, 0);
+    const doneLayerItems = data.layers.reduce((acc, layer) => acc + layer.items.filter(item => item.status === 'done').length, 0);
+    const doneMilestones = data.milestones.filter(item => item.status === 'done').length;
+    const total = layerItems + data.milestones.length;
+    const done = doneLayerItems + doneMilestones;
+
+    return {
+      total,
+      done,
+      remaining: Math.max(total - done, 0),
+      percent: total > 0 ? Math.round((done / total) * 100) : 0,
+      roles: data.target_roles.length,
+      milestones: data.milestones.length,
+    };
   }, [data]);
 
   if (isLoginOpen) {
@@ -428,42 +430,82 @@ export default function Home() {
         </div>
         
         <div className={styles.hero}>
-          <h1 className={styles.title}>Autonomous Performance 2030</h1>
+          <div className={styles.eyebrow}>Unified Mastery Engine</div>
+          <h1 className={styles.title}>Journey</h1>
           <p className={styles.subtitle}>Unifying technical mastery and biological optimization for the next decade of engineering.</p>
+          {overview && (
+            <div className={styles.heroStats}>
+              <div className={styles.heroStatCard}>
+                <span className={styles.heroStatValue}>{overview.percent}%</span>
+                <span className={styles.heroStatLabel}>overall progress</span>
+              </div>
+              <div className={styles.heroStatCard}>
+                <span className={styles.heroStatValue}>{overview.remaining}</span>
+                <span className={styles.heroStatLabel}>active goals</span>
+              </div>
+              <div className={styles.heroStatCard}>
+                <span className={styles.heroStatValue}>{overview.roles}</span>
+                <span className={styles.heroStatLabel}>target roles</span>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
       <main className={styles.main}>
         <div className={styles.layoutGrid}>
           <div className={styles.contentColumn}>
-            {data && <UserMetrics data={data} />}
-
-            <div className={styles.controlsRow}>
-              <div className={styles.searchBox}>
-                <Search size={18} className={styles.searchIcon} />
-                <input 
-                  type="text" 
-                  className={styles.searchInput} 
-                  placeholder="Search skills, tech, or layers..." 
-                  value={searchQuery} 
-                  onChange={(e) => setSearchWrapper(e.target.value)} 
-                />
+            <section className={styles.roadmapSection}>
+              <div className={styles.sectionIntro}>
+                <div>
+                  <span className={styles.sectionKicker}>Roadmap</span>
+                  <h2 className={styles.sectionTitle}>Choose one track, then expand only what you need.</h2>
+                </div>
+                <p className={styles.sectionCopy}>A calmer board for scanning progress, finding the next skill, and keeping attention on the current path.</p>
               </div>
-              
-              <div className={styles.trackTabs}>
-                {tracks.map(track => (
+
+              <div className={styles.controlsRow}>
+                <div className={styles.searchBox}>
+                  <Search size={18} className={styles.searchIcon} />
+                  <input 
+                    type="text" 
+                    className={styles.searchInput} 
+                    placeholder="Search skills, tech, or layers..." 
+                    value={searchQuery} 
+                    onChange={(e) => setSearchWrapper(e.target.value)} 
+                  />
+                </div>
+                
+                <div className={styles.trackTabs}>
+                  {tracks.map(track => (
+                    <button 
+                      key={track}
+                      onClick={() => setActiveTrack(track)}
+                      className={`${styles.trackTab} ${selectedTrack === track ? styles.trackTabActive : ''}`}
+                    >
+                      {track}
+                    </button>
+                  ))}
+                </div>
+                
+                <div className={styles.viewToggles}>
                   <button 
-                    key={track}
-                    onClick={() => setActiveTrack(track)}
-                    className={`${styles.trackTab} ${selectedTrack === track ? styles.trackTabActive : ''}`}
+                    onClick={() => setViewMode('grid')}
+                    className={`${styles.trackTab} ${viewMode === 'grid' ? styles.trackTabActive : ''}`}
                   >
-                    {track}
+                    Grid
                   </button>
-                ))}
+                  <button 
+                    onClick={() => setViewMode('tree')}
+                    className={`${styles.trackTab} ${viewMode === 'tree' ? styles.trackTabActive : ''}`}
+                  >
+                    Tree
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <section className={styles.layersGrid}>
+              {viewMode === 'grid' ? (
+              <div className={styles.layersGrid}>
               {filteredLayers?.map((layer) => (
                 <div 
                   key={layer.id} 
@@ -473,11 +515,23 @@ export default function Home() {
                   <div className={styles.cardGlow} />
                   <div className={styles.cardContent}>
                     <div className={`${styles.cardIcon} ${styles[`icon_${layer.id}`] || styles.iconDefault}`}>
-                      {layer.id === 'layer1' ? '⚡' : layer.id === 'layer2' ? '🧠' : layer.id === 'layer3' ? '🔮' : '🎯'}
+                      {layer.id === 'layer1' ? '⚡' : layer.id === 'layer2' ? '🧠' : layer.id === 'layer3' ? '🔮' : layer.id === 'layer4' ? '⛓️' : layer.id === 'layer5' ? '🌌' : layer.id === 'layer6' ? '🤖' : layer.id === 'layer7' ? '🔐' : '🎯'}
                     </div>
                     <div className={styles.cardHeader}>
                       <h3 className={styles.cardTitle}><HighlightText text={layer.title} query={searchQuery} /></h3>
                       <p className={styles.cardDescription}><HighlightText text={layer.description} query={searchQuery} /></p>
+                    </div>
+                    <div className={styles.layerProgressBlock}>
+                      <div className={styles.layerProgressHeader}>
+                        <span>{layer.items.filter(item => item.status === 'done').length} completed</span>
+                        <span>{Math.round((layer.items.filter(item => item.status === 'done').length / layer.items.length) * 100) || 0}%</span>
+                      </div>
+                      <div className={styles.layerProgressTrack}>
+                        <div
+                          className={styles.layerProgressBar}
+                          style={{ width: `${Math.round((layer.items.filter(item => item.status === 'done').length / layer.items.length) * 100) || 0}%` }}
+                        />
+                      </div>
                     </div>
                     
                     {expandedLayer === layer.id && (
@@ -522,44 +576,46 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-            </section>
-          </div>
-
-          <aside className={styles.sideColumn}>
-            <div className={styles.sideSticky}>
-              <section className={styles.sideSection}>
-                <div className={styles.sideSectionHeader}>
-                  <Target size={16} className={styles.sideIcon} />
-                  <h2 className={styles.sideSectionTitle}>Milestones</h2>
-                </div>
-                <div className={styles.milestoneList}>
-                  {data?.milestones.map((m) => (
-                    <div 
-                      key={m.id} 
-                      className={`${styles.milestoneCard} ${m.status === 'done' ? styles.milestoneDone : ''} ${focusMode && m.id === activeMilestoneId ? styles.milestoneFocused : ''}`}
-                      onClick={() => toggleItem('milestone', null, m.id)}
-                    >
-                      <div className={styles.milestoneStatus}>
-                        {m.status === 'done' ? <CheckCircle2 size={16} /> : <div className={styles.milestoneDot} />}
+              </div>
+              ) : (
+                <div className={styles.treeView}>
+                  {filteredLayers?.map((layer) => (
+                    <div key={layer.id} className={styles.treeLayer}>
+                      <div className={styles.treeLayerHeader} onClick={() => setExpandedLayer(expandedLayer === layer.id ? null : layer.id)}>
+                        <div className={styles.treeLayerIcon}>
+                          {expandedLayer === layer.id ? <ChevronUp size={18} /> : <ChevronRight size={18} />}
+                        </div>
+                        <div className={styles.treeLayerTitleGroup}>
+                          <h3 className={styles.treeLayerTitle}><HighlightText text={layer.title} query={searchQuery} /></h3>
+                          <span className={styles.treeLayerProgressText}>
+                            {layer.items.filter(item => item.status === 'done').length} / {layer.items.length} items completed
+                          </span>
+                        </div>
                       </div>
-                      <div className={styles.milestoneInfo}>
-                        <div className={styles.milestoneTitle}>{m.title}</div>
-                        {focusMode && m.id === activeMilestoneId && <div className={styles.focusTag}>Active Target</div>}
-                      </div>
+                      
+                      {expandedLayer === layer.id && (
+                        <div className={styles.treeLayerContent}>
+                          <div className={styles.treeItemList}>
+                            {layer.items.map(item => (
+                              <div key={item.id} className={`${styles.treeItemRow} ${item.status === 'done' ? styles.treeItemDone : ''}`}>
+                                <div className={styles.checkboxWrapper}>
+                                  <input type="checkbox" className={styles.checkbox} checked={item.status === 'done'} onChange={() => toggleItem('layer', layer.id, item.id)} />
+                                </div>
+                                <div className={styles.treeItemInfo}>
+                                  <span className={styles.treeItemTitle}><HighlightText text={item.title} query={searchQuery} /></span>
+                                  {item.goal && <span className={styles.treeItemGoal}>{item.goal}</span>}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
-              </section>
-
-              <section className={styles.sideSection}>
-                <div className={styles.sideSectionHeader}>
-                  <Clock size={16} className={styles.sideIcon} />
-                  <h2 className={styles.sideSectionTitle}>Recent Activity</h2>
-                </div>
-                <ProgressTimeline history={history} />
-              </section>
-            </div>
-          </aside>
+              )}
+            </section>
+          </div>
         </div>
       </main>
 

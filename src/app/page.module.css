@@ -144,10 +144,9 @@
 }
 
 .layoutGrid {
-  display: grid;
-  grid-template-columns: 1fr 340px;
+  display: flex;
+  flex-direction: column;
   gap: 40px;
-  align-items: start;
 }
 
 .contentColumn {
@@ -643,6 +642,223 @@
   border-radius: 2px;
 }
 
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: #9fb2ae;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.heroStatCard,
+.sideSummary {
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.heroStatCard {
+  padding: 16px;
+  text-align: left;
+}
+
+.heroStatValue {
+  display: block;
+  color: #eef8f4;
+  font-family: var(--font-space-grotesk);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.heroStatLabel,
+.sideSummaryLabel {
+  display: block;
+  margin-top: 8px;
+  color: #8da09c;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.roadmapSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.sectionIntro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.55fr);
+  gap: 20px;
+  align-items: end;
+}
+
+.sectionKicker {
+  margin: 0 0 8px;
+  color: #8fa29d;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #f4fbf8;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -0.03em;
+}
+
+.sectionCopy {
+  margin: 0;
+  color: #91a29e;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.layerProgressBlock {
+  margin: 18px 0 2px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.layerProgressHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  color: #9fb0ac;
+  font-size: 12px;
+}
+
+.layerProgressTrack {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.layerProgressBar {
+  height: 100%;
+  border-radius: inherit;
+  background: #7bdca8;
+  transition: width 0.25s ease;
+}
+
+.sideSummary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  padding: 18px;
+}
+
+.sideSummaryIcon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(123, 220, 168, 0.1);
+  color: #9fe3ba;
+}
+
+.sideSummaryText {
+  margin: 4px 0 0;
+  color: #d4dedb;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.actionBtnActive,
+.searchInput:focus,
+.milestoneFocused {
+  box-shadow: none;
+}
+
+.actionBtnActive {
+  background: rgba(123, 220, 168, 0.12);
+  border-color: rgba(123, 220, 168, 0.3);
+  color: #bceccd;
+}
+
+.searchInput:focus {
+  border-color: rgba(123, 220, 168, 0.38);
+}
+
+.layersGrid {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.card {
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+}
+
+.cardGlow {
+  opacity: 0.45;
+}
+
+.sideSticky,
+.sideColumn {
+  gap: 20px;
+}
+
+.sideSection {
+  padding: 20px;
+}
+
+.milestoneFocused {
+  border-color: rgba(123, 220, 168, 0.35);
+  background: rgba(123, 220, 168, 0.055);
+}
+
+.highlight {
+  color: #bde8ce;
+  background: rgba(123, 220, 168, 0.08);
+}
+
+@media (max-width: 760px) {
+  .heroStats,
+  .sectionIntro {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmapSection {
+    padding: 18px;
+  }
+
+  .layersGrid,
+  .itemList {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 1100px) {
   .layoutGrid {
     grid-template-columns: 1fr;
@@ -677,4 +893,113 @@
     width: 100%;
     overflow-x: auto;
   }
+}
+
+.viewToggles {
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.treeView {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.treeLayer {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.treeLayerHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.01);
+  transition: background 0.2s ease;
+}
+
+.treeLayerHeader:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.treeLayerIcon {
+  color: #7bdca8;
+  display: flex;
+  align-items: center;
+}
+
+.treeLayerTitleGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.treeLayerTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f4fbf8;
+  margin: 0;
+}
+
+.treeLayerProgressText {
+  font-size: 13px;
+  color: #8fa29d;
+}
+
+.treeLayerContent {
+  padding: 0 20px 20px 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  margin-top: 4px;
+}
+
+.treeItemList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.treeItemRow {
+  display: flex;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.treeItemRow:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.treeItemDone {
+  opacity: 0.6;
+}
+
+.treeItemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.treeItemTitle {
+  font-size: 14px;
+  color: #e0e7e7;
+}
+
+.treeItemGoal {
+  font-size: 12px;
+  color: #8fa29d;
 }

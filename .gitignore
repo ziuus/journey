@@ -40,3 +40,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+*.log
+*.json
+!data/roadmap.json
+!package.json
+!tsconfig.json
+!jsconfig.json
+.omo/
+server.pid

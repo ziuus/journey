@@ -244,12 +244,13 @@ export async function saveRoadmap(userId: string, data: RoadmapData) {
 
   if (didWriteToFirestore) return;
 
-  if (process.env.NODE_ENV === "development") {
+  try {
     await fs.writeFile(TEMPLATE_PATH, JSON.stringify(data, null, 2));
     return;
+  } catch (err) {
+    console.error("Failed to write to local storage:", err);
+    throw new Error("Local storage unavailable.");
   }
-
-  throw new Error("Cloud storage unavailable. Changes could not be persisted.");
 }
 
 export async function getHistory(userId: string): Promise<HistoryData> {
@@ -264,7 +265,13 @@ export async function getHistory(userId: string): Promise<HistoryData> {
     console.warn("Cloud history read failed", err);
   }
 
-  return HISTORY_TEMPLATE;
+  try {
+    const historyPath = path.join(process.cwd(), "data", "history.json");
+    const data = await fs.readFile(historyPath, "utf-8");
+    return JSON.parse(data) as HistoryData;
+  } catch (err) {
+    return HISTORY_TEMPLATE;
+  }
 }
 
 export async function saveHistory(userId: string, data: HistoryData) {
@@ -273,7 +280,14 @@ export async function saveHistory(userId: string, data: HistoryData) {
     ? await writeFirestoreData(userId, config.collectionHistory, data as unknown as Record<string, unknown>)
     : false;
 
-  if (!didWriteToFirestore && process.env.NODE_ENV !== "development") {
-    throw new Error("Cloud history storage unavailable. Changes could not be persisted.");
+  if (didWriteToFirestore) return;
+
+  try {
+    const historyPath = path.join(process.cwd(), "data", "history.json");
+    await fs.writeFile(historyPath, JSON.stringify(data, null, 2));
+    return;
+  } catch (err) {
+    console.error("Failed to write history to local storage:", err);
+    console.warn("Local history storage unavailable.");
   }
 }

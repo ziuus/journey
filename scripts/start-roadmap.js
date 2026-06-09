@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const projectRoot = path.join(__dirname, '..');
-const port = process.env.PORT || 6000;
+const port = process.env.PORT || 6060;
 
 console.log(`\x1b[36mJourney Roadmap Portal\x1b[0m`);
 console.log(`Starting portal on http://localhost:${port}...`);

@@ -197,3 +197,49 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+.metricCard {
+  padding: 24px;
+  gap: 16px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.metricCard:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.09);
+  box-shadow: none;
+}
+
+.liveBadge {
+  background: rgba(255, 255, 255, 0.055);
+  color: #a6b7b3;
+}
+
+.pulse {
+  background: #8fcfaa;
+  box-shadow: none;
+}
+
+.metricValue {
+  font-size: 40px;
+}
+
+.valueAccent {
+  color: #9fe3ba;
+  text-shadow: none;
+}
+
+.progressBar,
+.layerMiniBar {
+  background: #8fd6a9;
+  box-shadow: none;
+}
+
+.radarSvg {
+  filter: none;
+}
+
+.radarArea {
+  fill: rgba(143, 214, 169, 0.12);
+  stroke: #8fd6a9;
+}
