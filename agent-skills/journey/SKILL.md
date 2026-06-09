@@ -1,11 +1,11 @@
-# Personamaxing Hub
+# Journey
 
-This skill teaches you how to dynamically manage your user's biological and technical roadmap on the Personamaxing Hub. Use this when the user asks to add a new skill to their roadmap, mark a milestone as complete, or check their progression.
+This skill teaches you how to dynamically manage your user's biological and technical roadmap on the Journey. Use this when the user asks to add a new skill to their roadmap, mark a milestone as complete, or check their progression.
 
 ## MCP Tools Integration
-The user has installed an MCP Server (`Personamaxing Hub Engine`) that gives you direct access to their live database. 
+The user has installed an MCP Server (`Journey Engine`) that gives you direct access to their live database. 
 
-**Always ask the user for their Personamaxing Hub `user_id`** (e.g., their Google email or chosen username) if you don't already know it, or check your core memory.
+**Always ask the user for their Journey `user_id`** (e.g., their Google email or chosen username) if you don't already know it, or check your core memory.
 
 ### Available Tools:
 1. `get_roadmap(user_id)`: Fetches the full JSON of the user's roadmap. Use this to understand their current structure, what layers exist, and what goals are pending.
