@@ -27,9 +27,10 @@
   align-items: center;
   margin-bottom: 40px;
   padding: 12px 24px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--blur-deep));
+  -webkit-backdrop-filter: blur(var(--blur-deep));
+  border: 1px solid var(--border-light);
   border-radius: 100px;
 }
 
@@ -177,20 +178,22 @@
 
 .searchInput {
   width: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--blur-medium));
+  -webkit-backdrop-filter: blur(var(--blur-medium));
+  border: 1px solid var(--border-light);
   border-radius: 14px;
   padding: 14px 14px 14px 48px;
   color: #fff;
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .searchInput:focus {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: #00ff87;
+  background: var(--bg-glass-hover);
+  border-color: var(--accent-light);
   outline: none;
-  box-shadow: 0 0 30px rgba(0, 255, 135, 0.1);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.05);
 }
 
 .trackTabs {
@@ -227,19 +230,23 @@
 
 .card {
   position: relative;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--blur-medium));
+  -webkit-backdrop-filter: blur(var(--blur-medium));
+  border: 1px solid var(--border-light);
   border-radius: 24px;
   padding: 24px;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.3);
 }
 
 .card:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
-  transform: translateY(-4px);
+  background: var(--bg-glass-hover);
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5);
 }
 
 .cardExpanded {

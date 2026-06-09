@@ -6,8 +6,10 @@
 }
 
 .metricCard {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--blur-deep));
+  -webkit-backdrop-filter: blur(var(--blur-deep));
+  border: 1px solid var(--border-light);
   border-radius: 24px;
   padding: 32px;
   display: flex;
@@ -15,14 +17,14 @@
   gap: 20px;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .metricCard:hover {
-  transform: translateY(-4px);
-  border-color: #00ff87;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  background: var(--bg-glass-hover);
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.5);
 }
 
 .metricHeader {
