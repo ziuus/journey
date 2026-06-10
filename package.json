@@ -1,8 +1,40 @@
 {
-  "name": "journey",
+  "name": "@ziuus/journey",
   "version": "0.1.0",
-  "private": true,
+  "description": "Unified Mastery Engine - A universal roadmap tracking system with Liquid Glass UI",
+  "author": "ziuus",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ziuus/journey.git"
+  },
+  "keywords": [
+    "roadmap",
+    "mastery",
+    "goals",
+    "tracking",
+    "ai",
+    "mcp",
+    "nextjs",
+    "liquid-glass"
+  ],
+  "private": false,
+  "files": [
+    "src",
+    "public",
+    "scripts",
+    "data",
+    "mcp",
+    "next.config.ts",
+    "tsconfig.json",
+    "AGENTS.md",
+    "README.md",
+    "LEARN.md",
+    "CONTRIBUTING.md",
+    "setup.sh"
+  ],
   "bin": {
+    "journey": "./scripts/journey-cli.js",
     "start-roadmap": "./scripts/start-roadmap.js",
     "journey-mcp": "./scripts/mcp-server.js"
   },
@@ -11,7 +43,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "start-mcp": "node ./scripts/mcp-server.js"
+    "start-mcp": "node ./scripts/mcp-server.js",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

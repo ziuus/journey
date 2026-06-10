@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import Navigation from "@/components/Navigation";
+import ConfigProviderWrapper from "../context/ConfigProviderWrapper";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Personamaxing Hub - Unified Mastery",
+  title: "Journey - Unified Mastery",
   description: "Unifying technical mastery and biological optimization for the 2030 autonomous transition.",
 };
 
@@ -26,7 +28,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body>{children}</body>
+      <body>
+        <ConfigProviderWrapper>
+          <Navigation />
+          {children}
+        </ConfigProviderWrapper>
+      </body>
     </html>
   );
 }

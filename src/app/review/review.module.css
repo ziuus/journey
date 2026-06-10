@@ -1,0 +1,21 @@
+.container {
+  padding: 24px;
+}
+
+.changeList {
+  list-style: none;
+  padding: 0;
+}
+
+.changeItem {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}

@@ -1,0 +1,42 @@
+.aiGenerator {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.textarea {
+  width: 100%;
+  height: 100px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  color: white;
+  margin: 10px 0;
+  resize: vertical;
+}
+
+.button {
+  background: #00ff87;
+  color: #050a0a;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.5;
+}
+
+.response {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(0, 255, 135, 0.05);
+  border-radius: 12px;
+  white-space: pre-wrap;
+  font-size: 14px;
+}
