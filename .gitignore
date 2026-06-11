@@ -48,3 +48,4 @@ next-env.d.ts
 !jsconfig.json
 .omo/
 server.pid
+*.tgz

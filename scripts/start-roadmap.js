@@ -10,6 +10,11 @@ const port = process.env.PORT || 6060;
 console.log(`\x1b[36mJourney Roadmap Portal\x1b[0m`);
 console.log(`Starting portal on http://localhost:${port}...`);
 
+if (!fs.existsSync(path.join(projectRoot, '.next'))) {
+  console.log('No build found. Run `npm run build` first.');
+  process.exit(1);
+}
+
 const nextStart = spawn('npx', ['next', 'start', '-p', port], {
   cwd: projectRoot,
   stdio: 'inherit',
