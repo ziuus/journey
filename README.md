@@ -1,58 +1,71 @@
 # 🌌 Journey: Unified Mastery Engine
 
-[![NPM Version](https://img.shields.io/npm/v/@ziuus/journey?color=7bdca8&style=flat-square)](https://www.npmjs.com/package/@ziuus/journey)
-[![License: MIT](https://img.shields.io/badge/License-MIT-7bdca8.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+> **Universal architecture for engineering mastery. Built for the next decade of technical and physical evolution.**
 
-> **Bridge the gap between your current baseline and the 2030 Engineering Frontier.**
+Journey is a cinematic, high-performance roadmap tracking system designed for engineers who treat their career like a high-altitude architectural project. It transforms boring task lists into an interactive **Goal Tree** and a real-time **Mission Control HUD**.
 
-Journey is a high-fidelity, AI-orchestrated mastery engine. It is not a task manager; it is a **Syllabus for Autonomous Transition**. It unifies technical mastery (Distributed Systems, ZK-ML, Rust) with biological optimization (Nutrition, Physical Frame) into a single, cohesive progression tree.
+![Version](https://img.shields.io/npm/v/@ziuus/journey?color=a8ff60&style=flat-square)
+![License](https://img.shields.io/npm/l/@ziuus/journey?style=flat-square)
 
-![Journey UI Preview](https://github.com/ziuus/journey/raw/main/public/preview.png) *(Placeholder for your actual preview image)*
+---
 
-## ✨ Why Journey?
+## ⚡ Features of the Next Decade
 
-*   **Universal Goal Architecture**: 16+ pre-configured layers covering the absolute metal of systems engineering to the peak of human performance.
-*   **Liquid Glass UI**: A calm, usability-first aesthetic built with Next.js 19, GSAP kinetic physics, and aurora-shift backgrounds.
-*   **AI-Native (MCP)**: Built-in Model Context Protocol (MCP) server allows AI agents (Claude, Gemini, ChatGPT) to autonomously read your progress and update your roadmap as you build.
-*   **Progress Spotlight**: Smart recommendation engine that points you to your next logical "Boss Level" milestone.
-*   **Zero-Loss Persistence**: Your data lives in `~/.journey`, keeping your progress safe across package updates and re-installs.
+### 🏎️ Mission Control HUD
+A cinematic widescreen dashboard providing real-time telemetry of your progress.
+- **Core Vitality**: High-impact visualization of your overall progression.
+- **Neural Mapping**: An interactive radar system mapping your skill distribution across Systems, Math, AI, Web3, and more.
+- **Active Horizon**: A streamlined feed of your current modules and next milestones.
 
-## 🚀 One-Command Installation
+### 🌳 Interactive Goal Tree
+Visual architecture for your path to mastery.
+- **Structural Visualization**: View your journey as a hierarchical tree of dependencies.
+- **Direct Interaction**: Mark nodes as "Optimized" or "Pending" directly from the tree view with instant HUD syncing.
+- **Multi-Track Switching**: Toggle between Career, Health, and Research horizons seamlessly.
 
-The fastest way to install Journey and link the global CLI commands:
+### 🛡️ Privacy First (Zero Cloud)
+Your roadmap is your edge. Journey is designed for absolute local sovereignty.
+- **Local-Only Storage**: All your data lives in `~/.journey`, not on our servers.
+- **Cold-Start Data**: Initial installation provides a generic template; your mastery data never leaves your metal.
 
-```bash
-git clone https://github.com/ziuus/journey.git && cd journey && ./install.sh
-```
+### 💎 Liquid Glass UI
+Built with a "Next Level" aesthetic:
+- **Cinematic Dark Mode**: High-contrast, AA-accessible typography (Inter + Space Grotesk).
+- **Dynamic Glows**: Interactive radial gradients and backdrop blurs for an immersive HUD feel.
+- **Ultra-Fast**: Powered by Next.js 16 and Turbopack for near-instant interaction.
 
-Or via NPM:
+---
+
+## 🚀 Deployment
+
+### Installation
 ```bash
 npm install -g @ziuus/journey
 ```
 
-## 🛠 Command Center
-
-Once installed, use these global commands from anywhere:
-
-*   `start-roadmap`: Launches the high-fidelity portal on `http://localhost:6060`.
-*   `journey-mcp`: Connects your roadmap to AI agents for autonomous management.
-
-## 🧠 AI Agent Integration
-
-Tell your AI Agent (using the [Computer Use](https://github.com/ziuus/journey) or [MCP](https://github.com/ziuus/journey) extensions) to read the skill instructions:
-
-`agent-skills/journey/SKILL.md`
-
-Your agent can then help you:
-> "Hey, I just finished the Rust Raft implementation. Mark it as done and show me the next milestone."
-
-## 📂 Project Structure
-
-*   `src/app`: The cinematic Next.js 19 dashboard.
-*   `mcp/`: The Journey MCP Engine for cross-agent interaction.
-*   `data/`: Local templates for roadmaps and history.
-*   `~/.journey/data/`: Your permanent, personal roadmap storage.
+### Commands
+| Command | Action |
+| :--- | :--- |
+| `journey` | Start the command portal (background) |
+| `journey status` | Check engine diagnostics |
+| `journey stop` | Shut down the portal |
+| `journey logs` | View real-time system logs |
 
 ---
 
-*Built for those who want to work like it is 2030 while interviewing like it is 2013.*
+## 🏗️ Architecture
+
+Journey uses a **16-Layer Mastery Protocol** covering:
+1. **Core Systems**: Metal, Networks, and Browser Internals.
+2. **Foundations**: ML, Mathematics, and Distributed Algos.
+3. **Frontier AI**: LLMs, Transformers, and Autonomous Agents.
+4. **Physical Optimization**: Biological longevity and high-performance execution.
+
+---
+
+## 🛠️ Contribution
+
+We are building the command center for the 2030 autonomous transition. If you are a designer or engineer working on high-altitude interfaces, join us.
+
+**Developed by ziuus**  
+**Antigravity Labs**

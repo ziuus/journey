@@ -1,38 +1,36 @@
-# Learn Journey (Unified Mastery Engine)
+# 📖 Learning the Mastery Protocol
 
-Welcome to Journey! This guide will help you understand the core concepts behind the project and how to get the most out of it.
+Journey is more than a tracker; it's a framework for high-altitude engineering. This guide explains the core concepts of the engine.
 
-## The Core Concept
+## 1. The HUD (Heads-Up Display)
+The Home and Dashboard views function as your **Mission Control**.
+- **Neural Map**: A 10-point radar chart. When you complete items in a specific layer (e.g., Systems), the corresponding vector on the map expands. Aim for a balanced, wide-reaching map.
+- **Mastery Percent**: Calculated as the mathematical average of all nodes. This is your "Level" in the protocol.
 
-Journey is not a course or a tutorial; it's a **Mastery Engine**. It acts as your single source of truth for your learning path. 
+## 2. The Goal Tree Architecture
+Accessed via `/tree`, the Goal Tree is a visual representation of your dependencies.
+- **Spine**: The vertical line connecting your Layers.
+- **Branches**: The specific items (Nodes) within a layer.
+- **Node Interaction**: In this view, clicking any node toggles its state. Use this to rapidly update your progress after a deep study session.
 
-The intended workflow is:
-1. **Discover:** Open Journey to see your overarching roadmap (e.g., Applied AI + Web3 Full-Stack Engineer).
-2. **Select:** Pick a specific node you need to master (e.g., "Build a Rust-based KV store").
-3. **Execute:** Take that topic to ChatGPT, Claude, or documentation to actually learn it, practice it, and build it.
-4. **Complete:** Return to Journey and check it off. Watch your progress vectors grow.
+## 3. Data Sovereignty
+Journey creates a `~/.journey` folder in your home directory on first run.
+- `roadmap.json`: Your entire journey. You can back this up or manually edit it for bulk changes.
+- `history.json`: Log of your achievements.
+- **Syncing**: Because Journey is local-only, we recommend version-controlling your `~/.journey` directory in a private git repo if you want cross-device sync.
 
-## Architecture & Stack
+## 4. The 16-Layer Curriculum
+The default protocol follows a path optimized for the next generation of engineers:
+- **Layers 1-4**: The Metal & The Network (Core CS).
+- **Layers 5-8**: The Logic & The Model (ML/AI Foundations).
+- **Layers 9-12**: The Autonomy (Agents & Cryptographic AI).
+- **Layers 13-16**: The Biological (Physical Performance & Legacy).
 
-- **Framework:** Next.js 16.2 (Turbopack)
-- **Styling:** CSS Modules (No Tailwind) + GSAP for fluid, usability-first animations.
-- **Database:** Firebase (Multi-user architecture supported via `userId`, though defaults to local).
-- **Data Source:** `data/roadmap.json` acts as the definitive schema for layers, milestones, and target roles.
+## 5. UI Customization
+Visit `/settings` to align the HUD with your cognitive preferences:
+- **Accent Selection**: Switch between Cyber Cyan, Electric Purple, or Neon Green.
+- **Density**: Use "Compact" for high-information density or "Comfortable" for a focus-centric view.
 
-## Understanding the Roadmap Schema (`data/roadmap.json`)
+---
 
-The JSON structure is designed to be easily extensible. 
-
-- `target_roles`: High-level titles you are aiming for (e.g., "Infrastructure & Platform Engineer").
-- `timeline`: High-level phases spanning semesters or years.
-- `layers`: The core groups of skills. 
-  - Layers 1-7 and 12+ are grouped into **"Career & Tech"**.
-  - Layers 8-11 are reserved for **"Health & Fitness"**.
-  - Layers missing a specific hardcoded mapping fall into **"Other"**.
-- `milestones`: Concrete, buildable projects (e.g., "Implement Raft Consensus").
-
-## Customizing Your Journey
-
-You can easily adapt Journey for your own goals by editing `data/roadmap.json`. Just follow the existing JSON structure to add new layers or milestones. The UI will automatically render your new goals based on the category logic in `src/app/page.tsx`.
-
-Happy building!
+*Mastery is not a destination; it's a continuous optimization of your architectural interface with reality.*
