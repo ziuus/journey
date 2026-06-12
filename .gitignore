@@ -42,6 +42,8 @@ yarn-error.log*
 next-env.d.ts
 *.log
 *.json
+# data
+data/*
 !data/roadmap.json
 !package.json
 !tsconfig.json

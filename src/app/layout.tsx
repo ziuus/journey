@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/layout/Footer";
 import ConfigProviderWrapper from "../context/ConfigProviderWrapper";
 import "./globals.css";
 
@@ -32,6 +33,7 @@ export default function RootLayout({
         <ConfigProviderWrapper>
           <Navigation />
           {children}
+          <Footer />
         </ConfigProviderWrapper>
       </body>
     </html>

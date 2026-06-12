@@ -369,12 +369,6 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <span className={styles.footerBrand}>Journey Portal</span>
-          <span className={styles.footerYear}>2026 Edition</span>
-        </div>
-      </footer>
     </div>
   );
 }
