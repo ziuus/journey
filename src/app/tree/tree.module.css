@@ -9,10 +9,22 @@
   overflow-x: hidden;
 }
 
+.glowOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 0%, var(--accent-glow) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
 .header {
   width: 100%;
-  max-width: 1000px;
-  margin-bottom: 60px;
+  max-width: 1200px;
+  margin-bottom: 80px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -20,31 +32,50 @@
   z-index: 10;
 }
 
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.backLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
 .title {
-  font-size: clamp(32px, 5vw, 48px);
+  font-size: clamp(32px, 5vw, 64px);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 8px;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
 }
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: 16px;
+  font-size: 18px;
+  max-width: 500px;
 }
 
 .trackTabs {
   display: flex;
   gap: 8px;
   background: var(--glass-bg);
-  padding: 6px;
-  border-radius: 14px;
+  padding: 8px;
+  border-radius: 16px;
   border: 1px solid var(--glass-border);
 }
 
 .trackTab {
-  padding: 8px 16px;
+  padding: 10px 24px;
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-muted);
   background: transparent;
@@ -84,18 +115,18 @@
 .layerNode {
   background: var(--text-primary);
   color: var(--bg-primary);
-  padding: 16px 32px;
-  border-radius: 16px;
+  padding: 20px 40px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   z-index: 2;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.4);
 }
 
 .layerTitle {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin: 0;
@@ -104,23 +135,23 @@
 .layerNumber {
   background: var(--bg-primary);
   color: var(--text-primary);
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 14px;
+  font-weight: 900;
+  font-size: 16px;
 }
 
 .branchesContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px 80px;
+  gap: 24px 80px;
   width: 100%;
   max-width: 840px;
-  padding: 60px 0;
+  padding: 80px 0;
   position: relative;
 }
 
@@ -140,31 +171,30 @@
   position: relative;
   display: flex;
   width: 100%;
-  cursor: pointer;
 }
 
 .itemBoxWrapper:nth-child(odd) { justify-content: flex-end; }
 .itemBoxWrapper:nth-child(even) { justify-content: flex-start; }
 
 .itemBox {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   backdrop-filter: var(--glass-blur);
-  padding: 16px 24px;
-  border-radius: 16px;
+  padding: 20px 28px;
+  border-radius: 20px;
   z-index: 2;
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 16px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   width: calc(100% - 60px);
 }
 
 .itemBox:hover {
-  border-color: var(--glass-border-hover);
-  background: var(--glass-bg-hover);
-  transform: translateY(-2px);
+  border-color: var(--accent-color);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
 }
 
 .itemBoxWrapper:nth-child(odd) .itemBox { margin-right: 60px; }
@@ -194,8 +224,8 @@
   content: '';
   position: absolute;
   top: 50%;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   background: var(--bg-primary);
   border: 2px solid var(--glass-border);
   border-radius: 50%;
@@ -203,34 +233,33 @@
   transform: translateY(-50%);
 }
 
-.itemBoxWrapper:nth-child(odd)::before { right: -5px; }
-.itemBoxWrapper:nth-child(even)::before { left: -5px; }
+.itemBoxWrapper:nth-child(odd)::before { right: -6px; }
+.itemBoxWrapper:nth-child(even)::before { left: -6px; }
 
 .itemDone {
   background: var(--accent-glow);
-  border-color: var(--accent-color, #a8ff60);
+  border-color: var(--accent-color);
 }
 
-.doneWrapper::after { background: var(--accent-color, #a8ff60) !important; }
+.doneWrapper::after { background: var(--accent-color) !important; }
 .doneWrapper::before { 
-  border-color: var(--accent-color, #a8ff60) !important; 
-  background: var(--accent-color, #a8ff60) !important; 
-  box-shadow: 0 0 10px var(--accent-color, #a8ff60);
+  border-color: var(--accent-color) !important; 
+  background: var(--accent-color) !important; 
+  box-shadow: 0 0 15px var(--accent-color);
 }
 
 .itemText {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-.itemDone .itemText { color: var(--text-primary); }
-.checkIcon { color: var(--accent-color, #a8ff60); }
+.checkIcon { color: var(--accent-color); }
 .pendingIcon { color: var(--text-muted); }
 
 .spineConnector {
   width: 2px;
-  height: 80px;
+  height: 100px;
   background: var(--glass-border);
 }
 
@@ -239,19 +268,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
+  color: var(--text-primary);
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-weight: 600;
+  letter-spacing: 0.3em;
+  font-weight: 800;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 32px;
   }
+}
 
+@media (max-width: 768px) {
   .branchesContainer { grid-template-columns: 1fr; }
   .branchesContainer::before { left: 0; }
   .itemBoxWrapper:nth-child(odd), .itemBoxWrapper:nth-child(even) { justify-content: flex-start; }
@@ -266,6 +297,6 @@
   }
   
   .itemBoxWrapper:nth-child(odd)::before, .itemBoxWrapper:nth-child(even)::before {
-    left: -5px;
+    left: -6px;
   }
 }

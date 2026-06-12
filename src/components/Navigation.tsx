@@ -17,6 +17,7 @@ export default function Navigation() {
 
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/tree', label: 'Goal Tree', icon: GitBranch },
     { href: '/settings', label: 'Settings', icon: Settings },
   ];

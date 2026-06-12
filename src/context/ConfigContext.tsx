@@ -30,19 +30,8 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
         : config.ui.theme;
       
       root.setAttribute('data-theme', theme);
-      root.style.setProperty('--accent-green', config.ui.accentColor);
-      
-      if (theme === 'light') {
-        root.style.setProperty('--background', '#f5f7f7');
-        root.style.setProperty('--text-primary', '#1a1d1d');
-        root.style.setProperty('--text-secondary', '#5a6262');
-        root.style.setProperty('--glass-bg', 'rgba(0, 0, 0, 0.05)');
-      } else {
-        root.style.setProperty('--background', '#000000');
-        root.style.setProperty('--text-primary', 'rgba(255, 255, 255, 0.95)');
-        root.style.setProperty('--text-secondary', 'rgba(255, 255, 255, 0.5)');
-        root.style.setProperty('--glass-bg', 'rgba(255, 255, 255, 0.015)');
-      }
+      root.style.setProperty('--accent-color', config.ui.accentColor);
+      root.style.setProperty('--accent-glow', `${config.ui.accentColor}26`); // 15% opacity
     }
   }, [config.ui.theme, config.ui.accentColor]);
 
@@ -50,18 +39,6 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     savePreferences(newPrefs);
     setPrefs(getPreferences());
   };
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const theme = config.ui.theme === 'system' 
-      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-      : config.ui.theme;
-    
-    root.setAttribute('data-theme', theme);
-    root.style.setProperty('--accent-color', config.ui.accentColor);
-    
-    // Update body background transition if needed
-  }, [config.ui.theme, config.ui.accentColor]);
 
   return (
     <ConfigContext.Provider value={{ config, updateConfig }}>

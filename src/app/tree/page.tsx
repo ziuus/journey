@@ -2,17 +2,18 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import styles from "./tree.module.css";
-import { CheckCircle2, Circle } from "lucide-react";
-import { RoadmapData, LayerData } from "@/lib/storage";
+import { CheckCircle2, Circle, ChevronLeft } from "lucide-react";
+import { RoadmapData, LayerData, RoadmapItem } from "@/lib/storage";
+import Link from "next/link";
 
 export default function TreeView() {
   const [data, setData] = useState<RoadmapData | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTrack, setActiveTrack] = useState<string>("Career & Tech");
 
-  const fetchRoadmap = async () => {
+  const fetchData = async () => {
     try {
-      const res = await fetch(`/api/roadmap?userId=local_user`);
+      const res = await fetch('/api/roadmap?userId=local_user');
       const json = await res.json();
       setData(json);
     } catch (err) {
@@ -23,11 +24,13 @@ export default function TreeView() {
   };
 
   useEffect(() => {
-    void fetchRoadmap();
+    void fetchData();
   }, []);
 
   const toggleItem = async (layerId: string, itemId: string) => {
     if (!data) return;
+    
+    // Create deep copy
     const newData: RoadmapData = JSON.parse(JSON.stringify(data));
     const layer = newData.layers.find(l => l.id === layerId);
     if (!layer) return;
@@ -36,6 +39,7 @@ export default function TreeView() {
     if (item) {
       item.status = item.status === 'pending' ? 'done' : 'pending';
       setData(newData);
+      
       try {
         await fetch(`/api/roadmap?userId=local_user`, {
           method: 'PUT',
@@ -44,26 +48,21 @@ export default function TreeView() {
         });
       } catch (err) {
         console.error('Failed to sync changes:', err);
-        void fetchRoadmap();
       }
     }
   };
 
   const groupedLayers = useMemo(() => {
-    if (!data) return {};
-    const groups: Record<string, LayerData[]> = { "Career & Tech": [], "Health & Fitness": [], "Other": [] };
+    if (!data) return { "Career & Tech": [], "Health & Fitness": [] };
+    const groups: Record<string, LayerData[]> = { "Career & Tech": [], "Health & Fitness": [] };
     
     data.layers.forEach(layer => {
       const layerNum = parseInt(layer.id.replace('layer', ''), 10);
-      let category = (layerNum >= 8 && layerNum <= 11) ? "Health & Fitness" : (layer.id.startsWith('layer') ? "Career & Tech" : "Other");
+      let category = (layerNum >= 8 && layerNum <= 11) ? "Health & Fitness" : "Career & Tech";
+      if (!groups[category]) groups[category] = [];
       groups[category].push(layer);
     });
 
-    Object.keys(groups).forEach(key => {
-      groups[key].sort((a, b) => parseInt(a.id.replace('layer', ''), 10) - parseInt(b.id.replace('layer', ''), 10));
-      if (groups[key].length === 0) delete groups[key];
-    });
-    
     return groups;
   }, [data]);
 
@@ -71,21 +70,30 @@ export default function TreeView() {
   const selectedTrack = tracks.includes(activeTrack) ? activeTrack : tracks[0];
   const currentLayers = groupedLayers[selectedTrack] || [];
 
-  if (loading) return <div className={styles.loading}>Initializing Mastery Flow...</div>;
+  if (loading) return <div className={styles.loading}>Generating Architecture...</div>;
 
   return (
     <div className={styles.container}>
+      <div className={styles.glowOverlay} />
+      
       <header className={styles.header}>
         <div className={styles.titleGroup}>
+          <Link href="/" className={styles.backLink}>
+            <ChevronLeft size={16} /> Back
+          </Link>
           <h1 className={styles.title}>Goal Tree</h1>
-          <p className={styles.subtitle}>An interactive structural graph of your absolute progression.</p>
+          <p className={styles.subtitle}>Structural visualization of your path to absolute mastery.</p>
         </div>
 
         <div className={styles.controls}>
           <div className={styles.trackTabs}>
-            {tracks.map(t => (
-              <button key={t} onClick={() => setActiveTrack(t)} className={`${styles.trackTab} ${selectedTrack === t ? styles.trackTabActive : ''}`}>
-                {t}
+            {tracks.map(track => (
+              <button 
+                key={track} 
+                onClick={() => setActiveTrack(track)} 
+                className={`${styles.trackTab} ${selectedTrack === track ? styles.trackTabActive : ''}`}
+              >
+                {track}
               </button>
             ))}
           </div>
@@ -96,25 +104,29 @@ export default function TreeView() {
         <div className={styles.roadmapSpine}>
           {currentLayers.map((layer, idx) => {
              const cleanTitle = layer.title.includes('—') 
-             ? layer.title.split('—').slice(1).join('—').trim() 
-             : layer.title.replace(/^Layer \d+\s*(—|:)\s*/i, '').trim();
-
+                ? layer.title.split('—').slice(1).join('—').trim() 
+                : layer.title.replace(/^Layer \d+\s*(—|:)\s*/i, '').trim();
+             
              return (
                <div key={layer.id} className={styles.roadmapSection}>
                  <div className={styles.layerNode}>
-                    <div className={styles.layerNumber}>{idx + 1}</div>
-                    <h3 className={styles.layerTitle}>{cleanTitle}</h3>
+                   <div className={styles.layerNumber}>{idx + 1}</div>
+                   <h2 className={styles.layerTitle}>{cleanTitle}</h2>
                  </div>
-                 
+
                  <div className={styles.branchesContainer}>
-                   {layer.items.map((item) => (
+                   {layer.items.map(item => (
                      <div 
-                       key={item.id} 
-                       className={`${styles.itemBoxWrapper} ${item.status === 'done' ? styles.doneWrapper : ''}`}
-                       onClick={() => toggleItem(layer.id, item.id)}
+                        key={item.id} 
+                        className={`${styles.itemBoxWrapper} ${item.status === 'done' ? styles.doneWrapper : ''}`}
+                        onClick={() => toggleItem(layer.id, item.id)}
                      >
                        <div className={`${styles.itemBox} ${item.status === 'done' ? styles.itemDone : ''}`}>
-                         {item.status === 'done' ? <CheckCircle2 size={16} className={styles.checkIcon} /> : <Circle size={16} className={styles.pendingIcon} />}
+                         {item.status === 'done' ? (
+                           <CheckCircle2 size={18} className={styles.checkIcon} />
+                         ) : (
+                           <Circle size={18} className={styles.pendingIcon} />
+                         )}
                          <span className={styles.itemText}>{item.title}</span>
                        </div>
                      </div>

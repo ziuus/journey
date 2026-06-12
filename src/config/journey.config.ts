@@ -1,4 +1,4 @@
-export type JourneyView = "tree" | "dashboard" | "focus" | "review";
+export type JourneyView = "tree" | "dashboard";
 
 export interface JourneyConfig {
   appName: string;
@@ -7,8 +7,6 @@ export interface JourneyConfig {
   views: {
     tree: boolean;
     dashboard: boolean;
-    focus: boolean;
-    review: boolean;
   };
   ui: {
     theme: "dark" | "light" | "system";
@@ -40,15 +38,13 @@ export const journeyConfig: JourneyConfig = {
   views: {
     tree: true,
     dashboard: true,
-    focus: true,
-    review: true,
   },
   ui: {
     theme: "dark",
     accentColor: "#a8ff60",
     density: "comfortable",
-    showHero: false,
-    showRadar: false,
+    showHero: true,
+    showRadar: true,
     showCommandCenter: true,
     showRecentActivity: true,
   },
