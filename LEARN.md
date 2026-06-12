@@ -19,12 +19,12 @@ Journey creates a `~/.journey` folder in your home directory on first run.
 - `history.json`: Log of your achievements.
 - **Syncing**: Because Journey is local-only, we recommend version-controlling your `~/.journey` directory in a private git repo if you want cross-device sync.
 
-## 4. The 16-Layer Curriculum
-The default protocol follows a path optimized for the next generation of engineers:
-- **Layers 1-4**: The Metal & The Network (Core CS).
-- **Layers 5-8**: The Logic & The Model (ML/AI Foundations).
-- **Layers 9-12**: The Autonomy (Agents & Cryptographic AI).
-- **Layers 13-16**: The Biological (Physical Performance & Legacy).
+## 4. The Default Curriculum
+The default template provides a generic starting point optimized for modern full-stack development:
+- **Layer 1**: Web Fundamentals.
+- **Layer 2**: Frontend Architecture.
+- **Layer 3**: Backend & APIs.
+- **Layer 4**: Infrastructure & Deployment.
 
 ## 5. UI Customization
 Visit `/settings` to align the HUD with your cognitive preferences:

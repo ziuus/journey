@@ -55,11 +55,11 @@ npm install -g @ziuus/journey
 
 ## 🏗️ Architecture
 
-Journey uses a **16-Layer Mastery Protocol** covering:
-1. **Core Systems**: Metal, Networks, and Browser Internals.
-2. **Foundations**: ML, Mathematics, and Distributed Algos.
-3. **Frontier AI**: LLMs, Transformers, and Autonomous Agents.
-4. **Physical Optimization**: Biological longevity and high-performance execution.
+Journey includes a **Full-Stack Engineering Template** covering:
+1. **Web Fundamentals**: Advanced HTML/CSS, JS Core, Browser Internals.
+2. **Frontend Architecture**: React, State Management, Component Systems.
+3. **Backend & APIs**: Node.js, Database Design, REST/GraphQL.
+4. **Infrastructure**: Docker, CI/CD, Cloud Deployment.
 
 ---
 
