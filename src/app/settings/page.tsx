@@ -122,8 +122,6 @@ export default function SettingsView() {
             >
               <option value="dashboard">Dashboard (Cinematic)</option>
               <option value="tree">Goal Tree (Graph)</option>
-              <option value="focus">Deep Focus Mode</option>
-              <option value="review">Progress Review</option>
             </select>
           </div>
         </section>

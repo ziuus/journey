@@ -18,8 +18,6 @@ export default function Navigation() {
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/tree', label: 'Goal Tree', icon: GitBranch },
-    { href: '/focus', label: 'Deep Focus', icon: Zap },
-    { href: '/review', label: 'AI Review', icon: Sparkles },
     { href: '/settings', label: 'Settings', icon: Settings },
   ];
 

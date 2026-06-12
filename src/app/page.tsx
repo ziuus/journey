@@ -79,98 +79,92 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
   }).join(' ');
 
   return (
-    <section className={styles.metricsSection}>
-      <div className={mStyles.metricsGrid}>
-        {/* Card 1: Core Vitality */}
-        <div className={mStyles.metricCard}>
-          <div className={mStyles.cardGlow} />
-          <div className={mStyles.metricHeader}>
-            <span className={mStyles.metricLabel}>Core Vitality</span>
-            <div className={mStyles.liveBadge}>
-              <div className={mStyles.pulse} /> SYNCED
-            </div>
+    <div className={mStyles.metricsHub}>
+      <div className={mStyles.hudGrid}>
+        {/* Module 1: Vitality HUD */}
+        <div className={mStyles.hudCard}>
+          <div className={mStyles.cardLabel}>
+            <span>Core Vitality</span>
+            <Target size={12} />
           </div>
-          
-          <div className={mStyles.masterStats}>
-            <div className={mStyles.mainMetric}>
-              <div className={mStyles.percentWrapper}>
-                <span className={mStyles.percent}>{progressPercent}</span>
-                <span className={mStyles.percentSymbol}>%</span>
-              </div>
-              <div className={mStyles.progressTrack}>
-                <div className={mStyles.progressBar} style={{width: `${progressPercent}%`}} />
-              </div>
+          <div className={mStyles.vitalityValue}>
+            <span className={mStyles.bigPercent}>{progressPercent}</span>
+            <span className={mStyles.percentSymbol}>%</span>
+          </div>
+          <div className={mStyles.progressHUD}>
+            <div className={mStyles.progressBar} style={{ width: `${progressPercent}%` }} />
+          </div>
+          <div className={mStyles.statRow}>
+            <div className={mStyles.statItem}>
+              <span className={mStyles.statVal}>{doneItems}</span>
+              <span className={mStyles.statLab}>Mastered</span>
             </div>
-
-            <div className={mStyles.nodeStats}>
-              <div className={mStyles.nodeStat}>
-                <span className={mStyles.nodeVal}>{doneItems}</span>
-                <span className={mStyles.nodeLab}>Nodes Mastered</span>
-              </div>
-              <div className={mStyles.nodeStat}>
-                <span className={mStyles.nodeVal}>{totalItems - doneItems}</span>
-                <span className={mStyles.nodeLab}>Remaining</span>
-              </div>
+            <div className={mStyles.statItem}>
+              <span className={mStyles.statVal}>{totalItems - doneItems}</span>
+              <span className={mStyles.statLab}>Remaining</span>
             </div>
           </div>
         </div>
 
-        {/* Card 2: Neural Distribution & Active Horizon */}
-        <div className={mStyles.metricCard}>
-          <div className={mStyles.metricHeader}>
-            <span className={mStyles.metricLabel}>Mastery Distribution</span>
+        {/* Module 2: Neural Map HUD */}
+        <div className={mStyles.hudCard}>
+          <div className={mStyles.cardLabel}>
+            <span>Neural Distribution</span>
+            <Brain size={12} />
           </div>
-          
-          <div className={mStyles.radarWrapper}>
-            <div className={mStyles.radarContainer}>
-              <svg viewBox="0 0 100 100" className={mStyles.radarSvg}>
-                <circle cx="50" cy="50" r="45" className={mStyles.radarGrid} />
-                <circle cx="50" cy="50" r="30" className={mStyles.radarGrid} />
-                <circle cx="50" cy="50" r="15" className={mStyles.radarGrid} />
-                <polygon points={radarPoints} className={mStyles.radarArea} />
-              </svg>
-              <div className={mStyles.radarLabelsOverlay}>
-                {skills.map((s, i) => {
-                  const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
-                  const left = 50 + 55 * Math.cos(angle);
-                  const top = 50 + 55 * Math.sin(angle);
-                  return (
-                    <div key={i} className={mStyles.labelBadge} style={{ left: `${left}%`, top: `${top}%` }}>
-                      <span className={mStyles.labelName}>{s.label}</span>
-                      <span className={mStyles.labelVal}>{s.val}%</span>
-                    </div>
-                  );
-                })}
+          <div className={mStyles.radarContainer}>
+            <svg viewBox="0 0 100 100" className={mStyles.radarSvg}>
+              <circle cx="50" cy="50" r="45" className={mStyles.radarGrid} />
+              <circle cx="50" cy="50" r="30" className={mStyles.radarGrid} />
+              <circle cx="50" cy="50" r="15" className={mStyles.radarGrid} />
+              <polygon points={radarPoints} className={mStyles.radarArea} />
+            </svg>
+            {skills.map((s, i) => {
+              const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
+              const left = 50 + 58 * Math.cos(angle);
+              const top = 50 + 58 * Math.sin(angle);
+              return (
+                <div key={i} className={mStyles.labelBadge} style={{ left: `${left}%`, top: `${top}%` }}>
+                  {s.label}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Module 3: Active Horizon HUD */}
+        <div className={mStyles.hudCard}>
+          <div className={mStyles.cardLabel}>
+            <span>Active Horizon</span>
+            <Zap size={12} />
+          </div>
+          <div className={mStyles.horizonFeed}>
+            {activeLayers.map((s, i) => (
+              <div key={i} className={mStyles.horizonItem}>
+                <div className={i === 0 ? mStyles.activeDot : mStyles.miniFlowDot} />
+                <div className={mStyles.horizonInfo}>
+                  <span className={mStyles.horizonTitle}>{s.title}</span>
+                  <span className={mStyles.horizonPercent}>{s.percent}% Optimized</span>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className={mStyles.horizonHub} style={{ marginTop: '32px' }}>
-        <div className={mStyles.currentPhaseInfo}>
-          <span className={mStyles.phaseLabel}>Active Horizon</span>
-          <h2 className={mStyles.currentPhaseTitle}>{currentPhase.phase}: {currentPhase.title}</h2>
+      <div className={mStyles.statusStrip}>
+        <div className={mStyles.statusLeft}>
+          <div className={mStyles.liveCore}>
+            <div className={mStyles.pulse} />
+            <span>Core Engine Online</span>
+          </div>
+          <span>System: Liquid Glass v1.3</span>
         </div>
-        
-        <div className={mStyles.miniFlow}>
-          {activeLayers.map((s, i) => (
-            <div key={i} className={mStyles.miniFlowItem}>
-              <div className={mStyles.miniFlowDot} style={{ background: i === 0 ? 'var(--accent-color)' : 'var(--text-muted)' }} />
-              <div className={mStyles.miniFlowContent}>
-                <div className={mStyles.miniFlowNameGroup}>
-                  <span className={mStyles.miniFlowName}>{s.title}</span>
-                  <span className={mStyles.miniFlowPercent}>{s.percent}%</span>
-                </div>
-                <div className={mStyles.miniFlowBar}>
-                  <div style={{ width: `${s.percent}%` }} />
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className={mStyles.statusRight}>
+          Next Module: {currentPhase.phase}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
