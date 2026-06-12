@@ -1,247 +1,344 @@
 .metricsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .metricCard {
-  background: var(--bg-glass);
-  backdrop-filter: blur(var(--blur-deep));
-  -webkit-backdrop-filter: blur(var(--blur-deep));
-  border: 1px solid var(--border-light);
-  border-radius: 24px;
-  padding: 32px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 32px;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .metricCard:hover {
-  background: var(--bg-glass-hover);
-  border-color: var(--border-medium);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.5);
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3);
+}
+
+.cardGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top left, var(--accent-glow), transparent 60%);
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .metricHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .metricLabel {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #666;
-}
-
-.headerIcon {
-  color: rgba(255, 255, 255, 0.1);
-}
-
-.liveBadge {
-  padding: 4px 10px;
-  border-radius: 100px;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(0, 255, 135, 0.1);
-  color: #00ff87;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
 }
 
-.pulse {
-  width: 6px;
-  height: 6px;
-  background: #00ff87;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #00ff87;
+/* Master Stats Column */
+.masterStats {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  justify-content: center;
 }
 
-.metricValue {
-  font-family: var(--font-space-grotesk), sans-serif;
-  font-size: 48px;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
+.mainMetric {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.percentWrapper {
   display: flex;
   align-items: baseline;
   gap: 8px;
 }
 
-.valueAccent {
-  color: #00ff87;
-  text-shadow: 0 0 30px rgba(0, 255, 135, 0.3);
+.percent {
+  font-size: 84px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
 }
 
-.valueTotal {
-  color: #333;
-  font-size: 18px;
+.percentSymbol {
+  font-size: 32px;
+  color: var(--accent-color, #a8ff60);
+  font-weight: 700;
 }
 
 .progressTrack {
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.03);
+  height: 8px;
+  background: var(--glass-border);
   border-radius: 100px;
   overflow: hidden;
 }
 
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, #00ff87 0%, #60efff 100%);
-  box-shadow: 0 0 15px rgba(0, 255, 135, 0.3);
-  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--accent-color, #a8ff60);
+  box-shadow: 0 0 30px var(--accent-glow);
+  transition: width 2s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.statGrid {
+.nodeStats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 8px;
+  gap: 24px;
 }
 
-.statItem {
+.nodeStat {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.statValue {
-  font-size: 16px;
+.nodeVal {
+  font-size: 24px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 
-.statLabel {
+.nodeLab {
   font-size: 10px;
-  font-weight: 600;
-  color: #444;
+  color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
 }
 
-.layerBreakdown {
+/* Radar Styling */
+.radarWrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.layerMiniRow {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.layerMiniHeader {
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  font-weight: 700;
-  color: #555;
-  text-transform: uppercase;
-}
-
-.layerMiniTrack {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 100px;
-  overflow: hidden;
-}
-
-.layerMiniBar {
-  height: 100%;
-  background: #00ff87;
-  border-radius: 100px;
-  opacity: 0.8;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 300px;
 }
 
 .radarContainer {
   width: 100%;
-  aspect-ratio: 1;
+  height: 240px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
 }
 
 .radarSvg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 15px rgba(0, 255, 135, 0.1));
+  overflow: visible;
 }
 
 .radarGrid {
-  stroke: rgba(255, 255, 255, 0.05);
+  stroke: var(--glass-border);
   stroke-width: 1;
   fill: none;
 }
 
 .radarArea {
-  fill: rgba(0, 255, 135, 0.1);
-  stroke: #00ff87;
+  fill: var(--accent-glow);
+  stroke: var(--accent-color, #a8ff60);
   stroke-width: 2;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 10px var(--accent-glow));
 }
 
-.radarLabel {
-  font-size: 7px;
-  fill: #444;
-  font-weight: 700;
+.radarLabelsOverlay {
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+}
+
+.labelBadge {
+  position: absolute;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  backdrop-filter: blur(8px);
+  transform: translate(-50%, -50%);
+  min-width: 70px;
+}
+
+.labelName {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
-.metricCard {
-  padding: 24px;
+.labelVal {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-color, #a8ff60);
+}
+
+/* Horizon Hub */
+.horizonHub {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.currentPhaseInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.phaseLabel {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent-color, #a8ff60);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.currentPhaseTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.miniFlow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.miniFlowItem {
+  display: flex;
+  align-items: center;
   gap: 16px;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  padding: 12px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
 }
 
-.metricCard:hover {
-  transform: none;
-  border-color: rgba(255, 255, 255, 0.09);
-  box-shadow: none;
+.miniFlowItem:hover {
+  border-color: var(--glass-border-hover);
+  background: var(--glass-bg-hover);
 }
 
+.miniFlowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--text-muted);
+}
+
+.miniFlowContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.miniFlowNameGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.miniFlowName {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.miniFlowPercent {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.miniFlowBar {
+  height: 3px;
+  background: var(--glass-border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.miniFlowBar div {
+  height: 100%;
+  background: var(--accent-color, #a8ff60);
+  opacity: 0.6;
+}
+
+/* Status / Pulse */
 .liveBadge {
-  background: rgba(255, 255, 255, 0.055);
-  color: #a6b7b3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--accent-color, #a8ff60);
+  padding: 6px 12px;
+  background: var(--accent-glow);
+  border-radius: 100px;
 }
 
 .pulse {
-  background: #8fcfaa;
-  box-shadow: none;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-color, #a8ff60);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-color, #a8ff60);
+  animation: pulse-kf 2s infinite alternate;
 }
 
-.metricValue {
-  font-size: 40px;
+@keyframes pulse-kf {
+  from { opacity: 0.4; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1.2); }
 }
 
-.valueAccent {
-  color: #9fe3ba;
-  text-shadow: none;
+@media (max-width: 1000px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.progressBar,
-.layerMiniBar {
-  background: #8fd6a9;
-  box-shadow: none;
-}
-
-.radarSvg {
-  filter: none;
-}
-
-.radarArea {
-  fill: rgba(143, 214, 169, 0.12);
-  stroke: #8fd6a9;
+@media (max-width: 600px) {
+  .metricCard {
+    padding: 24px;
+  }
+  .percent {
+    font-size: 64px;
+  }
 }

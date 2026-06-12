@@ -13,14 +13,14 @@
   "layers": [
     {
       "id": "layer1",
-      "title": "Layer 1 \u2014 Core Engineering & Systems (The 2013-2030 Bridge)",
+      "title": "Layer 1 — Core Engineering & Systems (The 2013-2030 Bridge)",
       "description": "Absolute mastery of the metal, the network, and the browser. No black boxes.",
       "items": [
         {
           "id": "l1_sd_fundamentals",
           "title": "Systems Design: Database Internals & Core Concepts",
           "status": "pending",
-          "notes": "DB internals (B-Trees vs LSM Trees, indexing strategies, buffer pools), CAP Theorem & PACELC, ACID vs BASE, caching strategies (Redis patterns \u2014 cache-aside, write-through, write-behind), CDN architecture & edge caching, DNS resolution & Anycast. Rust implementation: build a B-tree or LSM-based persistent KV store."
+          "notes": "DB internals (B-Trees vs LSM Trees, indexing strategies, buffer pools), CAP Theorem & PACELC, ACID vs BASE, caching strategies (Redis patterns — cache-aside, write-through, write-behind), CDN architecture & edge caching, DNS resolution & Anycast. Rust implementation: build a B-tree or LSM-based persistent KV store."
         },
         {
           "id": "l1_sd_distributed",
@@ -122,7 +122,7 @@
     },
     {
       "id": "layer2",
-      "title": "Layer 2 \u2014 Mathematics & ML Foundations",
+      "title": "Layer 2 — Mathematics & ML Foundations",
       "description": "Understanding the calculus of reality before predicting it.",
       "items": [
         {
@@ -171,7 +171,7 @@
           "id": "l2_rust_numerical",
           "title": "Rust for Numerical & Scientific Computing",
           "status": "pending",
-          "notes": "ndarray (N-dimensional arrays, similar to NumPy), nalgebra (linear algebra for ML/graphics), linfa (Rust ML toolkit \u2014 equivalent to scikit-learn), statrs (statistical distributions), Peroxide (scientific computing), rust-cv (computer vision). Use Rust for performant numerical pipelines \u2014 implement PCA or linear regression from scratch."
+          "notes": "ndarray (N-dimensional arrays, similar to NumPy), nalgebra (linear algebra for ML/graphics), linfa (Rust ML toolkit — equivalent to scikit-learn), statrs (statistical distributions), Peroxide (scientific computing), rust-cv (computer vision). Use Rust for performant numerical pipelines — implement PCA or linear regression from scratch."
         },
         {
           "id": "l2_portfolio_building",
@@ -183,7 +183,7 @@
     },
     {
       "id": "layer3",
-      "title": "Layer 3 \u2014 Deep Learning & Modern AI Architectures",
+      "title": "Layer 3 — Deep Learning & Modern AI Architectures",
       "description": "Building and training the brains of 2030.",
       "items": [
         {
@@ -226,13 +226,13 @@
           "id": "l3_rust_dl",
           "title": "Rust Deep Learning Ecosystem",
           "status": "pending",
-          "notes": "Candle (minimalist ML framework by HuggingFace, GPU/CUDA support), Burn (Rust-native DL framework with WGPU backend), tract (ONNX inference engine), ort (ONNX Runtime bindings), safetensors (safe tensor serialization). Use Rust for inference serving \u2014 lower latency, smaller footprint than Python."
+          "notes": "Candle (minimalist ML framework by HuggingFace, GPU/CUDA support), Burn (Rust-native DL framework with WGPU backend), tract (ONNX inference engine), ort (ONNX Runtime bindings), safetensors (safe tensor serialization). Use Rust for inference serving — lower latency, smaller footprint than Python."
         }
       ]
     },
     {
       "id": "layer4",
-      "title": "Layer 4 \u2014 Web3, Blockchain & Decentralized Systems",
+      "title": "Layer 4 — Web3, Blockchain & Decentralized Systems",
       "description": "Engineering trustless, immutable, and uncensorable protocols.",
       "items": [
         {
@@ -275,7 +275,7 @@
     },
     {
       "id": "layer5",
-      "title": "Layer 5 \u2014 AI x Web3 (The Frontier)",
+      "title": "Layer 5 — AI x Web3 (The Frontier)",
       "description": "Where verifiable compute meets artificial intelligence.",
       "items": [
         {
@@ -306,7 +306,7 @@
     },
     {
       "id": "layer6",
-      "title": "Layer 6 \u2014 Autonomous Agents & High-Performance Runtimes",
+      "title": "Layer 6 — Autonomous Agents & High-Performance Runtimes",
       "description": "Where autonomous systems meet bare-metal performance.",
       "items": [
         {
@@ -337,7 +337,7 @@
     },
     {
       "id": "layer7",
-      "title": "Layer 7 \u2014 Cryptographic AI & Post-State Networks",
+      "title": "Layer 7 — Cryptographic AI & Post-State Networks",
       "description": "Trustless verifiable compute and privacy-preserving intelligence.",
       "items": [
         {
@@ -362,7 +362,7 @@
     },
     {
       "id": "layer8",
-      "title": "Layer 8 \u2014 Biological Nutrition (Fuel)",
+      "title": "Layer 8 — Biological Nutrition (Fuel)",
       "description": "Optimizing the body's internal chemistry and energy supply for sustained peak performance.",
       "items": [
         {
@@ -393,7 +393,7 @@
     },
     {
       "id": "layer9",
-      "title": "Layer 9 \u2014 Physical Frame (Hardware)",
+      "title": "Layer 9 — Physical Frame (Hardware)",
       "description": "Developing a robust, functional, and aesthetically balanced physical structure.",
       "items": [
         {
@@ -424,7 +424,7 @@
     },
     {
       "id": "layer10",
-      "title": "Layer 10 \u2014 Scalp & Follicle Recovery (Maintenance)",
+      "title": "Layer 10 — Scalp & Follicle Recovery (Maintenance)",
       "description": "Implementing a dedicated regimen for optimal hair and scalp health.",
       "items": [
         {
@@ -455,7 +455,7 @@
     },
     {
       "id": "layer11",
-      "title": "Layer 11 \u2014 Aesthetic & Facial Balancing (Interface)",
+      "title": "Layer 11 — Aesthetic & Facial Balancing (Interface)",
       "description": "Refining personal presentation and optimizing facial architecture for enhanced confidence and presence.",
       "items": [
         {
@@ -486,7 +486,7 @@
     },
     {
       "id": "layer_js_dev",
-      "title": "Layer 12 \u2014 JavaScript Developer Roadmap",
+      "title": "Layer 12 — JavaScript Developer Roadmap",
       "description": "Comprehensive path to mastering JavaScript and its ecosystem.",
       "items": [
         {
@@ -553,7 +553,7 @@
     },
     {
       "id": "layer13",
-      "title": "Layer 13 \u2014 Blockchain + Ethereum + Solidity",
+      "title": "Layer 13 — Blockchain + Ethereum + Solidity",
       "description": "Mastering the EVM, smart contracts, and decentralized protocols.",
       "items": [
         {
@@ -584,7 +584,7 @@
     },
     {
       "id": "layer14",
-      "title": "Layer 14 \u2014 DApp + Full-Stack Integration",
+      "title": "Layer 14 — DApp + Full-Stack Integration",
       "description": "Connecting the blockchain to modern web interfaces.",
       "items": [
         {
@@ -615,7 +615,7 @@
     },
     {
       "id": "layer15",
-      "title": "Layer 15 \u2014 AI + Web3 Combination",
+      "title": "Layer 15 — AI + Web3 Combination",
       "description": "Merging Artificial Intelligence with Decentralized Technologies.",
       "items": [
         {
@@ -646,7 +646,7 @@
     },
     {
       "id": "layer16",
-      "title": "Layer 16 \u2014 Security, Testing & Professional Depth",
+      "title": "Layer 16 — Security, Testing & Professional Depth",
       "description": "Securing applications and professional-grade testing.",
       "items": [
         {
@@ -721,7 +721,7 @@
     {
       "id": "m_rust_kv_store",
       "title": "Build a Rust-based KV store",
-      "status": "done"
+      "status": "pending"
     },
     {
       "id": "m_rust_raft",
@@ -731,17 +731,17 @@
     {
       "id": "m_sd_load_balancer",
       "title": "Design a load balancer",
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "m_sd_twitter",
       "title": "Design Twitter's architecture",
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "m_publish_projects",
       "title": "Publish 3 projects to GitHub",
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "m_sys_design",

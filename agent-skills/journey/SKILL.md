@@ -8,13 +8,11 @@ The user has installed an MCP Server (`Journey Engine`) that gives you direct ac
 **Always ask the user for their Journey `user_id`** (e.g., their Google email or chosen username) if you don't already know it, or check your core memory.
 
 ### Available Tools:
-1. `get_roadmap(user_id)`: Fetches the full JSON of the user's roadmap. Use this to understand their current structure, what layers exist, and what goals are pending.
-2. `get_summary(user_id)`: Fetches a quick percentage completion summary of all layers.
-3. `add_goal(user_id, layer_id, title, notes)`: Appends a new goal to a specific layer.
-4. `update_goal_status(user_id, layer_id, item_id, status)`: Marks a goal as `"done"` or `"pending"`.
+1. `get_roadmap()`: Fetches the full JSON of your current roadmap. Use this to understand the structure, layers, and pending tasks.
+2. `add_goal(layer_id, title, goal)`: Appends a new goal to a specific layer.
+3. `update_item_status(type, itemId, status, layerId)`: Marks a goal or milestone as `"done"` or `"pending"`. `type` must be `"layer"` or `"milestone"`.
 
 ## Agent Workflows
-- **"Add X to my roadmap"**: First, call `get_roadmap` to see the available `layer_id`s. Find the most appropriate layer (e.g., `layer1` for tech, `layer2` for bio). Then call `add_goal` with the new skill.
-- **"I finished learning X"**: First, call `get_roadmap` to find the exact `item_id` and `layer_id` for "X". Then call `update_goal_status` to mark it as `"done"`.
-- **"What should I learn next?"**: Call `get_roadmap`, find the first layer that has items with `"status": "pending"`, and recommend those to the user.
-- **"How am I doing?"**: Call `get_summary` and present the progress to the user.
+- **"Add X to my roadmap"**: Call `get_roadmap` to see available layers, then `add_goal` with the new skill.
+- **"I finished learning X"**: Find the `itemId` and `layerId` via `get_roadmap`, then call `update_item_status` with `status: "done"`.
+- **"What should I learn next?"**: Call `get_roadmap`, find the first incomplete layer, and suggest its pending tasks.

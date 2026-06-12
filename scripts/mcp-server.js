@@ -4,8 +4,20 @@ const fs = require('fs').promises;
 const path = require('path');
 const readline = require('readline');
 
-const ROADMAP_PATH = path.join(process.cwd(), 'data', 'roadmap.json');
-const PROGRESS_HISTORY_PATH = path.join(process.cwd(), 'data', 'progress_history.json');
+const os = require('os');
+
+// Use ~/.journey as the data home for consistency with start-roadmap
+const JOURNEY_HOME = path.join(os.homedir(), '.journey');
+const DATA_DIR = process.env.JOURNEY_DATA_PATH || path.join(JOURNEY_HOME, 'data');
+const LOCAL_DATA_DIR = path.join(__dirname, '..', 'data');
+
+const ROADMAP_PATH = fs.existsSync(path.join(DATA_DIR, 'roadmap.json')) 
+  ? path.join(DATA_DIR, 'roadmap.json') 
+  : path.join(LOCAL_DATA_DIR, 'roadmap.json');
+
+const PROGRESS_HISTORY_PATH = fs.existsSync(path.join(DATA_DIR, 'progress_history.json'))
+  ? path.join(DATA_DIR, 'progress_history.json')
+  : path.join(LOCAL_DATA_DIR, 'progress_history.json');
 
 const rl = readline.createInterface({
   input: process.stdin,

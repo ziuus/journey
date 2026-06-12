@@ -1,71 +1,58 @@
-# 🌌 Journey: Universal Goal Engine
+# 🌌 Journey: Unified Mastery Engine
 
-> **Universal Mastery Engine — Achieving any goal through structured layers, milestones, and AI assistance.**
+[![NPM Version](https://img.shields.io/npm/v/@ziuus/journey?color=7bdca8&style=flat-square)](https://www.npmjs.com/package/@ziuus/journey)
+[![License: MIT](https://img.shields.io/badge/License-MIT-7bdca8.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-Journey is a high-fidelity platform for tracking and achieving any type of goal—whether it's technical mastery, biological optimization, personal projects, or life milestones. It breaks down massive ambitions into structured **Layers** and actionable **Sub-tasks (Milestones)**, designed to be accomplished with the help of AI agents. 
+> **Bridge the gap between your current baseline and the 2030 Engineering Frontier.**
 
-## ⚡ Core Features
+Journey is a high-fidelity, AI-orchestrated mastery engine. It is not a task manager; it is a **Syllabus for Autonomous Transition**. It unifies technical mastery (Distributed Systems, ZK-ML, Rust) with biological optimization (Nutrition, Physical Frame) into a single, cohesive progression tree.
 
-- **Universal Goal Tracking**: Create custom layers for any domain (Career, Health, Personal, etc.) and track progress through actionable sub-tasks.
-- **AI-Assisted Execution**: Built from the ground up to integrate with AI agents (like OpenCode or Gemini) that can dynamically create, update, and manage your goals based on conversation.
-- **Progression Intelligence**: Real-time metrics dashboard featuring category radar vectors and phase-completion tracking.
-- **MCP Integration**: Direct tool-based access for AI agents to interact with and update the roadmap.
-- **Clean Premium Aesthetic**: Minimalist, glassmorphic UI built for high-performance focus.
+![Journey UI Preview](https://github.com/ziuus/journey/raw/main/public/preview.png) *(Placeholder for your actual preview image)*
 
-## 🛠 Tech Stack
+## ✨ Why Journey?
 
-- **Framework**: Next.js 16+ (Turbopack)
-- **Styling**: Vanilla CSS Modules (Glassmorphism / Antigravity Master UI)
-- **Intelligence**: Google Gemini-2.0 via Gemini CLI Bridge
-- **Animations**: GSAP & Framer Motion for kinetic physics
-- **Scrolling**: Lenis Smooth Scroll
+*   **Universal Goal Architecture**: 16+ pre-configured layers covering the absolute metal of systems engineering to the peak of human performance.
+*   **Liquid Glass UI**: A calm, usability-first aesthetic built with Next.js 19, GSAP kinetic physics, and aurora-shift backgrounds.
+*   **AI-Native (MCP)**: Built-in Model Context Protocol (MCP) server allows AI agents (Claude, Gemini, ChatGPT) to autonomously read your progress and update your roadmap as you build.
+*   **Progress Spotlight**: Smart recommendation engine that points you to your next logical "Boss Level" milestone.
+*   **Zero-Loss Persistence**: Your data lives in `~/.journey`, keeping your progress safe across package updates and re-installs.
 
-## 🚀 Getting Started
+## 🚀 One-Command Installation
 
-1. **Clone & Install**:
-   ```bash
-   npm install
-   ```
+The fastest way to install Journey and link the global CLI commands:
 
-2. **Configure Environment**:
-   Ensure the **OpenCode** or **Gemini CLI** is installed and authenticated in your local environment.
+```bash
+git clone https://github.com/ziuus/journey.git && cd journey && ./install.sh
+```
 
-3. **Run Development**:
-   ```bash
-   npm run dev
-   ```
+Or via NPM:
+```bash
+npm install -g @ziuus/journey
+```
 
-## 🌐 Production & Vercel Deployment
+## 🛠 Command Center
 
-Journey is production-ready with a multi-user architecture. To enable persistent storage on Vercel:
+Once installed, use these global commands from anywhere:
 
-1.  **Persistence**: The system is pre-configured for **Firebase Firestore via REST API**.
-    - Firebase project: `projects-fff6a`
-    - Firestore collection: `journ_roadmaps` by default
-    - If Firebase environment variables are missing, the app falls back to the local `data/roadmap.json` template.
-2.  **Required Environment Variables**:
-    - `FIREBASE_PROJECT_ID`
-    - `FIREBASE_WEB_API_KEY`
-    - `FIREBASE_COLLECTION_PREFIX` (optional, defaults to `journ`)
-    - Copy `.env.example` to `.env.local` for local development.
-3.  **Multi-User**: Users identify via a `userId` stored in `localStorage`. Each user gets an isolated roadmap document in Firestore.
-4.  **Privacy**: Personal health and roadmap data should live in Firestore per user. The repository keeps only a generic public template in `data/roadmap.json`.
-5.  **Build**: Run `npm run build` to verify project integrity before deploy.
+*   `start-roadmap`: Launches the high-fidelity portal on `http://localhost:6060`.
+*   `journey-mcp`: Connects your roadmap to AI agents for autonomous management.
+
+## 🧠 AI Agent Integration
+
+Tell your AI Agent (using the [Computer Use](https://github.com/ziuus/journey) or [MCP](https://github.com/ziuus/journey) extensions) to read the skill instructions:
+
+`agent-skills/journey/SKILL.md`
+
+Your agent can then help you:
+> "Hey, I just finished the Rust Raft implementation. Mark it as done and show me the next milestone."
 
 ## 📂 Project Structure
 
-- `src/app`: Next.js App Router logic and cinematic views.
-- `src/app/api`: Local bridge endpoints for roadmap manipulation and history.
-- `data/`: Local JSON-based persistent storage (Roadmap & History).
-- `mcp/`: Journey MCP Engine for cross-agent roadmap interaction.
-
-## 🤖 AI Agent Integration (Skills)
-
-Users can connect their own AI agents (like OpenCode) to Journey so the agent can dynamically create and manage their roadmaps based on conversations.
-
-1. Tell your AI Agent to read the skill instructions located at:
-   `agent-skills/journey/SKILL.md`
-2. The agent will learn the API structure and use the app's REST API (`/api/roadmap?userId=...`) to autonomously update your goals as you chat.
+*   `src/app`: The cinematic Next.js 19 dashboard.
+*   `mcp/`: The Journey MCP Engine for cross-agent interaction.
+*   `data/`: Local templates for roadmaps and history.
+*   `~/.journey/data/`: Your permanent, personal roadmap storage.
 
 ---
-*Built for the 2030 Engineering Frontier.*
+
+*Built for those who want to work like it is 2030 while interviewing like it is 2013.*

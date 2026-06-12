@@ -3,7 +3,7 @@ export type JourneyView = "tree" | "dashboard" | "focus" | "review";
 export interface JourneyConfig {
   appName: string;
   defaultView: JourneyView;
-  lastView?: JourneyView; // Added for persistence
+  lastView?: JourneyView;
   views: {
     tree: boolean;
     dashboard: boolean;
@@ -11,6 +11,8 @@ export interface JourneyConfig {
     review: boolean;
   };
   ui: {
+    theme: "dark" | "light" | "system";
+    accentColor: string;
     density: "comfortable" | "compact";
     showHero: boolean;
     showRadar: boolean;
@@ -34,7 +36,7 @@ export interface JourneyConfig {
 
 export const journeyConfig: JourneyConfig = {
   appName: "Journey",
-  defaultView: "tree",
+  defaultView: "dashboard",
   views: {
     tree: true,
     dashboard: true,
@@ -42,6 +44,8 @@ export const journeyConfig: JourneyConfig = {
     review: true,
   },
   ui: {
+    theme: "dark",
+    accentColor: "#a8ff60",
     density: "comfortable",
     showHero: false,
     showRadar: false,

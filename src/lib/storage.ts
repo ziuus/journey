@@ -60,7 +60,10 @@ export interface HistoryData {
   activeChatId?: string;
 }
 
-const TEMPLATE_PATH = path.join(process.cwd(), "data", "roadmap.json");
+const DATA_DIR = process.env.JOURNEY_DATA_PATH || path.join(process.cwd(), "data");
+const TEMPLATE_PATH = path.join(DATA_DIR, "roadmap.json");
+const HISTORY_PATH = path.join(DATA_DIR, "history.json");
+const PROGRESS_HISTORY_PATH = path.join(DATA_DIR, "progress_history.json");
 const HISTORY_TEMPLATE: HistoryData = { chats: [] };
 
 function getFirebaseConfig() {
