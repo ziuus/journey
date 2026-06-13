@@ -1,36 +1,34 @@
-# 📖 Learning the Mastery Protocol
+# 📖 Universal Goal Management Guide
 
-Journey is more than a tracker; it's a framework for high-altitude engineering. This guide explains the core concepts of the engine.
+Journey is a framework for visualizing and executing your path to any objective. This guide explains how to use the engine to its full potential.
 
-## 1. The HUD (Heads-Up Display)
-The Home and Dashboard views function as your **Mission Control**.
-- **Neural Map**: A 10-point radar chart. When you complete items in a specific layer (e.g., Systems), the corresponding vector on the map expands. Aim for a balanced, wide-reaching map.
-- **Mastery Percent**: Calculated as the mathematical average of all nodes. This is your "Level" in the protocol.
+## 1. The Dashboard HUD
+The main dashboard serves as your **Command Center**.
+- **Neural Map**: An interactive radar chart mapping your distribution across different goal vectors. As you complete items in a specific layer, the corresponding vector expands.
+- **Completion Analytics**: A high-impact percentage showing your total progression towards the final objective.
 
-## 2. The Goal Tree Architecture
-Accessed via `/tree`, the Goal Tree is a visual representation of your dependencies.
-- **Spine**: The vertical line connecting your Layers.
-- **Branches**: The specific items (Nodes) within a layer.
-- **Node Interaction**: In this view, clicking any node toggles its state. Use this to rapidly update your progress after a deep study session.
+## 2. Goal Tree Architecture
+Accessed via the **Goal Tree** view, this is the visual backbone of your journey.
+- **The Spine**: The vertical path connecting your major goal layers.
+- **The Branches**: Specific actionable items (Nodes) within each layer.
+- **Real-time Interaction**: Click any node in this view to toggle its completion status. Changes are instantly synced to your HUD and Dashboard.
 
-## 3. Data Sovereignty
-Journey creates a `~/.journey` folder in your home directory on first run.
-- `roadmap.json`: Your entire journey. You can back this up or manually edit it for bulk changes.
-- `history.json`: Log of your achievements.
-- **Syncing**: Because Journey is local-only, we recommend version-controlling your `~/.journey` directory in a private git repo if you want cross-device sync.
+## 3. Data Privacy & Sovereignty
+Journey is built on a "Zero Cloud" philosophy.
+- **Local Storage**: All data is stored in `~/.journey` on your machine.
+- **Offline First**: The engine functions entirely without an internet connection.
+- **Portability**: Your `roadmap.json` is a simple, standard file that you can back up, transfer, or version control as you see fit.
 
-## 4. The Default Curriculum
-The default template provides a generic starting point optimized for modern full-stack development:
-- **Layer 1**: Web Fundamentals.
-- **Layer 2**: Frontend Architecture.
-- **Layer 3**: Backend & APIs.
-- **Layer 4**: Infrastructure & Deployment.
+## 4. AI-Powered Management
+Journey is designed to work alongside your favorite AI agents.
+- **Intelligent Synthesis**: Use AI to break down massive, vague goals into logical, dependent layers.
+- **Dynamic Refinement**: Connect an AI assistant to analyze your progress and suggest optimizations to your roadmap structure.
 
 ## 5. UI Customization
-Visit `/settings` to align the HUD with your cognitive preferences:
-- **Accent Selection**: Switch between Cyber Cyan, Electric Purple, or Neon Green.
-- **Density**: Use "Compact" for high-information density or "Comfortable" for a focus-centric view.
+Tailor the environment to your cognitive flow in the **Settings** view:
+- **Liquid Glass Aesthetic**: Switch between high-contrast light and dark modes.
+- **Accent Highlighting**: Customize your HUD's secondary colors to match your aesthetic.
 
 ---
 
-*Mastery is not a destination; it's a continuous optimization of your architectural interface with reality.*
+*Mastery is a personal architecture. Build it your way.*
