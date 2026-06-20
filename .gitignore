@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# ── Dependencies ──────────────────────────────────────────────
 /node_modules
 /.pnp
 .pnp.*
@@ -10,44 +10,50 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
+# ── Testing ───────────────────────────────────────────────────
 /coverage
 
-# next.js
+# ── Build outputs ─────────────────────────────────────────────
 /.next/
 /out/
-
-# production
 /build
+dist/
 
-# misc
+# ── OS junk ───────────────────────────────────────────────────
 .DS_Store
 *.pem
+Thumbs.db
 
-# debug
+# ── Debug ─────────────────────────────────────────────────────
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
 
-# env files (can opt-in for committing if needed)
+# ── Secrets ───────────────────────────────────────────────────
 .env*
 !.env.example
 
-# vercel
+# ── Deployment ────────────────────────────────────────────────
 .vercel
+netlify.toml
 
-# typescript
+# ── TypeScript / Config ──────────────────────────────────────
 *.tsbuildinfo
 next-env.d.ts
-*.log
-*.json
-# data
-data/*
-!data/roadmap.json
-!package.json
-!tsconfig.json
-!jsconfig.json
-.omo/
 server.pid
 *.tgz
+
+# ── Personal Data Protection ─────────────────────────────────
+# Personal user data lives at ~/.journey/data/ — NOT in this repo.
+# Never write personal roadmap data to this directory.
+# The only tracked file is the starter template (explicitly allowed below).
+data/*
+!data/roadmap.json
+
+# Never commit personal data directories
+.journey/
+.journey_data/
+*.personal.json
+*_personal.json

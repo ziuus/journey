@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-const fs = require('fs').promises;
+const fs = require('fs');
+const fsp = require('fs').promises;
 const path = require('path');
 const readline = require('readline');
 
@@ -11,8 +12,8 @@ const JOURNEY_HOME = path.join(os.homedir(), '.journey');
 const DATA_DIR = process.env.JOURNEY_DATA_PATH || path.join(JOURNEY_HOME, 'data');
 const LOCAL_DATA_DIR = path.join(__dirname, '..', 'data');
 
-const ROADMAP_PATH = fs.existsSync(path.join(DATA_DIR, 'roadmap.json')) 
-  ? path.join(DATA_DIR, 'roadmap.json') 
+const ROADMAP_PATH = fs.existsSync(path.join(DATA_DIR, 'roadmap.json'))
+  ? path.join(DATA_DIR, 'roadmap.json')
   : path.join(LOCAL_DATA_DIR, 'roadmap.json');
 
 const PROGRESS_HISTORY_PATH = fs.existsSync(path.join(DATA_DIR, 'progress_history.json'))
@@ -26,31 +27,27 @@ const rl = readline.createInterface({
 });
 
 async function readRoadmap() {
-  const data = await fs.readFile(ROADMAP_PATH, 'utf-8');
+  const data = await fsp.readFile(ROADMAP_PATH, 'utf-8');
   return JSON.parse(data);
 }
 
 async function writeRoadmap(data) {
-  await fs.writeFile(ROADMAP_PATH, JSON.stringify(data, null, 2));
+  await fsp.writeFile(ROADMAP_PATH, JSON.stringify(data, null, 2));
 }
 
 async function appendProgressHistory(action, details) {
+  let history = [];
   try {
-    let history = [];
-    try {
-      const data = await fs.readFile(PROGRESS_HISTORY_PATH, 'utf-8');
-      history = JSON.parse(data);
-    } catch (err) {
-    }
-    history.push({
-      timestamp: new Date().toISOString(),
-      action,
-      details
-    });
-    await fs.writeFile(PROGRESS_HISTORY_PATH, JSON.stringify(history, null, 2));
+    const data = await fsp.readFile(PROGRESS_HISTORY_PATH, 'utf-8');
+    history = JSON.parse(data);
   } catch (err) {
-    console.error('Failed to append progress history:', err);
   }
+  history.push({
+    timestamp: new Date().toISOString(),
+    action,
+    details
+  });
+  await fsp.writeFile(PROGRESS_HISTORY_PATH, JSON.stringify(history, null, 2));
 }
 
 const tools = {
@@ -113,9 +110,10 @@ const tools = {
 };
 
 rl.on('line', async (line) => {
+  let request;
   try {
-    const request = JSON.parse(line);
-    
+    request = JSON.parse(line);
+
     // Basic MCP/JSON-RPC handling
     if (request.method === 'initialize') {
       console.log(JSON.stringify({
@@ -123,11 +121,11 @@ rl.on('line', async (line) => {
         id: request.id,
         result: {
           protocolVersion: '2024-11-05',
-          capabilities: {},
+          capabilities: { tools: {} },
           serverInfo: { name: 'journey-mcp', version: '0.1.0' }
         }
       }));
-    } else if (request.method === 'listTools') {
+    } else if (request.method === 'tools/list') {
       console.log(JSON.stringify({
         jsonrpc: '2.0',
         id: request.id,
@@ -168,7 +166,7 @@ rl.on('line', async (line) => {
           ]
         }
       }));
-    } else if (request.method === 'callTool') {
+    } else if (request.method === 'tools/call') {
       const { name, arguments: args } = request.params;
       if (tools[name]) {
         const result = await tools[name](args);
@@ -186,6 +184,13 @@ rl.on('line', async (line) => {
       }
     }
   } catch (err) {
-    // Silent catch for invalid JSON or other errors to keep stdio clean
+    // Respond to method calls with error so the client doesn't hang
+    if (request && request.id) {
+      console.log(JSON.stringify({
+        jsonrpc: '2.0',
+        id: request.id,
+        error: { code: -32603, message: err.message || 'Internal error' }
+      }));
+    }
   }
 });

@@ -1,65 +1,117 @@
-# 🌌 Journey: Universal Goal Engine
+# Journey — AI-Native Roadmap Engine
 
-> **A privacy-focused, immersive goal management system with dynamic AI integration and visual architecture.**
+[![npm version](https://img.shields.io/npm/v/%40ziuus%2Fjourney)](https://www.npmjs.com/package/@ziuus/journey)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-Journey is a cinematic, high-performance tracking engine designed for anyone who wants to visualize their path to any objective. It transforms static task lists into an immersive **Goal Tree** and a real-time **Status HUD**.
+**Your AI agent manages your roadmap. You focus on the work.**
 
-![Version](https://img.shields.io/npm/v/@ziuus/journey?color=a8ff60&style=flat-square)
-![License](https://img.shields.io/npm/l/@ziuus/journey?style=flat-square)
+Journey is a full-stack goal portal your AI assistant reads and updates in real time — while you chat.
 
----
-
-## ⚡ Core Features
-
-### 🖥️ Dashboard HUD
-A cinematic widescreen dashboard providing real-time telemetry of your progress.
-- **Progression Analytics**: High-impact visualization of your overall path.
-- **Neural Distribution**: An interactive radar system mapping your growth across custom vectors.
-- **Active Path**: A streamlined feed of your current focus areas and upcoming milestones.
-
-### 🌳 Immersive Goal Tree
-Visual architecture for your path to achievement.
-- **Structural Visualization**: View your goals as a hierarchical tree of dependencies and layers.
-- **Direct Interaction**: Mark items as "Done" or "Pending" directly from the tree view with instant HUD syncing.
-- **Multi-Track Horizons**: Toggle between different goal categories (e.g., Career, Fitness, Personal) seamlessly.
-
-### 🛡️ Privacy First (Zero Cloud)
-Your goals are your own. Journey is designed for absolute local sovereignty.
-- **Local-Only Storage**: All your data lives in `~/.journey`, never leaving your system.
-- **No Tracking**: We don't collect data on what you're tracking. Your metal, your rules.
-
-### 🤖 AI Integration
-Dynamically manage your roadmap using your favorite AI agents.
-- **Smart Updates**: Connect your AI assistant to intelligently update and manage your goal structure.
-- **Roadmap Synthesis**: Use AI to break down complex goals into logical, dependent layers.
-
----
-
-## 🚀 Deployment
-
-### Installation
-```bash
-npm install -g @ziuus/journey
+```
+         ┌──────────────────────┐
+         │  Journey Portal      │
+         │  (Next.js, 6161)     │
+         └──────┬───────────────┘
+                │ reads
+         ┌──────▼───────────────┐
+         │  data/roadmap.json   │ ◄── your AI agent reads & edits this
+         └──────────────────────┘
 ```
 
-### Commands
-| Command | Action |
-| :--- | :--- |
-| `journey` | Start the dashboard (background) |
-| `journey status` | Check engine diagnostics |
-| `journey stop` | Shut down the engine |
-| `journey logs` | View system logs |
+No cloud, no API keys, no setup ceremonies. Your data is a local JSON file. Your agent edits it directly.
 
 ---
 
-## 🏗️ Architecture
+## Quick Start
 
-Journey uses a **Layered Logic Protocol** that can adapt to any domain:
-- **Foundations**: The entry-level requirements for your objective.
-- **Milestones**: Major checkpoints that define your success.
-- **Vectors**: The specific skill or knowledge areas being tracked.
+```bash
+# install & launch
+npm install -g @ziuus/journey
+journey
+```
+
+Open `http://localhost:6161`. Your roadmap is at `~/.journey/data/roadmap.json`.
+
+That's it.
 
 ---
 
-**Developed by ziuus**  
-**Antigravity Labs**
+## Agent Setup (one step)
+
+Tell your agent to read `~/.journey/data/roadmap.json`.
+
+| Agent              | How to point it                                                      |
+|--------------------|----------------------------------------------------------------------|
+| **Gemini CLI**     | `gemini` → tell it "your roadmap context is at `GEMINI.md`"          |
+| **Claude Code**    | drop `CLAUDE.md` in the project                                      |
+| **Codex**          | tell it "your roadmap is at ~/.journey/data/roadmap.json"            |
+| **ChatGPT**        | paste the file or link it to a custom GPT                            |
+| **Hermes / Cursor**| same — it's a file. Point your agent at it.                          |
+
+Any agent that reads local files can manage your roadmap. No MCP setup. No protocol negotiation. Just a file.
+
+### Optional: MCP Server (for agents that support it)
+
+Some agents (Claude Desktop, Hermes) can connect via MCP for structured tool access. Journey ships a built-in MCP server:
+
+```json
+{
+  "mcpServers": {
+    "journey": {
+      "command": "journey-mcp",
+      "args": []
+    }
+  }
+}
+```
+
+This gives your agent three tools: `get_roadmap`, `add_goal`, `update_item_status`. It's optional — the JSON file approach works with any agent.
+
+---
+
+## CLI
+
+| Command        | What it does                           |
+|----------------|----------------------------------------|
+| `journey`      | Start portal (background, port 6161)   |
+| `journey dev`  | Dev server (foreground, port 3000)     |
+| `journey stop` | Stop background portal                 |
+| `journey status` | Check if portal is running          |
+| `journey logs` | Show recent logs                       |
+| `journey build`| Build the Next.js app                  |
+
+---
+
+## Architecture
+
+```
+journey/
+├── src/                    # Next.js app
+├── data/roadmap.json       # Your roadmap — your agent edits this
+├── scripts/
+│   ├── mcp-server.js       # MCP server (optional)
+│   └── journey-cli.js      # CLI
+├── agent-skills/journey/   # Agent behavior docs
+├── GEMINI.md               # Context doc for Gemini CLI
+└── AGENTS.md               # Quick agent setup
+```
+
+### Data Model
+
+```typescript
+roadmap.json {
+  target_roles: string[],
+  layers: [{ id, title, items: [{ id, title, status: "pending"|"done" }] }],
+  milestones: [{ id, title, status }]
+}
+```
+
+---
+
+## Related
+
+- [`GEMINI.md`](./GEMINI.md) — context file for Gemini CLI
+- [`AGENTS.md`](./AGENTS.md) — quick agent setup
+- [`agent-skills/journey/SKILL.md`](./agent-skills/journey/SKILL.md) — optional agent behaviour guide
+
+MIT. Built for the 2030 engineering frontier.

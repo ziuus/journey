@@ -1,27 +1,32 @@
 # Journey Project Context for Gemini AI
 
-You are the engine behind the "Journey Portal," a high-performance goal achievement tracking system. Your goal is to help the user transition from their current baseline to autonomous mastery across ANY chosen domain (career, health, skills, lifestyle, etc.).
+You are working on the **Journey** project — a universal goal-tracking engine with a Next.js web portal and MCP server.
 
-## Core Capabilities
-- You can read and modify the project roadmap.
-- You can mark tasks as done, add new sub-goals, or expand on any layers (tech, biological, habit-based).
-- **Critical Focus**: While the user has strong technical goals (Rust, System Design, AI), you must also track and update their non-technical goals with equal rigor.
-- **Architectural Depth**: Your mandate is to break down large, ambitious goals into structured, actionable layers and milestones. For technical tasks, focus on First Principles and Systems Design. For non-technical tasks, focus on compounding habits and measurable outcomes.
+## Critical: Data Separation
+- **Repo template file**: `data/roadmap.json` (4-layer starter template). Never overwrite with personal data.
+- **User's personal data**: `~/.journey/data/roadmap.json`. This is outside the repo. Read/write here for actual user goals.
+- The MCP server already points to `~/.journey/data/roadmap.json`. Do not change this.
 
-## Technical Architecture
-- **Roadmap Data**: Stored in `data/roadmap.json`.
-- **Schema**:
-  - `layers`: Array of objects (1-5). Each has an `items` array.
-  - `items`: `{ "id": string, "title": string, "status": "pending" | "done", "goal"?: string }`
-  - `milestones`: Array of milestone items.
+## README Rule
+If you edit the README, keep it accurate and professional:
+1. Journey is a universal goal engine — not a personal tracker for one person.
+2. No hype language, no marketing fluff. Clear technical prose.
+3. Don't invent features — verify they exist in source code.
+4. Badges: npm version + license only. No badge farms.
+
+## Architecture
+- Web portal: Next.js 16 app on port 6161
+- Data: JSON file at `~/.journey/data/roadmap.json`
+- MCP server: `scripts/mcp-server.js` (3 tools: get_roadmap, update_item_status, add_goal)
+- Schema: `{ target_roles, layers: [{ id, title, items: [{ id, title, status }] }], milestones }`
 
 ## How to Manipulate the Roadmap
-When the user asks you to "update the roadmap," "add a task," or "mark something done," you MUST:
-1.  Read `data/roadmap.json` to understand the current state.
-2.  Perform the requested logic (e.g., finding the item and switching status to "done").
-3.  Write the updated JSON back to `data/roadmap.json` using your file-writing tools.
-4.  The Web UI automatically refreshes to show your changes.
+When the user asks you to "update the roadmap," "add a task," or "mark something done":
+1. If using MCP: call the appropriate tool.
+2. If editing the file directly: read `~/.journey/data/roadmap.json`, make changes, write back.
+3. Never modify the repo's `data/roadmap.json` template file.
 
 ## Engineering Standards
-- Maintain the "Clean Premium" aesthetic in your descriptions.
-- Use technical, precise language for new roadmap items (e.g., mentions of ZK-ML, Transformers, Rust-based runtimes).
+- Maintain clean, professional language in descriptions.
+- Use precise technical terms for roadmap items.
+- Don't add speculative or unverifiable features.

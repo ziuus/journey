@@ -1,4 +1,5 @@
 {
+  "_comment": "TEMPLATE FILE — this is a starter template for new installs. Personal data lives at ~/.journey/data/roadmap.json. Do NOT overwrite this file with personal goals.",
   "target_roles": [
     "Full-Stack Engineer",
     "Frontend Specialist",
@@ -18,40 +19,38 @@
     },
     {
       "id": "layer2",
-      "title": "Layer 2 — Frontend Architecture",
-      "description": "Building scalable and performant user interfaces.",
+      "title": "Layer 2 — Frontend Frameworks & Tools",
+      "description": "Build production-ready UI with modern tooling.",
       "items": [
-        { "id": "l2_react", "title": "React & Next.js Ecosystem", "status": "pending" },
-        { "id": "l2_state", "title": "State Management (Zustand, TanStack Query)", "status": "pending" },
-        { "id": "l2_styling", "title": "Component Systems & Design Tokens", "status": "pending" }
+        { "id": "l2_react", "title": "React 19 (Hooks, Suspense, RSC)", "status": "pending" },
+        { "id": "l2_nextjs", "title": "Next.js 16 (App Router, SSR, ISR)", "status": "pending" },
+        { "id": "l2_state_mgmt", "title": "State Management (Zustand, TanStack Query)", "status": "pending" }
       ]
     },
     {
       "id": "layer3",
-      "title": "Layer 3 — Backend & APIs",
-      "description": "Server-side logic and data communication.",
+      "title": "Layer 3 — Backend & API Design",
+      "description": "Design, build, and scale APIs and services.",
       "items": [
-        { "id": "l3_node", "title": "Node.js & TypeScript Fundamentals", "status": "pending" },
-        { "id": "l3_db", "title": "Database Design (SQL vs NoSQL)", "status": "pending" },
-        { "id": "l3_api", "title": "REST & GraphQL API Architecture", "status": "pending" }
+        { "id": "l3_nodejs", "title": "Node.js / Bun Runtime & Express / Hono", "status": "pending" },
+        { "id": "l3_db", "title": "Databases (PostgreSQL, SQLite, Redis)", "status": "pending" },
+        { "id": "l3_api", "title": "API Design (REST, GraphQL, tRPC)", "status": "pending" }
       ]
     },
     {
       "id": "layer4",
-      "title": "Layer 4 — Infrastructure & Deployment",
-      "description": "Shipping code to the world safely.",
+      "title": "Layer 4 — DevOps & Deployment",
+      "description": "Ship and operate reliable software.",
       "items": [
-        { "id": "l4_docker", "title": "Containerization with Docker", "status": "pending" },
-        { "id": "l4_cicd", "title": "CI/CD Pipelines (GitHub Actions)", "status": "pending" },
-        { "id": "l4_cloud", "title": "Cloud Platforms (Vercel, AWS basics)", "status": "pending" }
+        { "id": "l4_docker", "title": "Docker & Containerization", "status": "pending" },
+        { "id": "l4_ci_cd", "title": "CI/CD Pipelines (GitHub Actions)", "status": "pending" },
+        { "id": "l4_cloud", "title": "Cloud Deployment (Vercel, AWS, Fly.io)", "status": "pending" }
       ]
     }
   ],
   "milestones": [
-    { "id": "m_portfolio", "title": "Build and deploy personal portfolio", "status": "pending" },
-    { "id": "m_oss", "title": "Contribute to an open-source project", "status": "pending" },
-    { "id": "m_fullstack", "title": "Ship a full-stack SaaS MVP", "status": "pending" }
-  ],
-  "mlops_devops": [],
-  "security_ethics": []
+    { "id": "m_first_app", "title": "Ship a full-stack app from scratch", "status": "pending" },
+    { "id": "m_open_source", "title": "Contribute to an open-source project", "status": "pending" },
+    { "id": "m_arch_design", "title": "Design and document a system architecture", "status": "pending" }
+  ]
 }
