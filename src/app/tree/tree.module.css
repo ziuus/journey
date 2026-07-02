@@ -254,6 +254,38 @@
   color: var(--text-primary);
 }
 
+.copyBtn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background 0.2s;
+  padding: 4px 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.itemBox:hover .copyBtn {
+  opacity: 0.5;
+}
+
+.copyBtn:hover {
+  opacity: 1 !important;
+  background: var(--glass-bg);
+  color: var(--accent-color);
+}
+
+.copyBtnCopied {
+  opacity: 1 !important;
+  color: var(--accent-color);
+}
+
 .checkIcon { color: var(--accent-color); }
 .pendingIcon { color: var(--text-muted); }
 

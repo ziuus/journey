@@ -4,6 +4,168 @@ export type NodeSource = "user" | "ai" | "system" | "import";
 export type AiAction = "create" | "update" | "delete" | "reorder" | "archive";
 export type AiChangeStatus = "pending" | "accepted" | "rejected" | "edited";
 
+// ─── Metadata types (optional extensions) ─────────────────────
+
+export type LearningDepth = "master" | "working" | "awareness";
+export type Priority = "master" | "working" | "awareness";
+export type Horizon =
+  | "3_months"
+  | "6_months"
+  | "12_months"
+  | "2_years"
+  | "5_years"
+  | "ongoing";
+export type CareerValue = "critical" | "high" | "medium" | "niche";
+export type IndustryDemand = "very_high" | "high" | "medium" | "emerging" | "research" | "legacy";
+export type TrackName = "career" | "mastery" | "exploration" | "health" | "fitness" | "finance" | "personal" | string;
+
+/**
+ * Optional rich metadata for any roadmap item.
+ * All fields are optional — existing files without them work unchanged.
+ */
+export interface ItemMetadata {
+  /** How deeply to learn this (master/working/awareness) */
+  priority?: Priority;
+  /** Short alias for priority (backward compat) */
+  learning_depth?: LearningDepth;
+  /** When this should be tackled */
+  horizon?: Horizon;
+  /** How much this contributes to near-term career success */
+  career_value?: CareerValue;
+  /** Engineering depth / long-term value (1-10) */
+  engineering_value?: number;
+  /** How likely this is to appear in interviews (1-10) */
+  interview_value?: number;
+  /** Current market demand */
+  industry_demand?: IndustryDemand;
+  /** Item IDs this depends on */
+  prerequisites?: string[];
+  /** Realistic time estimate in hours */
+  estimated_hours?: number;
+  /** Which parallel track this belongs to */
+  track?: TrackName;
+  /** Domain category (e.g. "networking", "databases", "ai") */
+  category?: string;
+  /** What this technology/topic is */
+  purpose?: string;
+  /** Problem it solves */
+  problem_solved?: string;
+  /** When to use it */
+  when_to_use?: string;
+  /** When NOT to use it */
+  when_not_to_use?: string;
+  /** Major alternatives */
+  alternatives?: string[];
+  /** Companies known to use this */
+  companies_using?: string[];
+  /** Learning resources (URLs, book titles, courses) */
+  resources?: string[];
+  /** Suggested mini / production / capstone projects */
+  projects?: {
+    mini?: string;
+    production?: string;
+    capstone?: string;
+  };
+}
+
+// ─── Roadmap item — the core unit ────────────────────────────
+
+export interface RawRoadmapItem {
+  id: string;
+  title: string;
+  status: "pending" | "done";
+  goal?: string;
+  notes?: string;
+  /** Optional rich metadata (additive, backward-compatible) */
+  metadata?: ItemMetadata;
+  // Flat shorthand fields for convenience (merged with metadata at read time)
+  priority?: Priority;
+  horizon?: Horizon;
+  career_value?: CareerValue;
+  engineering_value?: number;
+  interview_value?: number;
+  industry_demand?: IndustryDemand;
+  prerequisites?: string[];
+  estimated_hours?: number;
+  track?: TrackName;
+  category?: string;
+}
+
+// ─── Layer ────────────────────────────────────────────────────
+
+export interface RawLayerData {
+  id: string;
+  title: string;
+  description: string;
+  category?: string;
+  items: RawRoadmapItem[];
+  /** Track for grouping (overrides hardcoded layer-number logic) */
+  track?: TrackName;
+  /** Domain this layer belongs to */
+  domain?: string;
+  /** Lucide icon name for dynamic rendering */
+  icon?: string;
+  /** Arbitrary metadata for future extensibility */
+  metadata?: Record<string, unknown>;
+}
+
+// ─── Timeline ─────────────────────────────────────────────────
+
+export interface RawTimelineData {
+  id: string;
+  months: string;
+  goals: string[];
+  status: string;
+  focus_area: string;
+}
+
+// ─── Top-level structures ─────────────────────────────────────
+
+export interface Domain {
+  id: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  color?: string;
+}
+
+export interface Goal {
+  id: string;
+  title: string;
+  description?: string;
+  domain?: string;
+  target_date?: string;
+  status?: "active" | "paused" | "completed" | "archived";
+  tracks?: string[];
+}
+
+export interface Track {
+  id: TrackName;
+  title: string;
+  description?: string;
+  icon?: string;
+  color?: string;
+}
+
+// ─── Top-level roadmap document ──────────────────────────────
+
+export interface RawRoadmapData {
+  target_roles: string[];
+  layers: RawLayerData[];
+  milestones: RawRoadmapItem[];
+  mlops_devops?: RawRoadmapItem[];
+  security_ethics?: RawRoadmapItem[];
+  timeline?: RawTimelineData[];
+
+  // New optional top-level structures (all backward-compatible)
+  domains?: Domain[];
+  goals?: Goal[];
+  tracks?: Track[];
+  version?: string; // schema version for future migrations
+}
+
+// ─── Graph / tree types (unchanged) ──────────────────────────
+
 export interface RoadmapNode {
   id: string;
   title: string;
@@ -11,10 +173,10 @@ export interface RoadmapNode {
   type: NodeType;
   status: NodeStatus;
   parentId?: string;
-  children?: string[]; // array of child node IDs
-  dependencies?: string[]; // array of node IDs this node depends on
-  progress: number; // 0 to 100
-  priority: number; // e.g., 1 (high), 2 (medium), 3 (low)
+  children?: string[];
+  dependencies?: string[];
+  progress: number;
+  priority: number;
   estimatedMinutes?: number;
   source: NodeSource;
   approved: boolean;
@@ -27,9 +189,7 @@ export interface RoadmapNode {
   createdAt: string;
   updatedAt: string;
   completedAt?: string;
-  
-  // Original payload reference if needed (for reverse adapter)
-  originalData?: any; 
+  originalData?: any;
 }
 
 export interface AiChange {
@@ -49,41 +209,7 @@ export interface AiChange {
 
 export interface RoadmapGraph {
   nodes: Record<string, RoadmapNode>;
-  edges: Array<{ from: string; to: string; type: string }>; // e.g. type="dependency"
+  edges: Array<{ from: string; to: string; type: string }>;
   activeNodeId?: string;
   updatedAt: string;
-}
-
-// Interfaces matching the raw API roadmap.json
-export interface RawRoadmapItem {
-  id: string;
-  title: string;
-  status: 'pending' | 'done';
-  goal?: string;
-  notes?: string;
-}
-
-export interface RawLayerData {
-  id: string;
-  title: string;
-  description: string;
-  category?: string;
-  items: RawRoadmapItem[];
-}
-
-export interface RawTimelineData {
-  id: string;
-  months: string;
-  goals: string[];
-  status: string;
-  focus_area: string;
-}
-
-export interface RawRoadmapData {
-  target_roles: string[];
-  layers: RawLayerData[];
-  milestones: RawRoadmapItem[];
-  mlops_devops?: RawRoadmapItem[];
-  security_ethics?: RawRoadmapItem[];
-  timeline?: RawTimelineData[];
 }

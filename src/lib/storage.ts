@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import type { RawRoadmapData, RawRoadmapItem, RawLayerData } from "@/types/roadmap";
 
 type Primitive = string | number | boolean | null;
 type JsonValue = Primitive | JsonValue[] | { [key: string]: JsonValue };
@@ -14,29 +15,13 @@ type FirestoreValue = {
   stringValue?: string;
 };
 
-export interface RoadmapItem {
-  id: string;
-  title: string;
-  status: "pending" | "done";
-  goal?: string;
-  notes?: string;
-}
+// Re-export types so pages can import from @/lib/storage
+export type { RawRoadmapData, RawRoadmapItem, RawLayerData };
 
-export interface LayerData {
-  id: string;
-  title: string;
-  description: string;
-  category?: string;
-  items: RoadmapItem[];
-}
-
-export interface RoadmapData {
-  target_roles: string[];
-  layers: LayerData[];
-  milestones: RoadmapItem[];
-  mlops_devops: RoadmapItem[];
-  security_ethics: RoadmapItem[];
-}
+// Backward-compatible aliases for old import names
+export type RoadmapItem = RawRoadmapItem;
+export type LayerData = RawLayerData;
+export type RoadmapData = RawRoadmapData;
 
 export interface ChatMessage {
   id?: string;
@@ -88,9 +73,9 @@ function getDocumentId(userId: string) {
   return encodeURIComponent(normalized || "default");
 }
 
-async function readTemplateRoadmap(): Promise<RoadmapData> {
+async function readTemplateRoadmap(): Promise<RawRoadmapData> {
   const data = await fs.readFile(TEMPLATE_PATH, "utf-8");
-  return JSON.parse(data) as RoadmapData;
+  return JSON.parse(data) as RawRoadmapData;
 }
 
 function toFirestoreValue(value: JsonValue): FirestoreValue {
@@ -145,13 +130,19 @@ function toFirestoreFields(data: Record<string, unknown>) {
   );
 }
 
-function fromFirestoreRoadmap(fields?: Record<string, FirestoreValue>): RoadmapData {
+/** Hydrate a RawRoadmapData from Firestore fields, tolerating missing fields. */
+function fromFirestoreRoadmap(fields?: Record<string, FirestoreValue>): RawRoadmapData {
   return {
-    layers: (fromFirestoreValue(fields?.layers) as unknown as LayerData[]) || [],
-    milestones: (fromFirestoreValue(fields?.milestones) as unknown as RoadmapItem[]) || [],
-    mlops_devops: (fromFirestoreValue(fields?.mlops_devops) as unknown as RoadmapItem[]) || [],
-    security_ethics: (fromFirestoreValue(fields?.security_ethics) as unknown as RoadmapItem[]) || [],
-    target_roles: (fromFirestoreValue(fields?.target_roles) as unknown as string[]) || [],
+    target_roles: (fromFirestoreValue(fields?.target_roles) as string[]) || [],
+    layers: (fromFirestoreValue(fields?.layers) as unknown as RawLayerData[]) || [],
+    milestones: (fromFirestoreValue(fields?.milestones) as unknown as RawRoadmapItem[]) || [],
+    mlops_devops: (fromFirestoreValue(fields?.mlops_devops) as unknown as RawRoadmapItem[]) || undefined,
+    security_ethics: (fromFirestoreValue(fields?.security_ethics) as unknown as RawRoadmapItem[]) || undefined,
+    domains: (fromFirestoreValue(fields?.domains) as unknown as RawRoadmapData["domains"]) || undefined,
+    goals: (fromFirestoreValue(fields?.goals) as unknown as RawRoadmapData["goals"]) || undefined,
+    tracks: (fromFirestoreValue(fields?.tracks) as unknown as RawRoadmapData["tracks"]) || undefined,
+    timeline: (fromFirestoreValue(fields?.timeline) as unknown as RawRoadmapData["timeline"]) || undefined,
+    version: (fromFirestoreValue(fields?.version) as string) || undefined,
   };
 }
 
@@ -220,7 +211,7 @@ async function writeFirestoreData(userId: string, collection: string, data: Reco
   return true;
 }
 
-export async function getRoadmap(userId: string): Promise<RoadmapData> {
+export async function getRoadmap(userId: string): Promise<RawRoadmapData> {
   const config = getFirebaseConfig();
 
   try {
@@ -239,7 +230,7 @@ export async function getRoadmap(userId: string): Promise<RoadmapData> {
   return readTemplateRoadmap();
 }
 
-export async function saveRoadmap(userId: string, data: RoadmapData) {
+export async function saveRoadmap(userId: string, data: RawRoadmapData) {
   const config = getFirebaseConfig();
   const didWriteToFirestore = config
     ? await writeFirestoreData(userId, config.collectionRoadmaps, data as unknown as Record<string, unknown>)

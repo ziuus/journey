@@ -4,32 +4,51 @@ import React, { useEffect, useState, useMemo, useRef } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import mStyles from "./metrics.module.css";
-import { Search, Target, CheckCircle2, Zap, ChevronRight, ChevronUp, Cpu, Brain, Network, Blocks, Infinity, Bot, ShieldCheck } from "lucide-react";
+import {
+  Search, Target, CheckCircle2, Zap, ChevronRight, ChevronUp,
+  Cpu, Brain, Network, Blocks, Infinity, Bot, ShieldCheck,
+  BookOpen, Code, Database, Server, Globe, Lock, Activity,
+  Heart, Dumbbell, Wallet, Users, Compass, Star, Rocket, Lightbulb,
+  Award, Layers, PieChart, BarChart3, Clock, Calendar, Filter,
+  Music, Camera, Eye, Flag, Folder, File, MessageCircle, Phone,
+  PlusCircle, MinusCircle, AlertCircle, Info, HelpCircle, Settings,
+  User, Home as HomeIcon, Menu, MoreHorizontal, ExternalLink, Download, Upload,
+  RefreshCw, Power, Trash2, Edit, Map, Terminal, Cloud, Wifi,
+  MousePointer, Keyboard, Monitor, Tablet, Smartphone, TreePine, XCircle
+} from "lucide-react";
+import type { RawRoadmapData, RawLayerData, RawRoadmapItem } from "@/lib/storage";
+import {
+  resolveLayerIcon, resolveLayerTrack, collectTracks, filterLayersByTrack,
+  getPriorityBadge, getHorizonBadge, getCareerValueBadge, getEngineeringValue
+} from "@/lib/roadmap-utils";
 
-interface RoadmapItem {
-  id: string;
-  title: string;
-  status: 'pending' | 'done';
+// ─── Icon resolver (maps string names to Lucide components) ───
+
+const ICON_COMPONENTS: Record<string, React.ComponentType<{ size?: number }>> = {
+  Cpu, Brain, Network, Blocks, Infinity, Bot, ShieldCheck, Target,
+  BookOpen, Code, Database, Server, Globe, Lock, Activity,
+  Heart, Dumbbell, Wallet, Users, Compass, Star, Rocket, Lightbulb,
+  Award, Layers, PieChart, BarChart3, Clock, Calendar, Filter,
+  Music, Camera, Eye, Flag, Folder, File, MessageCircle, Phone,
+  PlusCircle, MinusCircle, CheckCircle2, XCircle, AlertCircle, Info, HelpCircle,
+  Settings, User, HomeIcon, Menu, MoreHorizontal, ExternalLink, Download, Upload,
+  RefreshCw, Power, Trash2, Edit, Map, Terminal, Cloud, Wifi,
+  MousePointer, Keyboard, Monitor, Tablet, Smartphone, TreePine, Zap,
+  Home: HomeIcon,
+};
+
+function getIconComponent(iconName: string): React.ComponentType<{ size?: number }> {
+  return ICON_COMPONENTS[iconName] || Target;
 }
 
-interface LayerData {
-  id: string;
-  title: string;
-  description: string;
-  items: RoadmapItem[];
-}
-
-interface RoadmapData {
-  layers: LayerData[];
-  milestones: RoadmapItem[];
-}
+// ─── Highlight text helper ────────────────────────────────────
 
 const HighlightText = ({ text, query }: { text: string, query: string }) => {
   if (!query.trim()) return <>{text}</>;
   const parts = text.split(new RegExp(`(${query})`, 'gi'));
   return (
     <>
-      {parts.map((part, i) => 
+      {parts.map((part, i) =>
         part.toLowerCase() === query.toLowerCase() ? (
           <span key={i} className={styles.highlight}>{part}</span>
         ) : (
@@ -40,7 +59,32 @@ const HighlightText = ({ text, query }: { text: string, query: string }) => {
   );
 };
 
-const UserMetrics = ({ data }: { data: RoadmapData }) => {
+// ─── Badge component ──────────────────────────────────────────
+
+const Badge = ({ label, color }: { label: string; color: string }) => (
+  <span
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      fontSize: "10px",
+      fontWeight: 700,
+      textTransform: "uppercase",
+      letterSpacing: "0.08em",
+      color,
+      border: `1px solid ${color}33`,
+      background: `${color}14`,
+      padding: "1px 6px",
+      borderRadius: "4px",
+      marginRight: "4px",
+    }}
+  >
+    {label}
+  </span>
+);
+
+// ─── UserMetrics component ────────────────────────────────────
+
+const UserMetrics = ({ data }: { data: RawRoadmapData }) => {
   const totalItems = data.layers.reduce((acc, l) => acc + l.items.length, 0);
   const doneItems = data.layers.reduce((acc, l) => acc + l.items.filter(i => i.status === 'done').length, 0);
   const progressPercent = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
@@ -55,16 +99,12 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
   const activeLayers = layerStats.filter(s => s.percent < 100).slice(0, 3);
   const currentPhase = activeLayers[0] || { phase: "Mastered", title: "Complete" };
 
-  const skills = [
-    { label: "Systems", val: layerStats[0]?.percent || 0 },
-    { label: "Math/ML", val: layerStats[1]?.percent || 0 },
-    { label: "AI Arch", val: layerStats[2]?.percent || 0 },
-    { label: "Web3", val: layerStats[3]?.percent || 0 },
-    { label: "Frontier", val: layerStats[4]?.percent || 0 },
-    { label: "Agents", val: layerStats[5]?.percent || 0 },
-    { label: "Security", val: layerStats[6]?.percent || 0 },
-    { label: "Basics", val: Math.round(((layerStats[7]?.percent || 0) + (layerStats[8]?.percent || 0) + (layerStats[9]?.percent || 0) + (layerStats[10]?.percent || 0)) / 4) || 0 },
-  ];
+  const skills = data.layers.slice(0, 7).map((l, i) => ({
+    label: l.icon
+      ? l.icon.charAt(0).toUpperCase() + l.icon.slice(1)
+      : ["Systems", "Math/ML", "AI Arch", "Web3", "Frontier", "Agents", "Security"][i] || `Layer ${i + 1}`,
+    val: layerStats[i]?.percent || 0,
+  }));
 
   const radarPoints = skills.map((s, i) => {
     const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
@@ -146,13 +186,15 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
   );
 };
 
+// ─── Main page ────────────────────────────────────────────────
+
 export default function Home() {
-  const [data, setData] = useState<RoadmapData | null>(null);
+  const [data, setData] = useState<RawRoadmapData | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedLayers, setExpandedLayers] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTrack, setActiveTrack] = useState<string>("Career & Tech");
-  
+  const [activeTrack, setActiveTrack] = useState<string>("");
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const fetchRoadmap = async () => {
@@ -183,8 +225,8 @@ export default function Home() {
 
   const toggleItem = async (type: string, layerId: string | null, itemId: string) => {
     if (!data) return;
-    const newData: RoadmapData = JSON.parse(JSON.stringify(data));
-    let targetItems: RoadmapItem[] = [];
+    const newData: RawRoadmapData = JSON.parse(JSON.stringify(data));
+    let targetItems: RawRoadmapItem[] = [];
     if (type === 'layer' && layerId) {
       const layer = newData.layers.find(l => l.id === layerId);
       if (layer) targetItems = layer.items;
@@ -208,30 +250,26 @@ export default function Home() {
     }
   };
 
-  const groupedLayers = useMemo(() => {
-    if (!data) return { "Career & Tech": [], "Health & Fitness": [] };
-    const groups: Record<string, LayerData[]> = { "Career & Tech": [], "Health & Fitness": [] };
-    
-    data.layers.forEach(layer => {
-      const layerNum = parseInt(layer.id.replace('layer', ''), 10);
-      let category = (layerNum >= 8 && layerNum <= 11) ? "Health & Fitness" : "Career & Tech";
-      if (!groups[category]) groups[category] = [];
-      groups[category].push(layer);
-    });
+  // ── Data-driven track grouping ──────────────────────────────
 
-    return groups;
+  const trackLabels = useMemo(() => {
+    if (!data) return ["Career & Tech", "Health & Fitness"];
+    return collectTracks(data.layers);
   }, [data]);
 
-  const tracks = Object.keys(groupedLayers);
-  const selectedTrack = tracks.includes(activeTrack) ? activeTrack : tracks[0];
-  const currentLayers = groupedLayers[selectedTrack] || [];
-  
+  const selectedTrack = trackLabels.includes(activeTrack) ? activeTrack : trackLabels[0];
+
+  const currentLayers = useMemo(() => {
+    if (!data) return [];
+    return filterLayersByTrack(data.layers, selectedTrack);
+  }, [data, selectedTrack]);
+
   const displayLayers = useMemo(() => {
     return currentLayers.map((layer, index) => {
-      const cleanTitle = layer.title.includes('—') 
-        ? layer.title.split('—').slice(1).join('—').trim() 
+      const cleanTitle = layer.title.includes('—')
+        ? layer.title.split('—').slice(1).join('—').trim()
         : layer.title.replace(/^Layer \d+\s*(—|:)\s*/i, '').trim();
-      
+
       return {
         ...layer,
         displayTitle: `Layer ${index + 1} — ${cleanTitle}`
@@ -239,7 +277,7 @@ export default function Home() {
     });
   }, [currentLayers]);
 
-  const filteredLayers = displayLayers.filter(layer => 
+  const filteredLayers = displayLayers.filter(layer =>
     layer.displayTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
     layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
   );
@@ -253,7 +291,7 @@ export default function Home() {
         <div className={styles.hero}>
           <h1 className={styles.title}>Journey</h1>
           <p className={styles.subtitle}>A visual architecture for tracking mastery across technical and physical horizons.</p>
-          
+
           <div className={styles.heroActions}>
             <Link href="/tree" className={styles.primaryAction}>
               Goal Tree <ChevronRight size={20} />
@@ -267,7 +305,7 @@ export default function Home() {
 
       <main className={styles.main}>
         {data && <UserMetrics data={data} />}
-        
+
         <div className={styles.layoutGrid} style={{ marginTop: '80px' }}>
           <div className={styles.contentColumn}>
             {data && data.milestones.length > 0 && (
@@ -278,8 +316,8 @@ export default function Home() {
                 </div>
                 <div className={styles.milestonesHorizontal}>
                   {data.milestones.map(m => (
-                    <div 
-                      key={m.id} 
+                    <div
+                      key={m.id}
                       className={`${styles.milestoneMiniCard} ${m.status === 'done' ? styles.milestoneDone : ''}`}
                       onClick={() => toggleItem('milestone', null, m.id)}
                     >
@@ -300,69 +338,76 @@ export default function Home() {
                   <input type="text" className={styles.searchInput} placeholder="Search modules..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
                 <div className={styles.trackTabs}>
-                  {tracks.map(track => (
+                  {trackLabels.map(track => (
                     <button key={track} onClick={() => setActiveTrack(track)} className={`${styles.trackTab} ${selectedTrack === track ? styles.trackTabActive : ''}`}>{track}</button>
                   ))}
                 </div>
               </div>
 
               <div className={styles.layersGrid}>
-                {filteredLayers?.map((layer) => (
-                  <div 
-                    key={layer.id} 
-                    id={layer.id} 
-                    className={`${styles.card} ${expandedLayers.has(layer.id) ? styles.cardExpanded : ''}`} 
-                    onClick={() => toggleLayerExpansion(layer.id)}
-                  >
-                    <div className={styles.cardContent}>
-                      <div className={`${styles.cardIcon}`}>
-                        {layer.id === 'layer1' ? <Cpu size={28} /> : 
-                         layer.id === 'layer2' ? <Brain size={28} /> : 
-                         layer.id === 'layer3' ? <Network size={28} /> : 
-                         layer.id === 'layer4' ? <Blocks size={28} /> : 
-                         layer.id === 'layer5' ? <Infinity size={28} /> : 
-                         layer.id === 'layer6' ? <Bot size={28} /> : 
-                         layer.id === 'layer7' ? <ShieldCheck size={28} /> : 
-                         <Target size={28} />}
-                      </div>
-                      <div className={styles.cardHeader}>
-                        <h3 className={styles.cardTitle}><HighlightText text={(layer as any).displayTitle} query={searchQuery} /></h3>
-                        <p className={styles.cardDescription}><HighlightText text={layer.description} query={searchQuery} /></p>
-                      </div>
-                      <div className={styles.layerProgressBlock}>
-                        <div className={styles.layerProgressTrack}>
-                          <div className={styles.layerProgressBar} style={{ width: `${Math.round((layer.items.filter(item => item.status === 'done').length / layer.items.length) * 100) || 0}%` }} />
+                {filteredLayers?.map((layer) => {
+                  const iconName = resolveLayerIcon(layer);
+                  const IconComponent = getIconComponent(iconName);
+
+                  return (
+                    <div
+                      key={layer.id}
+                      id={layer.id}
+                      className={`${styles.card} ${expandedLayers.has(layer.id) ? styles.cardExpanded : ''}`}
+                      onClick={() => toggleLayerExpansion(layer.id)}
+                    >
+                      <div className={styles.cardContent}>
+                        <div className={`${styles.cardIcon}`}>
+                          <IconComponent size={28} />
                         </div>
-                      </div>
-                      
-                      {expandedLayers.has(layer.id) && (
-                        <div className={styles.expandedContent} onClick={(e) => e.stopPropagation()}>
-                          <div className={styles.itemList}>
-                            {layer.items.map(item => (
-                              <div 
-                                key={item.id} 
-                                className={`${styles.itemRow} ${item.status === 'done' ? styles.itemRowDone : ''}`}
-                                onClick={() => toggleItem('layer', layer.id, item.id)}
-                              >
-                                <div className={styles.checkboxCustom}>
-                                  {item.status === 'done' ? <CheckCircle2 size={16} /> : <div className={styles.circleSmall} />}
-                                </div>
-                                <span className={styles.itemTitle}><HighlightText text={item.title} query={searchQuery} /></span>
-                              </div>
-                            ))}
+                        <div className={styles.cardHeader}>
+                          <h3 className={styles.cardTitle}><HighlightText text={(layer as any).displayTitle} query={searchQuery} /></h3>
+                          <p className={styles.cardDescription}><HighlightText text={layer.description} query={searchQuery} /></p>
+                        </div>
+                        <div className={styles.layerProgressBlock}>
+                          <div className={styles.layerProgressTrack}>
+                            <div className={styles.layerProgressBar} style={{ width: `${Math.round((layer.items.filter(item => item.status === 'done').length / layer.items.length) * 100) || 0}%` }} />
                           </div>
                         </div>
-                      )}
-                      
-                      <div className={styles.cardFooter}>
-                        <span className={styles.itemCount}>{layer.items.length} Nodes</span>
-                        <div className={styles.expandIndicator}>
-                          {expandedLayers.has(layer.id) ? <ChevronUp size={20} /> : <ChevronRight size={20} />}
+
+                        {expandedLayers.has(layer.id) && (
+                          <div className={styles.expandedContent} onClick={(e) => e.stopPropagation()}>
+                            <div className={styles.itemList}>
+                              {layer.items.map(item => {
+                                const priorityBadge = getPriorityBadge(item);
+                                const horizonBadge = getHorizonBadge(item);
+
+                                return (
+                                  <div
+                                    key={item.id}
+                                    className={`${styles.itemRow} ${item.status === 'done' ? styles.itemRowDone : ''}`}
+                                    onClick={() => toggleItem('layer', layer.id, item.id)}
+                                  >
+                                    <div className={styles.checkboxCustom}>
+                                      {item.status === 'done' ? <CheckCircle2 size={16} /> : <div className={styles.circleSmall} />}
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', flex: 1 }}>
+                                      <span className={styles.itemTitle}><HighlightText text={item.title} query={searchQuery} /></span>
+                                      {priorityBadge && <Badge {...priorityBadge} />}
+                                      {horizonBadge && <Badge {...horizonBadge} />}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className={styles.cardFooter}>
+                          <span className={styles.itemCount}>{layer.items.length} Nodes</span>
+                          <div className={styles.expandIndicator}>
+                            {expandedLayers.has(layer.id) ? <ChevronUp size={20} /> : <ChevronRight size={20} />}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           </div>

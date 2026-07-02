@@ -113,6 +113,38 @@
   color: var(--text-secondary);
 }
 
+.milestoneCopy {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+  padding: 3px 5px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.milestoneItem:hover .milestoneCopy {
+  opacity: 0.5;
+}
+
+.milestoneCopy:hover {
+  opacity: 1 !important;
+  color: var(--accent-color);
+  background: var(--accent-glow);
+}
+
+.milestoneCopyCopied {
+  opacity: 1 !important;
+  color: var(--accent-color);
+}
+
 .milestoneDone {
   border-color: var(--accent-color);
   color: var(--text-primary);

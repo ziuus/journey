@@ -3,27 +3,15 @@
 import React, { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 import mStyles from "../metrics.module.css";
-import { Target, Brain, Zap, Cpu, ShieldCheck, Activity, Award, BarChart3 } from "lucide-react";
+import { Target, Brain, Zap, Activity, Award, BarChart3, Copy, Check } from "lucide-react";
+import type { RawRoadmapData, RawRoadmapItem, RawLayerData } from "@/lib/storage";
 
-interface RoadmapItem {
-  id: string;
-  title: string;
-  status: 'pending' | 'done';
+interface DashboardData {
+  layers: RawLayerData[];
+  milestones: RawRoadmapItem[];
 }
 
-interface LayerData {
-  id: string;
-  title: string;
-  description: string;
-  items: RoadmapItem[];
-}
-
-interface RoadmapData {
-  layers: LayerData[];
-  milestones: RoadmapItem[];
-}
-
-const UserMetrics = ({ data }: { data: RoadmapData }) => {
+const UserMetrics = ({ data }: { data: DashboardData }) => {
   const totalItems = data.layers.reduce((acc, l) => acc + l.items.length, 0);
   const doneItems = data.layers.reduce((acc, l) => acc + l.items.filter(i => i.status === 'done').length, 0);
   const progressPercent = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
@@ -38,16 +26,12 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
   const activeLayers = layerStats.filter(s => s.percent < 100).slice(0, 4);
   const currentPhase = activeLayers[0] || { phase: "Ascended", title: "Complete" };
 
-  const skills = [
-    { label: "Systems", val: layerStats[0]?.percent || 0 },
-    { label: "Math/ML", val: layerStats[1]?.percent || 0 },
-    { label: "AI Arch", val: layerStats[2]?.percent || 0 },
-    { label: "Web3", val: layerStats[3]?.percent || 0 },
-    { label: "Frontier", val: layerStats[4]?.percent || 0 },
-    { label: "Agents", val: layerStats[5]?.percent || 0 },
-    { label: "Security", val: layerStats[6]?.percent || 0 },
-    { label: "Foundations", val: Math.round(((layerStats[7]?.percent || 0) + (layerStats[8]?.percent || 0) + (layerStats[9]?.percent || 0) + (layerStats[10]?.percent || 0)) / 4) || 0 },
-  ];
+  const skills = data.layers.slice(0, 7).map((l, i) => ({
+    label: l.icon
+      ? l.icon.charAt(0).toUpperCase() + l.icon.slice(1)
+      : ["Systems", "Math/ML", "AI Arch", "Web3", "Frontier", "Agents", "Security"][i] || `Layer ${i + 1}`,
+    val: layerStats[i]?.percent || 0,
+  }));
 
   const radarPoints = skills.map((s, i) => {
     const angle = (i / skills.length) * 2 * Math.PI - Math.PI / 2;
@@ -130,8 +114,26 @@ const UserMetrics = ({ data }: { data: RoadmapData }) => {
 };
 
 export default function DashboardView() {
-  const [data, setData] = useState<RoadmapData | null>(null);
+  const [data, setData] = useState<RawRoadmapData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const copyItem = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 1500);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 1500);
+    }
+  };
 
   useEffect(() => {
     const fetchRoadmap = async () => {
@@ -150,6 +152,11 @@ export default function DashboardView() {
 
   if (loading) return <div className={styles.loading}>Accessing Core...</div>;
 
+  const dashboardData: DashboardData = {
+    layers: data?.layers || [],
+    milestones: data?.milestones || [],
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -161,7 +168,7 @@ export default function DashboardView() {
       </header>
 
       <div className={styles.main}>
-        {data && <UserMetrics data={data} />}
+        {data && <UserMetrics data={dashboardData} />}
 
         <div className={styles.grid}>
           <section className={styles.card}>
@@ -170,10 +177,18 @@ export default function DashboardView() {
               <h2 className={styles.cardTitle}>Milestone Analytics</h2>
             </div>
             <div className={styles.milestoneGrid}>
-              {data?.milestones.map(m => (
+              {dashboardData.milestones.map(m => (
                 <div key={m.id} className={`${styles.milestoneItem} ${m.status === 'done' ? styles.milestoneDone : ''}`}>
                   <div className={styles.statusDot} />
                   <span>{m.title}</span>
+                  <button
+                    className={`${styles.milestoneCopy} ${copiedId === m.id ? styles.milestoneCopyCopied : ''}`}
+                    onClick={(e) => { e.stopPropagation(); copyItem(m.title, m.id); }}
+                    aria-label="Copy milestone"
+                    title="Copy to clipboard"
+                  >
+                    {copiedId === m.id ? <Check size={12} /> : <Copy size={12} />}
+                  </button>
                 </div>
               ))}
             </div>
