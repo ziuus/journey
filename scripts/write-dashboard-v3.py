@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+import os
+
+content = '''\
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
@@ -27,6 +31,29 @@ const Badge = ({ label, color }: { label: string; color?: string }) => (
     {label}
   </span>
 );
+
+// ─── Priority / horizon helpers ─────────────────────────────────
+
+const priorityColor = (p?: string) => {
+  switch (p) {
+    case 'critical': return '#ef4444';
+    case 'high': return '#f97316';
+    case 'medium': return '#eab308';
+    case 'low': return '#6b7280';
+    default: return undefined;
+  }
+};
+
+const horizonLabel = (h?: string) => {
+  switch (h) {
+    case '3_months': return '3M';
+    case '6_months': return '6M';
+    case '12_months': return '1Y';
+    case '2_years': return '2Y';
+    case '5_years': return '5Y';
+    default: return h ?? '';
+  }
+};
 
 /** Human label for daily slot */
 const slotLabel = (slot: TodayRecommendation['dailySlot']): string => {
@@ -235,7 +262,11 @@ const TodayCard = ({
 
       <div className={styles.todayCardHeader}>
         <span className={styles.todayScore}>{scored.score}</span>
-        <Badge label={getTrackLabel(item.track)} />
+        <div className={styles.todayBadges}>
+          <Badge label={getTrackLabel(item.track)} />
+          {item.priority && <Badge label={item.priority.toUpperCase()} color={priorityColor(item.priority)} />}
+          {item.horizon && <Badge label={horizonLabel(item.horizon)} />}
+        </div>
       </div>
       <h3 className={styles.todayTitle}>{item.title}</h3>
 
@@ -273,6 +304,9 @@ const TodayCard = ({
       <p className={styles.todayReason}>{rec.reason}</p>
 
       <div className={styles.todayMeta}>
+        <span className={styles.metaItem}>
+          <Hash size={10} /> IV:{item.interview_value ?? '?'} · EV:{item.engineering_value ?? '?'}
+        </span>
         {scored.blocked && (
           <span className={styles.metaBlocked}><AlertTriangle size={10} /> Blocked</span>
         )}
@@ -361,6 +395,8 @@ const ScoredRow = ({
         )}
       </div>
       <div className={styles.scoredBadges}>
+        {item.priority && <Badge label={item.priority.toUpperCase()} color={priorityColor(item.priority)} />}
+        {item.horizon && <Badge label={horizonLabel(item.horizon)} />}
         {scored.blocked && <Badge label="BLOCKED" color="#ef4444" />}
         <span className={styles.scoredScore}>{scored.score}</span>
       </div>
@@ -426,8 +462,8 @@ const OverdueRow = ({ scored }: { scored: ScoredItem }) => (
       <span className={styles.scoredTitle}>{scored.item.title}</span>
       <span className={styles.scoredTrack}>
         {scored.isOverdue ? 'Overdue' : 'Stale'}
-        {scored.item.target_date ? ` · Due: ${scored.item.target_date}` : ''}
-        {scored.item.last_worked_on ? ` · Last: ${scored.item.last_worked_on}` : ''}
+        {scored.item.target_date ? ` \u00b7 Due: ${scored.item.target_date}` : ''}
+        {scored.item.last_worked_on ? ` \u00b7 Last: ${scored.item.last_worked_on}` : ''}
       </span>
     </div>
     <Badge label={scored.isOverdue ? 'OVERDUE' : 'STALE'} color={scored.isOverdue ? '#ef4444' : '#f97316'} />
@@ -559,11 +595,11 @@ export default function ExecutionDashboard() {
       <header className={styles.header}>
         <div className={styles.eyebrow}><Activity size={12} /> Execution OS</div>
         <h1 className={styles.title}>What Should I Do Now?</h1>
-        <p className={styles.subtitle}>Prioritised by ROI, urgency, dependencies, and unlock potential.</p>
+        <p className={styles.subtitle}>AI-driven daily recommendations \u2014 prioritised by ROI, urgency, dependencies, and unlock potential.</p>
       </header>
 
       <div className={styles.main}>
-        {/* ─── Today View ──────────────────────────────────── */}
+        {/* ─── Today View (4-5 balanced slots) ──────────────── */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <Zap size={20} className={styles.sectionIcon} />
@@ -600,7 +636,7 @@ export default function ExecutionDashboard() {
             <h2 className={styles.sectionTitle}>This Week</h2>
           </div>
           {thisWeek.length === 0 ? (
-            <div className={styles.empty}>Weekly view — grouping by track category.</div>
+            <div className={styles.empty}>Weekly view \u2014 grouping by track category.</div>
           ) : (
             <div className={styles.weekGrid}>
               {thisWeek.map((group, i) => (
@@ -688,3 +724,9 @@ export default function ExecutionDashboard() {
     </div>
   );
 }
+'''
+
+path = os.path.expanduser("~/Projects/journey/src/app/dashboard/page.tsx")
+with open(path, "w", encoding="utf-8") as f:
+    f.write(content.strip())
+print(f"Written {len(content.strip())} bytes to {path}")

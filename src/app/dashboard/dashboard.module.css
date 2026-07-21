@@ -1,18 +1,16 @@
 .container {
   min-height: 100vh;
-  padding: 120px 24px 80px;
+  padding: 80px 24px 80px;
   background: var(--bg-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-  overflow-x: hidden;
 }
 
 .header {
   width: 100%;
-  max-width: 1400px;
-  margin-bottom: 60px;
+  max-width: 1100px;
+  margin-bottom: 48px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -22,188 +20,641 @@
 .eyebrow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-size: 11px;
-  font-weight: 800;
-  color: var(--accent-color);
+  font-weight: 600;
+  color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  margin-bottom: 16px;
-  background: var(--accent-glow);
-  padding: 6px 12px;
-  border-radius: 100px;
-}
-
-.title {
-  font-size: clamp(32px, 6vw, 56px);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--text-primary);
+  letter-spacing: 0.15em;
   margin-bottom: 12px;
 }
 
+.title {
+  font-size: clamp(24px, 4vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
 .subtitle {
-  font-size: 18px;
+  font-size: 15px;
   color: var(--text-secondary);
-  max-width: 600px;
+  max-width: 500px;
+  line-height: 1.5;
 }
 
 .main {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1100px;
   display: flex;
   flex-direction: column;
-  gap: 64px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 32px;
 }
 
-.card {
+/* ─── Section ────────────────────────────────── */
+
+.section {
   background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 28px;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  transition: all 0.4s ease;
-}
-
-.card:hover {
-  border-color: var(--glass-border-hover);
-  transform: translateY(-4px);
-}
-
-.cardHeader {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.cardIcon {
-  color: var(--accent-color);
-}
-
-.cardTitle {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.milestoneGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-
-.milestoneItem {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 14px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.milestoneCopy {
-  margin-left: auto;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--text-muted);
-  opacity: 0;
-  transition: opacity 0.2s, color 0.2s;
-  padding: 3px 5px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-.milestoneItem:hover .milestoneCopy {
-  opacity: 0.5;
-}
-
-.milestoneCopy:hover {
-  opacity: 1 !important;
-  color: var(--accent-color);
-  background: var(--accent-glow);
-}
-
-.milestoneCopyCopied {
-  opacity: 1 !important;
-  color: var(--accent-color);
-}
-
-.milestoneDone {
-  border-color: var(--accent-color);
-  color: var(--text-primary);
-  background: var(--accent-glow);
-}
-
-.statusDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--text-muted);
-}
-
-.milestoneDone .statusDot {
-  background: var(--accent-color);
-  box-shadow: 0 0 10px var(--accent-color);
-}
-
-.statusList {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 28px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.statusRow {
+.sectionHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--glass-border);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  gap: 10px;
 }
 
-.statusRow:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.sectionIcon {
+  color: var(--accent);
+  flex-shrink: 0;
 }
 
-.statusVal {
-  color: var(--text-primary);
+.sectionTitle {
+  font-size: 18px;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
+
+.sectionCount {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* ─── Today Grid ─────────────────────────────── */
+
+.todayGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+}
+
+.todayCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color var(--transition);
+}
+
+.todayCard:hover {
+  border-color: var(--border-hover);
+}
+
+.todayCardActive {
+  border-color: var(--accent);
+}
+
+.todaySlot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.todayCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.todayScore {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.todayBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.todayTitle {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.todayAction {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  margin: 0;
+}
+
+.actionArrow {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--accent);
+}
+
+.todayReason {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.todayMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.metaItem {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.metaBlocked {
+  font-size: 11px;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.metaOverdue {
+  font-size: 11px;
+  color: #f97316;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ─── This Week ──────────────────────────────── */
+
+.weekGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.weekGroup {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weekGroupTitle {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.weekItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weekItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.weekBullet {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: var(--text-muted);
+}
+
+.weekItemInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.weekItemTitle {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.weekItemAction {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.weekItemScore {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Split (Two-column) ──────────────────────── */
+
+.splitGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 800px) {
+  .splitGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Scored List ────────────────────────────── */
+
+.scoredList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scoredRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition);
+}
+
+.scoredRow:hover {
+  border-color: var(--border-hover);
+}
+
+.scoredInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scoredTitle {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.scoredTrack {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.scoredBadges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.scoredScore {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Blocked ────────────────────────────────── */
+
+.blockedRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(239, 68, 68, 0.04);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: var(--radius-sm);
+}
+
+.blockedBy {
+  font-size: 11px;
+  color: #ef4444;
+}
+
+/* ─── Empty ──────────────────────────────────── */
+
+.empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-muted);
+  justify-content: center;
+  text-align: center;
+}
+
+.empty code {
+  background: var(--card-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* ─── Unlock display ─────────────────────────── */
+
+.scoredUnlock {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.metaDeps {
+  font-size: 11px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ─── Loading ────────────────────────────────── */
 
 .loading {
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-weight: 800;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
-@media (max-width: 1000px) {
-  .grid {
+/* ─── Badge (generic) ────────────────────────── */
+
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ─── Action Bar ─────────────────────────────── */
+
+.actionBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all var(--transition);
+  line-height: 1;
+}
+
+.actionBtn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.actionBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.actionDone {
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.actionDone:hover {
+  background: rgba(34, 197, 94, 0.06);
+  border-color: #22c55e;
+}
+
+.actionBlock {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+/* ─── Inline Editor ──────────────────────────── */
+
+.inlineEditor {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.inlineInput {
+  flex: 1;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.inlineInput:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.inlineSaveBtn,
+.inlineCancelBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.inlineSaveBtn:hover {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.inlineCancelBtn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* ─── Snooze Modal ───────────────────────────── */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 360px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modalTitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modalInput {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.modalInput:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modalBtnCancel {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.modalBtnConfirm {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ─── Misc ───────────────────────────────────── */
+
+.unlockDisplay {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.snoozeBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #f97316;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Responsive ─────────────────────────────── */
+
+@media (max-width: 900px) {
+  .todayGrid {
     grid-template-columns: 1fr;
   }
+  .weekGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Hide badge containers (fields removed from data) ── */
+
+.todayBadges,
+.scoredBadges {
+  display: none;
 }

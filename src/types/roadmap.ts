@@ -6,8 +6,10 @@ export type AiChangeStatus = "pending" | "accepted" | "rejected" | "edited";
 
 // ─── Metadata types (optional extensions) ─────────────────────
 
+/** How deeply to learn / the intended proficiency level */
 export type LearningDepth = "master" | "working" | "awareness";
-export type Priority = "master" | "working" | "awareness";
+/** Urgency / execution priority */
+export type Priority = "critical" | "high" | "medium" | "low";
 export type Horizon =
   | "3_months"
   | "6_months"
@@ -16,6 +18,7 @@ export type Horizon =
   | "5_years"
   | "ongoing";
 export type CareerValue = "critical" | "high" | "medium" | "niche";
+export type CareerROI = "very_high" | "high" | "medium" | "low";
 export type IndustryDemand = "very_high" | "high" | "medium" | "emerging" | "research" | "legacy";
 export type TrackName = "career" | "mastery" | "exploration" | "health" | "fitness" | "finance" | "personal" | string;
 
@@ -25,13 +28,15 @@ export type TrackName = "career" | "mastery" | "exploration" | "health" | "fitne
  */
 export interface ItemMetadata {
   /** How deeply to learn this (master/working/awareness) */
-  priority?: Priority;
-  /** Short alias for priority (backward compat) */
   learning_depth?: LearningDepth;
+  /** Urgency / execution priority */
+  priority?: Priority;
   /** When this should be tackled */
   horizon?: Horizon;
   /** How much this contributes to near-term career success */
   career_value?: CareerValue;
+  /** Career return on investment */
+  career_roi?: CareerROI;
   /** Engineering depth / long-term value (1-10) */
   engineering_value?: number;
   /** How likely this is to appear in interviews (1-10) */
@@ -73,22 +78,45 @@ export interface ItemMetadata {
 export interface RawRoadmapItem {
   id: string;
   title: string;
-  status: "pending" | "done";
+  status: "pending" | "active" | "done" | "blocked";
   goal?: string;
   notes?: string;
   /** Optional rich metadata (additive, backward-compatible) */
   metadata?: ItemMetadata;
   // Flat shorthand fields for convenience (merged with metadata at read time)
+  learning_depth?: LearningDepth;
   priority?: Priority;
   horizon?: Horizon;
   career_value?: CareerValue;
+  career_roi?: CareerROI;
   engineering_value?: number;
   interview_value?: number;
   industry_demand?: IndustryDemand;
   prerequisites?: string[];
+  depends_on?: string[];
   estimated_hours?: number;
+  actual_hours?: number;
   track?: TrackName;
   category?: string;
+  /** Concrete next action the user should take for this item */
+  next_action?: string;
+  /** When this was last worked on (ISO) */
+  last_worked_on?: string;
+  /** When this was created / added (ISO) */
+  created_at?: string;
+  /** Target completion date (ISO) */
+  target_date?: string;
+  /** Date string YYYY-MM-DD — when item was completed */
+  completed_at?: string;
+  /** Date string YYYY-MM-DD — snooze until this date */
+  snoozed_until?: string;
+  /** Blocked metadata */
+  blocked_metadata?: {
+    blocked_at?: string;
+    reason?: string;
+  };
+  /** Type of work: 'deep_work' | 'interview_prep' | 'project' | 'light_review' | 'other' */
+  work_type?: string;
 }
 
 // ─── Layer ────────────────────────────────────────────────────
@@ -136,6 +164,8 @@ export interface Goal {
   domain?: string;
   target_date?: string;
   status?: "active" | "paused" | "completed" | "archived";
+  horizon?: string;
+  icon?: string;
   tracks?: string[];
 }
 

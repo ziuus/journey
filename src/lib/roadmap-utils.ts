@@ -3,7 +3,7 @@
  * All functions maintain backward compatibility with the old layer-number-based logic.
  */
 
-import type { RawLayerData, RawRoadmapItem, TrackName, Priority, Horizon } from "@/types/roadmap";
+import type { RawLayerData, RawRoadmapItem, TrackName } from "@/types/roadmap";
 
 // ─── Icon map ─────────────────────────────────────────────────
 
@@ -83,6 +83,7 @@ const ICON_MAP: Record<string, string> = {
   monitor: "Monitor",
   tablet: "Tablet",
   phone_icon: "Smartphone",
+  list: "List",
 };
 
 /**
@@ -150,6 +151,15 @@ export function trackToLabel(track: string): string {
     business: "Business",
     health_fitness: "Health & Fitness",
     career_tech: "Career & Tech",
+    skills: "Skills",
+    projects: "Projects",
+    dsa_interviews: "DSA & Interviews",
+    system_design: "System Design",
+    ai_engineering: "AI Engineering",
+    backend_cloud_infra: "Backend / Cloud / Infra",
+    portfolio_resume: "Portfolio / GitHub / Resume",
+    applications_networking: "Applications / Networking",
+    weekly_review: "Weekly Review",
   };
   return labels[track] || track.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
@@ -189,97 +199,44 @@ export function filterLayersByTrack(layers: RawLayerData[], trackLabel: string):
   });
 }
 
-// ─── Metadata helpers ─────────────────────────────────────────
+// ─── Goal progress ────────────────────────────────────────────
 
-const PRIORITY_LABELS: Record<Priority, string> = {
-  master: "Master",
-  working: "Working",
-  awareness: "Awareness",
-};
-
-const PRIORITY_COLORS: Record<Priority, string> = {
-  master: "#22c55e",
-  working: "#eab308",
-  awareness: "#6366f1",
-};
-
-const HORIZON_LABELS: Record<Horizon, string> = {
-  "3_months": "3M",
-  "6_months": "6M",
-  "12_months": "1Y",
-  "2_years": "2Y",
-  "5_years": "5Y",
-  ongoing: "∞",
-};
-
-const HORIZON_COLORS: Record<Horizon, string> = {
-  "3_months": "#ef4444",
-  "6_months": "#f97316",
-  "12_months": "#eab308",
-  "2_years": "#22c55e",
-  "5_years": "#3b82f6",
-  ongoing: "#8b5cf6",
-};
-
-const CAREER_VALUE_COLORS: Record<string, string> = {
-  critical: "#22c55e",
-  high: "#3b82f6",
-  medium: "#eab308",
-  niche: "#8b5cf6",
-};
-
-/**
- * Get display data for an item's priority badge.
- * Returns null if no priority is set.
- */
-export function getPriorityBadge(item: RawRoadmapItem): { label: string; color: string } | null {
-  const p = item.priority || item.metadata?.priority;
-  if (!p || !(p in PRIORITY_LABELS)) return null;
-  return { label: PRIORITY_LABELS[p as Priority], color: PRIORITY_COLORS[p as Priority] };
+export function computeGoalProgress(
+  layers: RawLayerData[],
+  trackIds: string[],
+): { completed: number; total: number; percent: number } {
+  let total = 0;
+  let done = 0;
+  for (const layer of layers) {
+    if (!trackIds.includes(layer.track || "")) continue;
+    for (const item of layer.items) {
+      total++;
+      if (item.status === "done") done++;
+    }
+  }
+  const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+  return { completed: done, total, percent };
 }
 
-/**
- * Get display data for an item's horizon badge.
- * Returns null if no horizon is set.
- */
-export function getHorizonBadge(item: RawRoadmapItem): { label: string; color: string } | null {
-  const h = item.horizon || item.metadata?.horizon;
-  if (!h || !(h in HORIZON_LABELS)) return null;
-  return { label: HORIZON_LABELS[h as Horizon], color: HORIZON_COLORS[h as Horizon] };
-}
-
-/**
- * Get display data for an item's career value badge.
- * Returns null if no career value is set.
- */
-export function getCareerValueBadge(item: RawRoadmapItem): { label: string; color: string } | null {
-  const cv = item.career_value || item.metadata?.career_value;
-  if (!cv) return null;
-  const color = CAREER_VALUE_COLORS[cv] || "#6b7280";
-  return { label: cv.charAt(0).toUpperCase() + cv.slice(1), color };
-}
-
-/**
- * Get display data for an item's engineering value badge.
- */
-export function getEngineeringValue(item: RawRoadmapItem): number | null {
-  const ev = item.engineering_value ?? item.metadata?.engineering_value;
-  return typeof ev === "number" ? ev : null;
-}
-
-/**
- * Normalize item: if it has a `metadata` object, merge top-level shortcuts into it
- * so that frontend reads from one place. Returns a shallow copy.
- */
-export function normalizeItem(item: RawRoadmapItem): RawRoadmapItem & { resolved: { priority?: Priority; horizon?: Horizon; career_value?: string; engineering_value?: number } } {
-  const meta = item.metadata || {};
-  return {
-    ...item,
-    resolved: {
-      priority: (item.priority || meta.priority) as Priority | undefined,
-      horizon: (item.horizon || meta.horizon) as Horizon | undefined,
-      career_value: item.career_value || meta.career_value,
-      engineering_value: item.engineering_value ?? meta.engineering_value,
-    },
-  };
+export function computeTrackProgress(
+  layers: RawLayerData[],
+): Record<string, { completed: number; total: number; percent: number }> {
+  const map: Record<string, { items: number; done: number }> = {};
+  for (const layer of layers) {
+    const track = layer.track || "";
+    if (!map[track]) map[track] = { items: 0, done: 0 };
+    for (const item of layer.items) {
+      map[track].items++;
+      if (item.status === "done") map[track].done++;
+    }
+  }
+  const result: Record<string, any> = {};
+  for (const [track, stats] of Object.entries(map)) {
+    result[track] = {
+      completed: stats.done,
+      total: stats.items,
+      percent: stats.items > 0 ? Math.round((stats.done / stats.items) * 100) : 0,
+    };
+  }
+  return result;
 }

@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/%40ziuus%2Fjourney)](https://www.npmjs.com/package/@ziuus/journey)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**Your AI agent manages your roadmap. You focus on the work.**
+**Your roadmap is a local JSON file. Your AI agent reads and updates it directly.**
 
 Journey is a full-stack goal portal your AI assistant reads and updates in real time — while you chat.
 
@@ -101,7 +101,9 @@ journey/
 ```typescript
 roadmap.json {
   target_roles: string[],
-  layers: [{ id, title, items: [{ id, title, status: "pending"|"done" }] }],
+  goals: [{ id, title, tracks: string[], icon?, color? }],
+  tracks: [{ id, title, icon?, color? }],
+  layers: [{ id, title, description, icon?, track?, items: [{ id, title, status, track?, next_action? }] }],
   milestones: [{ id, title, status }]
 }
 ```
@@ -114,4 +116,4 @@ roadmap.json {
 - [`AGENTS.md`](./AGENTS.md) — quick agent setup
 - [`agent-skills/journey/SKILL.md`](./agent-skills/journey/SKILL.md) — optional agent behaviour guide
 
-MIT. Built for the 2030 engineering frontier.
+MIT.

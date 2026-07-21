@@ -6,33 +6,8 @@ import { CheckCircle2, Circle, ChevronLeft, Copy, Check } from "lucide-react";
 import type { RawRoadmapData, RawLayerData, RawRoadmapItem } from "@/lib/storage";
 import {
   collectTracks, filterLayersByTrack,
-  getPriorityBadge, getHorizonBadge
 } from "@/lib/roadmap-utils";
 import Link from "next/link";
-
-// ─── Badge component ──────────────────────────────────────────
-
-const Badge = ({ label, color }: { label: string; color: string }) => (
-  <span
-    style={{
-      display: "inline-flex",
-      alignItems: "center",
-      fontSize: "9px",
-      fontWeight: 700,
-      textTransform: "uppercase",
-      letterSpacing: "0.08em",
-      color,
-      border: `1px solid ${color}33`,
-      background: `${color}14`,
-      padding: "1px 5px",
-      borderRadius: "3px",
-      marginLeft: "4px",
-      verticalAlign: "middle",
-    }}
-  >
-    {label}
-  </span>
-);
 
 export default function TreeView() {
   const [data, setData] = useState<RawRoadmapData | null>(null);
@@ -115,7 +90,6 @@ export default function TreeView() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.glowOverlay} />
 
       <header className={styles.header}>
         <div className={styles.titleGroup}>
@@ -157,8 +131,6 @@ export default function TreeView() {
 
                  <div className={styles.branchesContainer}>
                    {layer.items.map(item => {
-                      const priorityBadge = getPriorityBadge(item);
-                      const horizonBadge = getHorizonBadge(item);
 
                       return (
                         <div
@@ -173,8 +145,6 @@ export default function TreeView() {
                               <Circle size={18} className={styles.pendingIcon} />
                             )}
                             <span className={styles.itemText}>{item.title}</span>
-                            {priorityBadge && <Badge {...priorityBadge} />}
-                            {horizonBadge && <Badge {...horizonBadge} />}
                             <button
                               className={`${styles.copyBtn} ${copiedId === item.id ? styles.copyBtnCopied : ''}`}
                               onClick={(e) => { e.stopPropagation(); copyItem(item.title, item.id); }}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import mStyles from "./metrics.module.css";
@@ -9,18 +9,20 @@ import {
   Cpu, Brain, Network, Blocks, Infinity, Bot, ShieldCheck,
   BookOpen, Code, Database, Server, Globe, Lock, Activity,
   Heart, Dumbbell, Wallet, Users, Compass, Star, Rocket, Lightbulb,
-  Award, Layers, PieChart, BarChart3, Clock, Calendar, Filter,
+  Award, Layers, PieChart, BarChart3, Clock, Calendar,
   Music, Camera, Eye, Flag, Folder, File, MessageCircle, Phone,
   PlusCircle, MinusCircle, AlertCircle, Info, HelpCircle, Settings,
   User, Home as HomeIcon, Menu, MoreHorizontal, ExternalLink, Download, Upload,
   RefreshCw, Power, Trash2, Edit, Map, Terminal, Cloud, Wifi,
-  MousePointer, Keyboard, Monitor, Tablet, Smartphone, TreePine, XCircle
+  MousePointer, Keyboard, Monitor, Tablet, Smartphone, TreePine, XCircle,
+  List, Briefcase
 } from "lucide-react";
 import type { RawRoadmapData, RawLayerData, RawRoadmapItem } from "@/lib/storage";
+import type { Goal, Track } from "@/types/roadmap";
 import {
   resolveLayerIcon, resolveLayerTrack, collectTracks, filterLayersByTrack,
-  getPriorityBadge, getHorizonBadge, getCareerValueBadge, getEngineeringValue
 } from "@/lib/roadmap-utils";
+import { computeDashboard, getTrackLabel, type DashboardState } from "@/lib/execution-recommendations";
 
 // ─── Icon resolver (maps string names to Lucide components) ───
 
@@ -28,12 +30,13 @@ const ICON_COMPONENTS: Record<string, React.ComponentType<{ size?: number }>> = 
   Cpu, Brain, Network, Blocks, Infinity, Bot, ShieldCheck, Target,
   BookOpen, Code, Database, Server, Globe, Lock, Activity,
   Heart, Dumbbell, Wallet, Users, Compass, Star, Rocket, Lightbulb,
-  Award, Layers, PieChart, BarChart3, Clock, Calendar, Filter,
+  Award, Layers, PieChart, BarChart3, Clock, Calendar,
   Music, Camera, Eye, Flag, Folder, File, MessageCircle, Phone,
   PlusCircle, MinusCircle, CheckCircle2, XCircle, AlertCircle, Info, HelpCircle,
   Settings, User, HomeIcon, Menu, MoreHorizontal, ExternalLink, Download, Upload,
   RefreshCw, Power, Trash2, Edit, Map, Terminal, Cloud, Wifi,
   MousePointer, Keyboard, Monitor, Tablet, Smartphone, TreePine, Zap,
+  List, Briefcase,
   Home: HomeIcon,
 };
 
@@ -45,7 +48,7 @@ function getIconComponent(iconName: string): React.ComponentType<{ size?: number
 
 const HighlightText = ({ text, query }: { text: string, query: string }) => {
   if (!query.trim()) return <>{text}</>;
-  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  const parts = text.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
   return (
     <>
       {parts.map((part, i) =>
@@ -59,28 +62,204 @@ const HighlightText = ({ text, query }: { text: string, query: string }) => {
   );
 };
 
-// ─── Badge component ──────────────────────────────────────────
+// ─── Today Widget (top 3 recommendations on main page) ─────────
 
-const Badge = ({ label, color }: { label: string; color: string }) => (
-  <span
-    style={{
-      display: "inline-flex",
-      alignItems: "center",
-      fontSize: "10px",
-      fontWeight: 700,
-      textTransform: "uppercase",
-      letterSpacing: "0.08em",
-      color,
-      border: `1px solid ${color}33`,
-      background: `${color}14`,
-      padding: "1px 6px",
-      borderRadius: "4px",
-      marginRight: "4px",
-    }}
-  >
-    {label}
-  </span>
-);
+const TodayWidget = ({ layers }: { layers: RawLayerData[] }) => {
+  const [dash, setDash] = useState<DashboardState | null>(null);
+
+  useEffect(() => {
+    if (layers.length > 0) {
+      setDash(computeDashboard(layers));
+    }
+  }, [layers]);
+
+  if (!dash || dash.today.length === 0) return null;
+
+  return (
+    <div className={styles.todayWidget}>
+      <div className={styles.todayWidgetHeader}>
+        <div className={styles.todayWidgetTitleRow}>
+          <Zap size={16} className={styles.todayWidgetIcon} />
+          <h3 className={styles.todayWidgetTitle}>Today&apos;s Focus</h3>
+        </div>
+        <a href="/dashboard" className={styles.todayWidgetLink}>
+          Full Dashboard →
+        </a>
+      </div>
+      <div className={styles.todayWidgetList}>
+        {dash.today.slice(0, 3).map((rec, i) => {
+          const { scored } = rec;
+          const { item } = scored;
+          return (
+            <div key={i} className={`${styles.todayWidgetItem} ${item.status === 'active' ? styles.todayWidgetItemActive : ''}`}>
+              <div className={styles.todayWidgetScore}>{scored.score}</div>
+              <div className={styles.todayWidgetBody}>
+                <div className={styles.todayWidgetItemTop}>
+                  <span className={styles.todayWidgetItemTitle}>{item.title}</span>
+                </div>
+                {item.next_action && (
+                  <p className={styles.todayWidgetAction}>{item.next_action}</p>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// ─── Goal card (primary goal with tracks) ─────────────────────
+
+const GoalCard = ({
+  goal,
+  tracks,
+  allLayers,
+  searchQuery,
+  onToggleItem,
+}: {
+  goal: Goal;
+  tracks: Track[];
+  allLayers: RawLayerData[];
+  searchQuery: string;
+  onToggleItem: (layerId: string, itemId: string) => void;
+}) => {
+  const [expandedTracks, setExpandedTracks] = useState<Set<string>>(new Set());
+
+  const toggleTrack = (tid: string) => {
+    setExpandedTracks(prev => {
+      const next = new Set(prev);
+      if (next.has(tid)) next.delete(tid);
+      else next.add(tid);
+      return next;
+    });
+  };
+
+  const goalTrackIds = goal.tracks || [];
+  const trackItems: Record<string, RawRoadmapItem[]> = {};
+  const trackProgress: Record<string, { completed: number; total: number; percent: number }> = {};
+
+  // Collect all items for each track
+  for (const layer of allLayers) {
+    const lt = layer.track || "";
+    if (!goalTrackIds.includes(lt)) continue;
+
+    if (!trackItems[lt]) trackItems[lt] = [];
+    for (const item of layer.items) {
+      if (searchQuery && !item.title.toLowerCase().includes(searchQuery.toLowerCase())) continue;
+      trackItems[lt].push(item);
+    }
+  }
+
+  // Compute progress per track
+  for (const tid of goalTrackIds) {
+    const items = trackItems[tid] || [];
+    const done = items.filter(i => i.status === "done").length;
+    trackProgress[tid] = {
+      completed: done,
+      total: items.length,
+      percent: items.length > 0 ? Math.round((done / items.length) * 100) : 0,
+    };
+  }
+
+  // Goal-wide progress
+  const allGoalItems = Object.values(trackItems).flat();
+  const goalDone = allGoalItems.filter(i => i.status === "done").length;
+  const goalTotal = allGoalItems.length;
+  const goalPercent = goalTotal > 0 ? Math.round((goalDone / goalTotal) * 100) : 0;
+
+  return (
+    <section className={styles.goalSection}>
+      <div className={styles.goalHeader}>
+        <div className={styles.goalIcon}><Target size={24} /></div>
+        <div className={styles.goalMeta}>
+          <h2 className={styles.goalTitle}>{goal.title}</h2>
+          <p className={styles.goalTracks}>{goalTrackIds.length} tracks &middot; {goalTotal} items</p>
+        </div>
+        <div className={styles.goalProgressWrap}>
+          <div className={styles.goalPercent}>{goalPercent}%</div>
+          <div className={styles.goalProgressTrack}>
+            <div className={styles.goalProgressBar} style={{ width: `${goalPercent}%` }} />
+          </div>
+          <span className={styles.goalProgressLabel}>{goalDone}/{goalTotal} done</span>
+        </div>
+      </div>
+
+      <div className={styles.tracksList}>
+        {tracks
+          .filter(t => goalTrackIds.includes(t.id))
+          .map((track) => {
+            const items = trackItems[track.id] || [];
+            if (items.length === 0 && !searchQuery) return null;
+            const prog = trackProgress[track.id] || { completed: 0, total: 0, percent: 0 };
+            const isExpanded = expandedTracks.has(track.id);
+            const IconComp = getIconComponent(track.icon || "layers");
+
+            return (
+              <div key={track.id} className={styles.trackCard}>
+                <div
+                  className={styles.trackHeader}
+                  onClick={() => toggleTrack(track.id)}
+                >
+                  <div className={styles.trackIconWrap} style={{ color: track.color || "#3b82f6" }}>
+                    <IconComp size={18} />
+                  </div>
+                  <div className={styles.trackInfo}>
+                    <span className={styles.trackTitle}>{track.title}</span>
+                    <span className={styles.trackProgressMini}>
+                      {prog.percent}% &middot; {prog.completed}/{prog.total}
+                    </span>
+                  </div>
+                  <div className={styles.trackMiniBar}>
+                    <div className={styles.trackMiniFill} style={{ width: `${prog.percent}%`, background: track.color || "#3b82f6" }} />
+                  </div>
+                  <span className={styles.trackChevron}>
+                    {isExpanded ? <ChevronUp size={16} /> : <ChevronRight size={16} />}
+                  </span>
+                </div>
+
+                {isExpanded && (
+                  <div className={styles.trackItems}>
+                    {items.length === 0 ? (
+                      <div className={styles.trackEmpty}>No items.</div>
+                    ) : (
+                      items.map((item) => (
+                        <div
+                          key={item.id}
+                          className={`${styles.trackItem} ${item.status === "done" ? styles.trackItemDone : ""}`}
+                          onClick={() => onToggleItem(layerOfItem(allLayers, item.id) || "", item.id)}
+                        >
+                          <div className={styles.checkboxCustom}>
+                            {item.status === "done" ? <CheckCircle2 size={16} /> : <div className={styles.circleSmall} />}
+                          </div>
+                          <span className={styles.trackItemTitle}>
+                            <HighlightText text={item.title} query={searchQuery} />
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+      </div>
+    </section>
+  );
+};
+
+// ─── Helpers ──────────────────────────────────────────────────
+
+function layerOfItem(layers: RawLayerData[], itemId: string): string | null {
+  for (const layer of layers) {
+    if (layer.items.some(i => i.id === itemId)) return layer.id;
+  }
+  return null;
+}
+
+function getTrackById(tracks: Track[], id: string): Track | undefined {
+  return tracks.find(t => t.id === id);
+}
 
 // ─── UserMetrics component ────────────────────────────────────
 
@@ -97,7 +276,6 @@ const UserMetrics = ({ data }: { data: RawRoadmapData }) => {
   }));
 
   const activeLayers = layerStats.filter(s => s.percent < 100).slice(0, 3);
-  const currentPhase = activeLayers[0] || { phase: "Mastered", title: "Complete" };
 
   const skills = data.layers.slice(0, 7).map((l, i) => ({
     label: l.icon
@@ -195,8 +373,6 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTrack, setActiveTrack] = useState<string>("");
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
   const fetchRoadmap = async () => {
     setLoading(true);
     try {
@@ -223,20 +399,29 @@ export default function Home() {
     });
   };
 
-  const toggleItem = async (type: string, layerId: string | null, itemId: string) => {
+  const toggleItem = async (layerId: string | null, itemId: string) => {
     if (!data) return;
     const newData: RawRoadmapData = JSON.parse(JSON.stringify(data));
-    let targetItems: RawRoadmapItem[] = [];
-    if (type === 'layer' && layerId) {
-      const layer = newData.layers.find(l => l.id === layerId);
-      if (layer) targetItems = layer.items;
-    } else if (type === 'milestone') {
-      targetItems = newData.milestones;
+    for (const layer of newData.layers) {
+      const item = layer.items.find(i => i.id === itemId);
+      if (item) {
+        item.status = item.status === 'pending' ? 'done' : 'pending';
+        setData(newData);
+        try {
+          await fetch(`/api/roadmap?userId=local_user`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newData)
+          });
+        } catch (err) {
+          console.error('Failed to sync changes:', err);
+        }
+        return;
+      }
     }
-
-    const item = targetItems.find(i => i.id === itemId);
-    if (item) {
-      item.status = item.status === 'pending' ? 'done' : 'pending';
+    const mItem = newData.milestones.find(i => i.id === itemId);
+    if (mItem) {
+      mItem.status = mItem.status === 'pending' ? 'done' : 'pending';
       setData(newData);
       try {
         await fetch(`/api/roadmap?userId=local_user`, {
@@ -282,15 +467,19 @@ export default function Home() {
     layer.items.some(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  // ── Goal data ──────────────────────────────────────────────
+
+  const primaryGoal = data?.goals?.[0] || null;
+  const allTracks = data?.tracks || [];
+
   if (loading) return <div className={styles.loadingScreen}>Accessing Path...</div>;
 
   return (
-    <div className={styles.container} ref={containerRef}>
-      <div className={styles.glowOverlay} />
+    <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.hero}>
           <h1 className={styles.title}>Journey</h1>
-          <p className={styles.subtitle}>A visual architecture for tracking mastery across technical and physical horizons.</p>
+          <p className={styles.subtitle}>Track your path across AI engineering, systems, Web3, and growth.</p>
 
           <div className={styles.heroActions}>
             <Link href="/tree" className={styles.primaryAction}>
@@ -306,12 +495,28 @@ export default function Home() {
       <main className={styles.main}>
         {data && <UserMetrics data={data} />}
 
-        <div className={styles.layoutGrid} style={{ marginTop: '80px' }}>
+        {/* ── Goal section ───────────────────────────────── */}
+        {primaryGoal && data && (
+          <div className={styles.goalWrap}>
+            <GoalCard
+              goal={primaryGoal}
+              tracks={allTracks}
+              allLayers={data.layers}
+              searchQuery={searchQuery}
+              onToggleItem={(layerId, itemId) => toggleItem(layerId, itemId)}
+            />
+          </div>
+        )}
+
+        {/* ── Today Widget ───────────────────────────── */}
+        {data && <TodayWidget layers={data.layers} />}
+
+        <div className={styles.layoutGrid}>
           <div className={styles.contentColumn}>
             {data && data.milestones.length > 0 && (
               <section className={styles.milestoneSection}>
                 <div className={styles.sectionHeader}>
-                  <Target size={20} style={{color: 'var(--accent-color)'}} />
+                  <Target size={20} style={{color: 'var(--accent)'}} />
                   <h2 className={styles.sectionTitle}>Key Milestones</h2>
                 </div>
                 <div className={styles.milestonesHorizontal}>
@@ -319,7 +524,7 @@ export default function Home() {
                     <div
                       key={m.id}
                       className={`${styles.milestoneMiniCard} ${m.status === 'done' ? styles.milestoneDone : ''}`}
-                      onClick={() => toggleItem('milestone', null, m.id)}
+                      onClick={() => toggleItem(null, m.id)}
                     >
                       <div className={styles.milestoneCheck}>
                         {m.status === 'done' ? <CheckCircle2 size={18} /> : <div className={styles.milestoneDot} />}
@@ -368,38 +573,30 @@ export default function Home() {
                           <div className={styles.layerProgressTrack}>
                             <div className={styles.layerProgressBar} style={{ width: `${Math.round((layer.items.filter(item => item.status === 'done').length / layer.items.length) * 100) || 0}%` }} />
                           </div>
+                          <span className={styles.layerCount}>{layer.items.length} items</span>
                         </div>
 
                         {expandedLayers.has(layer.id) && (
                           <div className={styles.expandedContent} onClick={(e) => e.stopPropagation()}>
                             <div className={styles.itemList}>
-                              {layer.items.map(item => {
-                                const priorityBadge = getPriorityBadge(item);
-                                const horizonBadge = getHorizonBadge(item);
-
-                                return (
-                                  <div
-                                    key={item.id}
-                                    className={`${styles.itemRow} ${item.status === 'done' ? styles.itemRowDone : ''}`}
-                                    onClick={() => toggleItem('layer', layer.id, item.id)}
-                                  >
-                                    <div className={styles.checkboxCustom}>
-                                      {item.status === 'done' ? <CheckCircle2 size={16} /> : <div className={styles.circleSmall} />}
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', flex: 1 }}>
-                                      <span className={styles.itemTitle}><HighlightText text={item.title} query={searchQuery} /></span>
-                                      {priorityBadge && <Badge {...priorityBadge} />}
-                                      {horizonBadge && <Badge {...horizonBadge} />}
-                                    </div>
+                              {layer.items.map(item => (
+                                <div
+                                  key={item.id}
+                                  className={`${styles.itemRow} ${item.status === 'done' ? styles.itemRowDone : ''}`}
+                                  onClick={() => toggleItem(layer.id, item.id)}
+                                >
+                                  <div className={styles.checkboxCustom}>
+                                    {item.status === 'done' ? <CheckCircle2 size={16} /> : <div className={styles.circleSmall} />}
                                   </div>
-                                );
-                              })}
+                                  <span className={styles.itemTitle}><HighlightText text={item.title} query={searchQuery} /></span>
+                                </div>
+                              ))}
                             </div>
                           </div>
                         )}
 
                         <div className={styles.cardFooter}>
-                          <span className={styles.itemCount}>{layer.items.length} Nodes</span>
+                          <span className={styles.itemCount}>{layer.items.length} items</span>
                           <div className={styles.expandIndicator}>
                             {expandedLayers.has(layer.id) ? <ChevronUp size={20} /> : <ChevronRight size={20} />}
                           </div>

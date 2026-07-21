@@ -18,48 +18,28 @@ export default function Footer() {
               <span className={styles.logoText}>Journey</span>
             </div>
             <p className={styles.description}>
-              Universal architecture for engineering mastery. Built for the next decade of technical and physical evolution.
+              A goal-tracking engine for AI engineering, systems, Web3, and career growth.
             </p>
           </div>
 
           <div className={styles.linksGrid}>
             <div className={styles.linkColumn}>
-              <span className={styles.columnTitle}>Navigation</span>
-              <Link href="/">Command Home</Link>
-              <Link href="/dashboard">System Metrics</Link>
+              <Link href="/">Home</Link>
+              <Link href="/dashboard">Dashboard</Link>
               <Link href="/tree">Goal Tree</Link>
             </div>
             <div className={styles.linkColumn}>
-              <span className={styles.columnTitle}>Resources</span>
-              <a href="https://github.com/ziuus/journey" target="_blank" rel="noopener noreferrer">Source Code</a>
-              <Link href="/settings">Configuration</Link>
-            </div>
-            <div className={styles.linkColumn}>
-              <span className={styles.columnTitle}>Connect</span>
-              <div className={styles.socialRow}>
-                <a href="#" className={styles.socialLink} title="Github"><Code size={18} /></a>
-                <a href="#" className={styles.socialLink} title="Website"><Layout size={18} /></a>
-              </div>
+              <a href="https://github.com/ziuus/journey" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <Link href="/settings">Settings</Link>
             </div>
           </div>
         </div>
 
         <div className={styles.bottomBar}>
-          <div className={styles.statusGroup}>
-            <div className={styles.statusItem}>
-              <Terminal size={12} />
-              <span>Protocol: Liquid Glass v1.4.1</span>
-            </div>
-            <div className={styles.statusItem}>
-              <Shield size={12} />
-              <span>Encryption: SHA-256 Verified</span>
-            </div>
-          </div>
-          
           <div className={styles.copyright}>
-            <span>&copy; {currentYear} Antigravity Labs</span>
+            <span>&copy; {currentYear}</span>
             <span className={styles.divider}>|</span>
-            <span className={styles.author}>Developed by ziuus</span>
+            <span>Journey</span>
           </div>
         </div>
       </div>

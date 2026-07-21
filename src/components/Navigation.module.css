@@ -4,20 +4,17 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 24px 24px;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 16px 24px;
+  transition: background var(--transition), padding var(--transition);
 }
 
 .navScrolled {
-  padding: 16px 24px;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--glass-border);
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .navContainer {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -27,59 +24,58 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .logoBox {
-  width: 32px;
-  height: 32px;
-  background: var(--accent-color, #a8ff60);
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
   color: #000;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .logoText {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  color: var(--text-primary);
   letter-spacing: -0.01em;
 }
 
 .links {
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: var(--glass-bg);
+  gap: 2px;
+  background: var(--bg-secondary);
   padding: 4px;
-  border-radius: 100px;
-  border: 1px solid var(--glass-border);
+  border-radius: 10px;
 }
 
 .navLink {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 100px;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-secondary);
-  transition: all 0.2s ease;
+  transition: all var(--transition);
 }
 
 .navLink:hover {
   color: var(--text-primary);
-  background: var(--glass-bg-hover);
+  background: var(--bg-tertiary);
 }
 
 .navLinkActive {
-  background: var(--text-primary);
-  color: var(--bg-primary);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .navActions {
@@ -90,28 +86,27 @@
 .statusIndicator {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  font-weight: 800;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent-color, #a8ff60);
-  background: var(--accent-glow);
-  padding: 6px 12px;
-  border-radius: 100px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: var(--accent-dim);
+  padding: 5px 10px;
+  border-radius: 8px;
 }
 
 .pulse {
-  width: 6px;
-  height: 6px;
-  background: var(--accent-color, #a8ff60);
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
   border-radius: 50%;
-  box-shadow: 0 0 10px var(--accent-color, #a8ff60);
   animation: pulse-kf 2s infinite alternate;
 }
 
 @keyframes pulse-kf {
-  from { opacity: 0.4; }
+  from { opacity: 0.3; }
   to { opacity: 1; }
 }
 
@@ -119,11 +114,6 @@
   .logoText, .navLink span {
     display: none;
   }
-  
-  .links {
-    gap: 8px;
-  }
-  
   .navLink {
     padding: 8px;
   }

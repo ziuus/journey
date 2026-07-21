@@ -1,7 +1,7 @@
 {
   "name": "@ziuus/journey",
   "version": "0.1.4",
-  "description": "Unified Mastery Engine - A universal roadmap tracking system with Liquid Glass UI",
+  "description": "A universal goal-tracking engine with a Next.js portal, MCP server, and local-first data model.",
   "author": "ziuus",
   "license": "MIT",
   "repository": {
