@@ -1,58 +1,70 @@
-# Journey — AI-Native Roadmap Engine
+# Journey — Universal Goal & Roadmap Engine
 
 [![npm version](https://img.shields.io/npm/v/%40ziuus%2Fjourney)](https://www.npmjs.com/package/@ziuus/journey)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**Your roadmap is a local JSON file. Your AI agent reads and updates it directly.**
-
-Journey is a full-stack goal portal your AI assistant reads and updates in real time — while you chat.
+Journey is a local-first goal tracking portal and Model Context Protocol (MCP) server. It manages roadmaps, skill trees, and execution tasks using a local JSON data file (`~/.journey/data/roadmap.json`) that both you and your AI assistants (Gemini, Claude, Cursor, Codex) can view and update in real time.
 
 ```
-         ┌──────────────────────┐
-         │  Journey Portal      │
-         │  (Next.js, 6161)     │
-         └──────┬───────────────┘
-                │ reads
-         ┌──────▼───────────────┐
-         │  data/roadmap.json   │ ◄── your AI agent reads & edits this
-         └──────────────────────┘
+                   ┌────────────────────────────┐
+                   │   Journey Web Portal       │
+                   │   (http://localhost:6161)  │
+                   └─────────────┬──────────────┘
+                                 │ reads & writes
+                   ┌─────────────▼──────────────┐
+                   │ ~/.journey/data/roadmap.json│ ◄── AI Agent / MCP Server
+                   └────────────────────────────┘
 ```
-
-No cloud, no API keys, no setup ceremonies. Your data is a local JSON file. Your agent edits it directly.
 
 ---
 
 ## Quick Start
 
+### 1. Installation
+
 ```bash
-# install & launch
 npm install -g @ziuus/journey
+```
+
+### 2. Launch Portal
+
+```bash
 journey
 ```
 
-Open `http://localhost:6161`. Your roadmap is at `~/.journey/data/roadmap.json`.
-
-That's it.
+Open `http://localhost:6161` in your browser. Journey automatically initializes your local roadmap file at `~/.journey/data/roadmap.json` using the repository starter template.
 
 ---
 
-## Agent Setup (one step)
+## Features & Views
 
-Tell your agent to read `~/.journey/data/roadmap.json`.
+- **Home View (`/`)**: High-level overview of overall progress, search bar, multi-track filter tabs, and layer tree accordions.
+- **Dashboard (`/dashboard`)**: Automated execution scoring recommending *Today's Focus*, *High ROI Items*, and *Blocked Task Detection*.
+- **Goal Tree (`/tree`)**: Interactive structural graph visualization with hover edit controls (rename, add, delete, toggle completion).
+- **Settings (`/settings`)**: Visual mode switching (Light / Dark / System), accent color highlights, interface density controls, and default landing preferences.
 
-| Agent              | How to point it                                                      |
-|--------------------|----------------------------------------------------------------------|
-| **Gemini CLI**     | `gemini` → tell it "your roadmap context is at `GEMINI.md`"          |
-| **Claude Code**    | drop `CLAUDE.md` in the project                                      |
-| **Codex**          | tell it "your roadmap is at ~/.journey/data/roadmap.json"            |
-| **ChatGPT**        | paste the file or link it to a custom GPT                            |
-| **Hermes / Cursor**| same — it's a file. Point your agent at it.                          |
+---
 
-Any agent that reads local files can manage your roadmap. No MCP setup. No protocol negotiation. Just a file.
+## Agent Integration
 
-### Optional: MCP Server (for agents that support it)
+Journey works with any AI assistant that can read local files or connect via MCP.
 
-Some agents (Claude Desktop, Hermes) can connect via MCP for structured tool access. Journey ships a built-in MCP server:
+### Option A: Direct File Reference (Recommended)
+
+Point your AI assistant to read `~/.journey/data/roadmap.json`.
+
+| Agent / Environment | Setup Instructions |
+|---|---|
+| **Gemini CLI** | Reference [`GEMINI.md`](./GEMINI.md) context file or tell it your roadmap lives at `~/.journey/data/roadmap.json`. |
+| **Claude Code** | Reference [`AGENTS.md`](./AGENTS.md) in your workspace. |
+| **Cursor / Windsurf** | Add `~/.journey/data/roadmap.json` to your project context or `.cursorrules`. |
+| **ChatGPT / Custom GPTs** | Attach or reference your `~/.journey/data/roadmap.json` file. |
+
+### Option B: Model Context Protocol (MCP) Server
+
+Journey includes a built-in MCP server (`journey-mcp`) for agents supporting standard MCP protocol integrations (such as Claude Desktop or Cursor).
+
+Add the following to your agent's MCP configuration (`mcpServers`):
 
 ```json
 {
@@ -65,55 +77,50 @@ Some agents (Claude Desktop, Hermes) can connect via MCP for structured tool acc
 }
 ```
 
-This gives your agent three tools: `get_roadmap`, `add_goal`, `update_item_status`. It's optional — the JSON file approach works with any agent.
+#### Available MCP Tools:
+
+- `get_roadmap`: Retrieves the full JSON roadmap data from `~/.journey/data/roadmap.json`.
+- `add_goal`: Adds a new goal item to a specified roadmap layer.
+- `update_item_status`: Updates the status (`pending` or `done`) of a specific roadmap item.
 
 ---
 
-## CLI
+## CLI Reference
 
-| Command        | What it does                           |
-|----------------|----------------------------------------|
-| `journey`      | Start portal (background, port 6161)   |
-| `journey dev`  | Dev server (foreground, port 3000)     |
-| `journey stop` | Stop background portal                 |
-| `journey status` | Check if portal is running          |
-| `journey logs` | Show recent logs                       |
-| `journey build`| Build the Next.js app                  |
+| Command | Description |
+|---|---|
+| `journey` | Start background web portal (Port 6161) |
+| `journey dev` | Start development portal in foreground (Port 3000) |
+| `journey status` | Check running portal background process status |
+| `journey stop` | Terminate background web portal process |
+| `journey logs` | Display recent background portal logs |
+| `journey-mcp` | Run stdin/stdout JSON-RPC 2.0 MCP server |
 
 ---
 
-## Architecture
+## Architecture & Data Storage
 
 ```
 journey/
-├── src/                    # Next.js app
-├── data/roadmap.json       # Your roadmap — your agent edits this
+├── src/                    # Next.js web application
+│   ├── app/                # Page routes (/ , /dashboard, /tree, /settings)
+│   ├── components/         # Reusable UI components & navigation
+│   └── lib/                # Roadmap parser & recommendation engine
+├── data/
+│   └── roadmap.json        # Repository STARTER TEMPLATE file
 ├── scripts/
-│   ├── mcp-server.js       # MCP server (optional)
-│   └── journey-cli.js      # CLI
-├── agent-skills/journey/   # Agent behavior docs
-├── GEMINI.md               # Context doc for Gemini CLI
-└── AGENTS.md               # Quick agent setup
+│   ├── journey-cli.js      # CLI management tool
+│   └── mcp-server.js       # MCP server implementation
+├── GEMINI.md               # Context file for Gemini CLI
+└── AGENTS.md               # Agent guidelines and standards
 ```
 
-### Data Model
-
-```typescript
-roadmap.json {
-  target_roles: string[],
-  goals: [{ id, title, tracks: string[], icon?, color? }],
-  tracks: [{ id, title, icon?, color? }],
-  layers: [{ id, title, description, icon?, track?, items: [{ id, title, status, track?, next_action? }] }],
-  milestones: [{ id, title, status }]
-}
-```
+> **Data Separation**:
+> - **User Data**: Saved locally at `~/.journey/data/roadmap.json` outside the code repository.
+> - **Template Data**: The repository file `data/roadmap.json` is a generic starter template used for fresh installations.
 
 ---
 
-## Related
+## License
 
-- [`GEMINI.md`](./GEMINI.md) — context file for Gemini CLI
-- [`AGENTS.md`](./AGENTS.md) — quick agent setup
-- [`agent-skills/journey/SKILL.md`](./agent-skills/journey/SKILL.md) — optional agent behaviour guide
-
-MIT.
+MIT © [ziuus](https://github.com/ziuus)
