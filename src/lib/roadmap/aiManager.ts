@@ -5,8 +5,8 @@ export class AiManager {
   static createChange(
     action: AiAction,
     nodeId: string,
-    before: any,
-    after: any,
+    before: unknown,
+    after: unknown,
     reason: string
   ): AiChange {
     const change: AiChange = {

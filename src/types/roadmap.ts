@@ -219,7 +219,7 @@ export interface RoadmapNode {
   createdAt: string;
   updatedAt: string;
   completedAt?: string;
-  originalData?: any;
+  originalData?: unknown;
 }
 
 export interface AiChange {

@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  padding: 120px 24px 80px;
+  padding: 60px 24px 100px;
   background: var(--bg-primary);
   display: flex;
   flex-direction: column;
@@ -9,75 +9,137 @@
 
 .header {
   width: 100%;
-  max-width: 1200px;
-  margin-bottom: 80px;
+  max-width: 1100px;
+  margin-bottom: 48px;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-end;
-  position: relative;
-  z-index: 10;
+  width: 100%;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: var(--accent);
 }
 
 .titleGroup {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-.backLink {
-  display: flex;
-  align-items: center;
   gap: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 12px;
 }
 
 .title {
-  font-size: clamp(32px, 5vw, 64px);
+  font-size: 40px;
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   color: var(--text-primary);
 }
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: 18px;
-  max-width: 500px;
+  font-size: 16px;
+  max-width: 560px;
 }
 
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+/* Pencil Edit Mode Toggle Button */
+.pencilToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pencilToggleBtn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pencilToggleBtnActive {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+/* Track Pills Bar (Single Row Scrollable) */
 .trackTabs {
   display: flex;
+  align-items: center;
   gap: 8px;
-  background: var(--bg-secondary);
-  padding: 8px;
-  border-radius: 16px;
-  border: 1px solid var(--border-color);
+  overflow-x: auto;
+  padding: 6px 0;
+  max-width: 100%;
+  scrollbar-width: none;
+}
+
+.trackTabs::-webkit-scrollbar {
+  display: none;
 }
 
 .trackTab {
-  padding: 10px 24px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
   background: transparent;
-  border: none;
+  border: 1px solid var(--border-color);
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.trackTab:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .trackTabActive {
-  background: var(--text-primary);
-  color: var(--bg-primary);
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+  font-weight: 600;
+  box-shadow: 0 2px 12px var(--accent-glow);
 }
 
+/* Tree Structure */
 .treeContainer {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   flex: 1;
   position: relative;
   z-index: 1;
@@ -88,7 +150,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-bottom: 100px;
+  padding-bottom: 60px;
 }
 
 .roadmapSection {
@@ -99,19 +161,28 @@
 }
 
 .layerNode {
-  background: var(--text-primary);
-  color: var(--bg-primary);
-  padding: 20px 40px;
-  border-radius: 20px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 16px 36px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   z-index: 2;
-  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 20px var(--shadow-ambient);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.layerNode:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px var(--accent-glow);
+  transform: translateY(-2px);
 }
 
 .layerTitle {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -119,25 +190,27 @@
 }
 
 .layerNumber {
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  background: var(--accent);
+  color: #ffffff;
   width: 32px;
   height: 32px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 900;
-  font-size: 16px;
+  font-weight: 800;
+  font-size: 14px;
+  border: 1px solid var(--accent);
+  box-shadow: 0 2px 10px var(--accent-glow);
 }
 
 .branchesContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px 80px;
+  gap: 18px 56px;
   width: 100%;
-  max-width: 840px;
-  padding: 80px 0;
+  max-width: 1050px;
+  padding: 44px 0;
   position: relative;
 }
 
@@ -166,29 +239,32 @@
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 16px 24px;
+  padding: 15px 22px;
   z-index: 2;
   position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
-  transition: border-color var(--transition);
-  width: calc(100% - 60px);
+  transition: all var(--transition);
+  width: calc(100% - 44px);
+  box-shadow: 0 2px 12px var(--shadow-ambient);
 }
 
 .itemBox:hover {
   border-color: var(--accent);
+  box-shadow: 0 6px 20px var(--accent-glow);
+  transform: translateY(-2px);
 }
 
-.itemBoxWrapper:nth-child(odd) .itemBox { margin-right: 60px; }
-.itemBoxWrapper:nth-child(even) .itemBox { margin-left: 60px; }
+.itemBoxWrapper:nth-child(odd) .itemBox { margin-right: 44px; }
+.itemBoxWrapper:nth-child(even) .itemBox { margin-left: 44px; }
 
 .itemBoxWrapper:nth-child(odd)::after {
   content: '';
   position: absolute;
   top: 50%;
   right: 0;
-  width: 60px;
+  width: 44px;
   height: 2px;
   background: var(--border-color);
 }
@@ -198,7 +274,7 @@
   position: absolute;
   top: 50%;
   left: 0;
-  width: 60px;
+  width: 44px;
   height: 2px;
   background: var(--border-color);
 }
@@ -209,7 +285,7 @@
   top: 50%;
   width: 12px;
   height: 12px;
-  background: var(--bg-primary);
+  background: var(--card-bg);
   border: 2px solid var(--border-color);
   border-radius: 50%;
   z-index: 1;
@@ -220,20 +296,21 @@
 .itemBoxWrapper:nth-child(even)::before { left: -6px; }
 
 .itemDone {
-  background: var(--accent-glow);
-  border-color: var(--accent);
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  opacity: 0.8;
 }
 
 .doneWrapper::after { background: var(--accent) !important; }
 .doneWrapper::before { 
   border-color: var(--accent) !important; 
   background: var(--accent) !important; 
-  box-shadow: 0 0 15px var(--accent);
 }
 
 .itemText {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.5;
   color: var(--text-primary);
 }
 
@@ -244,23 +321,21 @@
   cursor: pointer;
   color: var(--text-muted);
   opacity: 0;
-  transition: opacity 0.2s, color 0.2s, background 0.2s;
-  padding: 4px 6px;
-  border-radius: 6px;
+  transition: opacity 0.2s, color 0.2s;
+  padding: 4px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  line-height: 1;
 }
 
 .itemBox:hover .copyBtn {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .copyBtn:hover {
   opacity: 1 !important;
-  background: var(--bg-secondary);
   color: var(--accent);
 }
 
@@ -269,12 +344,57 @@
   color: var(--accent);
 }
 
+/* Edit Mode Hover Controls */
+.hoverActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.isEditMode .layerNode:hover .hoverActions,
+.isEditMode .itemBox:hover .hoverActions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.iconBtnDanger:hover {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.inlineEditInput {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+}
+
 .checkIcon { color: var(--accent); }
 .pendingIcon { color: var(--text-muted); }
 
 .spineConnector {
   width: 2px;
-  height: 100px;
+  height: 50px;
   background: var(--border-color);
 }
 
@@ -283,32 +403,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  font-weight: 800;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 @media (max-width: 900px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 32px;
-  }
-}
-
-@media (max-width: 768px) {
-  .branchesContainer { grid-template-columns: 1fr; }
+  .branchesContainer { grid-template-columns: 1fr; max-width: 100%; }
   .branchesContainer::before { left: 0; }
   .itemBoxWrapper:nth-child(odd), .itemBoxWrapper:nth-child(even) { justify-content: flex-start; }
   .itemBoxWrapper:nth-child(odd) .itemBox, .itemBoxWrapper:nth-child(even) .itemBox {
-    margin-left: 40px;
-    width: calc(100% - 40px);
+    margin-left: 30px;
+    width: calc(100% - 30px);
   }
   
   .itemBoxWrapper:nth-child(odd)::after, .itemBoxWrapper:nth-child(even)::after {
     left: 0;
-    width: 40px;
+    width: 30px;
   }
   
   .itemBoxWrapper:nth-child(odd)::before, .itemBoxWrapper:nth-child(even)::before {

@@ -127,6 +127,22 @@ export function resolveLayerTrack(layer: RawLayerData): { track: string; label: 
     return { track: layer.track, label: trackToLabel(layer.track) };
   }
 
+  // Use layer title as track label if it's a top-level named goal/roadmap
+  if (layer.title) {
+    const cleanTitle = layer.title.includes("—")
+      ? layer.title.split("—")[0].trim()
+      : layer.title;
+    if (cleanTitle && cleanTitle.length < 35 && !cleanTitle.startsWith("Layer ")) {
+      return { track: layer.id, label: cleanTitle };
+    }
+  }
+
+  // Check if layer items specify a track
+  const itemTrack = layer.items?.find((i) => i.track)?.track;
+  if (itemTrack) {
+    return { track: itemTrack, label: trackToLabel(itemTrack) };
+  }
+
   // Backward-compatible fallback
   const layerNum = parseInt(layer.id.replace("layer", ""), 10);
   if (layerNum >= 8 && layerNum <= 11) {
@@ -156,6 +172,8 @@ export function trackToLabel(track: string): string {
     dsa_interviews: "DSA & Interviews",
     system_design: "System Design",
     ai_engineering: "AI Engineering",
+    agentic_systems: "Building AI & Agentic Systems",
+    ai_llms: "Building AI & LLMs",
     backend_cloud_infra: "Backend / Cloud / Infra",
     portfolio_resume: "Portfolio / GitHub / Resume",
     applications_networking: "Applications / Networking",
@@ -166,33 +184,28 @@ export function trackToLabel(track: string): string {
 
 /**
  * Collect unique track labels from layers (preserving order).
- * Falls back to the two default tracks if no layer has a track field.
  */
 export function collectTracks(layers: RawLayerData[]): string[] {
   const trackSet = new Set<string>();
+
+  // Always include 'All Roadmaps' first for complete overview
+  trackSet.add("All Roadmaps");
 
   for (const layer of layers) {
     const { label } = resolveLayerTrack(layer);
     trackSet.add(label);
   }
 
-  if (trackSet.size === 0) {
-    return ["Career & Tech", "Health & Fitness"];
-  }
-
-  // Sort: career-type tracks first, then health/personal
-  const priority = ["career", "mastery", "exploration", "career_tech"];
-  return Array.from(trackSet).sort((a, b) => {
-    const aIdx = priority.findIndex((p) => a.toLowerCase().includes(p));
-    const bIdx = priority.findIndex((p) => b.toLowerCase().includes(p));
-    return (aIdx === -1 ? 99 : aIdx) - (bIdx === -1 ? 99 : bIdx);
-  });
+  return Array.from(trackSet);
 }
 
 /**
  * Filter layers by a track label.
  */
 export function filterLayersByTrack(layers: RawLayerData[], trackLabel: string): RawLayerData[] {
+  if (!trackLabel || trackLabel === "All Roadmaps") {
+    return layers;
+  }
   return layers.filter((layer) => {
     const { label } = resolveLayerTrack(layer);
     return label === trackLabel;
@@ -230,7 +243,7 @@ export function computeTrackProgress(
       if (item.status === "done") map[track].done++;
     }
   }
-  const result: Record<string, any> = {};
+  const result: Record<string, { completed: number; total: number; percent: number }> = {};
   for (const [track, stats] of Object.entries(map)) {
     result[track] = {
       completed: stats.done,

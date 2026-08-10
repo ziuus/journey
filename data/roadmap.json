@@ -1,12 +1,23 @@
 {
-  "_comment": "TEMPLATE FILE — this is a starter template for new installs. Personal data lives at ~/.journey/data/roadmap.json. Do NOT overwrite this file with personal goals.",
+  "_comment": "TEMPLATE FILE — starter template for new installations. Personal data lives at ~/.journey/data/roadmap.json. Do NOT overwrite this file with personal goals.",
   "target_roles": [
     "Full-Stack Engineer",
     "Frontend Specialist",
     "Backend Architect",
-    "Software Engineer"
+    "Software Engineer",
+    "General Mastery"
   ],
   "layers": [
+    {
+      "id": "layer_template",
+      "title": "Layer 0 — Example Starter Template",
+      "description": "Example template node demonstrating custom goal structures.",
+      "items": [
+        { "id": "tpl_item_1", "title": "Example Task 1: Define your core objective", "status": "pending" },
+        { "id": "tpl_item_2", "title": "Example Task 2: Break down milestones", "status": "pending" },
+        { "id": "tpl_item_3", "title": "Example Task 3: Track progress via MCP or UI", "status": "pending" }
+      ]
+    },
     {
       "id": "layer1",
       "title": "Layer 1 — Web Fundamentals",

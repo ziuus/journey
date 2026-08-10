@@ -1,4 +1,4 @@
-import { RawRoadmapData, RoadmapGraph, RoadmapNode, NodeStatus, NodeType } from "../../types/roadmap";
+import { RawRoadmapData, RoadmapGraph, RoadmapNode, NodeStatus } from "../../types/roadmap";
 
 export function normalizeRoadmap(raw: RawRoadmapData): RoadmapGraph {
   const nodes: Record<string, RoadmapNode> = {};
@@ -137,7 +137,7 @@ export function normalizeRoadmap(raw: RawRoadmapData): RoadmapGraph {
   const processExtraSection = (items: any[], sectionId: string, sectionTitle: string) => {
     if (items && items.length > 0) {
       nodes['root'].children!.push(sectionId);
-      const doneCount = items.filter(i => i.status === 'done').length;
+      const doneCount = items.filter((i: any) => i.status === 'done').length;
       const prog = Math.round((doneCount / items.length) * 100);
       
       totalItems += items.length;

@@ -25,7 +25,6 @@
 }
 
 .hudCard {
-  background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 24px;

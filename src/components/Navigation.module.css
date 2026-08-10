@@ -1,120 +1,155 @@
-.nav {
+.navWrapper {
   position: fixed;
-  top: 0;
+  top: 16px;
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 16px 24px;
-  transition: background var(--transition), padding var(--transition);
-}
-
-.navScrolled {
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.navContainer {
-  max-width: 1200px;
-  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  pointer-events: none;
+  transition: all 0.3s ease;
 }
 
-.logo {
+.navWrapperScrolled {
+  top: 12px;
+}
+
+.floatingPill {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  max-width: 960px;
+  padding: 8px 12px 8px 16px;
+  border-radius: 100px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px var(--shadow-ambient);
+  backdrop-filter: blur(16px);
+  transition: all 0.3s ease;
+}
+
+.navWrapperScrolled .floatingPill {
+  border-color: var(--border-hover);
+  box-shadow: 0 12px 40px var(--shadow-ambient);
+}
+
+/* Brand */
+.brand {
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
 }
 
-.logoBox {
-  width: 28px;
-  height: 28px;
+.brandIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: var(--accent);
-  color: #000;
-  border-radius: 6px;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 14px;
+  box-shadow: 0 2px 10px var(--accent-glow);
+  transition: transform 0.2s ease;
 }
 
-.logoText {
+.brand:hover .brandIcon {
+  transform: rotate(45deg);
+}
+
+.brandText {
   font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 }
 
-.links {
+/* Nav Links Segment */
+.linksSegment {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   background: var(--bg-secondary);
   padding: 4px;
-  border-radius: 10px;
+  border-radius: 100px;
+  border: 1px solid var(--border-color);
 }
 
-.navLink {
+.navItem {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: 8px;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: 100px;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
-  transition: all var(--transition);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.navLink:hover {
-  color: var(--text-primary);
-  background: var(--bg-tertiary);
-}
-
-.navLinkActive {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.navActions {
-  display: flex;
-  align-items: center;
-}
-
-.statusIndicator {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.navItem:hover {
   color: var(--accent);
   background: var(--accent-dim);
-  padding: 5px 10px;
-  border-radius: 8px;
 }
 
-.pulse {
-  width: 5px;
-  height: 5px;
+.navItemActive {
   background: var(--accent);
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 2px 10px var(--accent-glow);
+}
+
+/* Actions Group */
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.themeToggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  animation: pulse-kf 2s infinite alternate;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-@keyframes pulse-kf {
-  from { opacity: 0.3; }
-  to { opacity: 1; }
+.themeToggleBtn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--card-bg);
 }
 
-@media (max-width: 900px) {
-  .logoText, .navLink span {
+@media (max-width: 768px) {
+  .floatingPill {
+    padding: 6px 10px;
+    gap: 12px;
+  }
+
+  .brandText {
     display: none;
   }
-  .navLink {
+
+  .navItem span {
+    display: none;
+  }
+
+  .navItem {
     padding: 8px;
+    border-radius: 50%;
   }
 }
