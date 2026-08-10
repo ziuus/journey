@@ -43,8 +43,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "start-mcp": "node ./scripts/mcp-server.js",
-    "postinstall": "node ./scripts/postinstall.js"
+    "start-mcp": "node ./scripts/mcp-server.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
