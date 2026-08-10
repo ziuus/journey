@@ -145,7 +145,7 @@ button {
 /* GLOBAL THEME ACCENT HELPERS */
 .accent-bg {
   background: var(--accent) !important;
-  color: #ffffff !important;
+  color: var(--accent-fg) !important;
 }
 
 .accent-text {

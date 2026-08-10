@@ -89,7 +89,7 @@
 
 .pencilToggleBtnActive {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--accent-fg) !important;
   border-color: var(--accent);
   box-shadow: 0 4px 14px var(--accent-glow);
 }
@@ -130,9 +130,9 @@
 
 .trackTabActive {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--accent-fg) !important;
   border-color: var(--accent);
-  font-weight: 600;
+  font-weight: 700;
   box-shadow: 0 2px 12px var(--accent-glow);
 }
 
@@ -191,7 +191,7 @@
 
 .layerNumber {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--accent-fg) !important;
   width: 32px;
   height: 32px;
   border-radius: 8px;
