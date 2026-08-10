@@ -1,70 +1,106 @@
-# Journey — Universal Goal & Roadmap Engine
+<div align="center">
 
-[![npm version](https://img.shields.io/npm/v/%40ziuus%2Fjourney)](https://www.npmjs.com/package/@ziuus/journey)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+# Journey
 
-Journey is a local-first goal tracking portal and Model Context Protocol (MCP) server. It manages roadmaps, skill trees, and execution tasks using a local JSON data file (`~/.journey/data/roadmap.json`) that both you and your AI assistants (Gemini, Claude, Cursor, Codex) can view and update in real time.
+### Universal Goal Engine & Real-Time AI Roadmap Portal
+
+[![npm version](https://img.shields.io/npm/v/%40ziuus%2Fjourney?style=for-the-badge&color=007aff)](https://www.npmjs.com/package/@ziuus/journey)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16.2.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![MCP Ready](https://img.shields.io/badge/MCP-Supported-purple?style=for-the-badge)](https://modelcontextprotocol.io)
+
+*A local-first goal-tracking engine, interactive web portal, and Model Context Protocol (MCP) server that seamlessly syncs your roadmaps, skill trees, and execution tasks with AI assistants.*
+
+</div>
+
+---
+
+## Key Capabilities
+
+- **Local-First & Data Autonomous**: Your roadmap lives in a single, clean JSON file at `~/.journey/data/roadmap.json`. No proprietary cloud locking or API requirements.
+- **Bi-Directional AI Sync**: AI agents (Gemini, Claude, Cursor, Codex, ChatGPT) can read, add goals, and update roadmap tasks in real time while you chat.
+- **Model Context Protocol (MCP)**: Native `journey-mcp` server offering `get_roadmap`, `add_goal`, and `update_item_status` tools.
+- **Multiple Domain Roadmaps**: Categorize and view goals across tracks (e.g. *Building AI & Agentic Systems*, *Building AI & LLMs*, *Systems & Infrastructure*, *Web3 Full-Stack*).
+- **Automated Execution Engine**: Evaluates item priority, dependencies, and career ROI to recommend *Today's Focus* and identify blocked tasks.
+- **Interactive Goal Tree**: Visual graph network allowing inline tree node editing, task creation, status toggles, and deletion.
+- **Tailored Aesthetics**: Switch between Light/Dark/System themes, pick dynamic accent colors (*Neon Green, Royal Blue, Electric Purple, Flame Orange, Crimson Red, Cyber Cyan*), and adjust interface density (*Comfortable* vs *Compact*).
+
+---
+
+## Architecture Overview
 
 ```
-                   ┌────────────────────────────┐
-                   │   Journey Web Portal       │
-                   │   (http://localhost:6161)  │
-                   └─────────────┬──────────────┘
-                                 │ reads & writes
-                   ┌─────────────▼──────────────┐
-                   │ ~/.journey/data/roadmap.json│ ◄── AI Agent / MCP Server
-                   └────────────────────────────┘
+   ┌─────────────────────────────────────────────────────────┐
+   │                  Journey Web Portal                     │
+   │               (http://localhost:6161)                   │
+   │   - Home Overview     - Execution Dashboard            │
+   │   - Goal Tree Graph   - System Preferences              │
+   └────────────────────────────┬────────────────────────────┘
+                                │ Real-Time File Sync
+   ┌────────────────────────────▼────────────────────────────┐
+   │             ~/.journey/data/roadmap.json                │
+   │         (User's Local Goal Data Storage)                │
+   └────────────────────────────▲────────────────────────────┘
+                                │ Read & Update Tools
+   ┌────────────────────────────┴────────────────────────────┐
+   │              AI Assistant / MCP Integration             │
+   │        (Gemini CLI, Claude Code, Cursor, Codex)        │
+   └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## Quick Start
 
-### 1. Installation
+### 1. Global Installation
+
+Install Journey globally via npm:
 
 ```bash
 npm install -g @ziuus/journey
 ```
 
-### 2. Launch Portal
+### 2. Launch the Portal
+
+Start the portal background process:
 
 ```bash
 journey
 ```
 
-Open `http://localhost:6161` in your browser. Journey automatically initializes your local roadmap file at `~/.journey/data/roadmap.json` using the repository starter template.
+Open `http://localhost:6161` in your browser. Journey automatically initializes your local roadmap file at `~/.journey/data/roadmap.json` with a complete starter template.
 
 ---
 
-## Features & Views
+## Portal Views
 
-- **Home View (`/`)**: High-level overview of overall progress, search bar, multi-track filter tabs, and layer tree accordions.
-- **Dashboard (`/dashboard`)**: Automated execution scoring recommending *Today's Focus*, *High ROI Items*, and *Blocked Task Detection*.
-- **Goal Tree (`/tree`)**: Interactive structural graph visualization with hover edit controls (rename, add, delete, toggle completion).
-- **Settings (`/settings`)**: Visual mode switching (Light / Dark / System), accent color highlights, interface density controls, and default landing preferences.
+| View | Path | Description |
+|---|---|---|
+| **Home** | `/` | High-level roadmap overview, progress metrics, category filter pills, and expandable layer accordions. |
+| **Dashboard** | `/dashboard` | Intelligent execution recommendations listing *Today's Focus*, *High ROI Items*, and *Blocked Task Alerts*. |
+| **Goal Tree** | `/tree` | Full-screen interactive node graph visualization. Activate edit mode via the pencil button to rename, add, or delete nodes. |
+| **Settings** | `/settings` | Customize visual mode (Light/Dark/System), accent theme highlights, interface density (*Comfortable* / *Compact*), and landing view preferences. |
 
 ---
 
-## Agent Integration
+## AI Agent & MCP Integration
 
-Journey works with any AI assistant that can read local files or connect via MCP.
+Journey supports both **direct file reading** and **Model Context Protocol (MCP)** tool calling.
 
-### Option A: Direct File Reference (Recommended)
+### Option 1: Direct File Reference (Universal)
 
-Point your AI assistant to read `~/.journey/data/roadmap.json`.
+Point your AI assistant directly to `~/.journey/data/roadmap.json`.
 
-| Agent / Environment | Setup Instructions |
-|---|---|
-| **Gemini CLI** | Reference [`GEMINI.md`](./GEMINI.md) context file or tell it your roadmap lives at `~/.journey/data/roadmap.json`. |
-| **Claude Code** | Reference [`AGENTS.md`](./AGENTS.md) in your workspace. |
-| **Cursor / Windsurf** | Add `~/.journey/data/roadmap.json` to your project context or `.cursorrules`. |
-| **ChatGPT / Custom GPTs** | Attach or reference your `~/.journey/data/roadmap.json` file. |
+- **Gemini CLI**: Run `gemini` and reference [`GEMINI.md`](./GEMINI.md) context file or prompt: `"Your roadmap context is at ~/.journey/data/roadmap.json"`.
+- **Claude Code**: Include [`AGENTS.md`](./AGENTS.md) in your project workspace.
+- **Cursor / Windsurf**: Add `~/.journey/data/roadmap.json` to project rules or `.cursorrules`.
+- **ChatGPT**: Attach or paste your `~/.journey/data/roadmap.json` file.
 
-### Option B: Model Context Protocol (MCP) Server
+### Option 2: Model Context Protocol (MCP) Server
 
-Journey includes a built-in MCP server (`journey-mcp`) for agents supporting standard MCP protocol integrations (such as Claude Desktop or Cursor).
+Journey includes a native MCP server (`journey-mcp`) communicating via standard JSON-RPC 2.0 over stdin/stdout.
 
-Add the following to your agent's MCP configuration (`mcpServers`):
+Add `journey-mcp` to your client's MCP configuration (`mcpServers`):
 
 ```json
 {
@@ -77,47 +113,62 @@ Add the following to your agent's MCP configuration (`mcpServers`):
 }
 ```
 
-#### Available MCP Tools:
+#### Supported MCP Tools:
 
-- `get_roadmap`: Retrieves the full JSON roadmap data from `~/.journey/data/roadmap.json`.
-- `add_goal`: Adds a new goal item to a specified roadmap layer.
-- `update_item_status`: Updates the status (`pending` or `done`) of a specific roadmap item.
+1. `get_roadmap` — Reads and returns the complete JSON data structure from `~/.journey/data/roadmap.json`.
+2. `add_goal` — Appends a new goal item to a specified layer node.
+3. `update_item_status` — Toggles or updates an item's status (`pending` or `done`).
 
 ---
 
 ## CLI Reference
 
-| Command | Description |
-|---|---|
-| `journey` | Start background web portal (Port 6161) |
-| `journey dev` | Start development portal in foreground (Port 3000) |
-| `journey status` | Check running portal background process status |
-| `journey stop` | Terminate background web portal process |
-| `journey logs` | Display recent background portal logs |
-| `journey-mcp` | Run stdin/stdout JSON-RPC 2.0 MCP server |
+```bash
+# Start background web portal on port 6161
+journey
+
+# Start dev server in foreground (Port 3000)
+journey dev
+
+# Check background portal process status
+journey status
+
+# Stop running background portal
+journey stop
+
+# Display recent portal logs
+journey logs
+
+# Run stdin/stdout MCP server for agents
+journey-mcp
+```
 
 ---
 
-## Architecture & Data Storage
+## Repository Structure & Data Protection
 
 ```
 journey/
-├── src/                    # Next.js web application
-│   ├── app/                # Page routes (/ , /dashboard, /tree, /settings)
-│   ├── components/         # Reusable UI components & navigation
-│   └── lib/                # Roadmap parser & recommendation engine
+├── src/                    # Next.js web portal source code
+│   ├── app/                # Pages (/ , /dashboard, /tree, /settings) & API routes
+│   ├── components/         # Reusable UI components & navigation header
+│   ├── context/            # Global configuration & theme provider
+│   └── lib/                # Roadmap parsing, data normalization & recommendation engine
 ├── data/
-│   └── roadmap.json        # Repository STARTER TEMPLATE file
+│   └── roadmap.json        # STARTER TEMPLATE file (used only for fresh installs)
 ├── scripts/
-│   ├── journey-cli.js      # CLI management tool
-│   └── mcp-server.js       # MCP server implementation
-├── GEMINI.md               # Context file for Gemini CLI
-└── AGENTS.md               # Agent guidelines and standards
+│   ├── journey-cli.js      # CLI process manager
+│   ├── mcp-server.js       # Model Context Protocol server
+│   └── start-roadmap.js    # Production launcher
+├── GEMINI.md               # Context documentation for Gemini CLI
+├── AGENTS.md               # Operational standards & agent behavior rules
+└── README.md               # Project documentation
 ```
 
-> **Data Separation**:
-> - **User Data**: Saved locally at `~/.journey/data/roadmap.json` outside the code repository.
-> - **Template Data**: The repository file `data/roadmap.json` is a generic starter template used for fresh installations.
+> [!IMPORTANT]
+> **Data Separation Rules**:
+> - **User Personal Goals**: Lives strictly at `~/.journey/data/roadmap.json` (outside the git repository).
+> - **Repo Template File**: `data/roadmap.json` inside this repository is a generic starter template. It is never overwritten with personal goal data.
 
 ---
 
