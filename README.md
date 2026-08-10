@@ -5,6 +5,14 @@
 
 **Journey** is a universal goal-tracking engine, local web portal, and Model Context Protocol (MCP) server. It manages skill trees, mastery roadmaps, and execution tasks using a simple local JSON file (`~/.journey/data/roadmap.json`) that both you and your AI assistants can read and update in real time.
 
+<p align="center">
+  <img src="public/preview-home.png" alt="Journey Home Portal Overview" width="880" />
+</p>
+
+<p align="center">
+  <img src="public/preview-tree.png" alt="Journey Goal Tree Graph View" width="880" />
+</p>
+
 ```
 +-----------------------------------------------------------+
 |                   Journey Web Portal                      |
