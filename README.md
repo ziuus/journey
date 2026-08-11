@@ -48,7 +48,7 @@
                              │ MCP / Stdin-Stdout
 ┌────────────────────────────┴────────────────────────────┐
 │             AI Assistants & MCP Clients                 │
-│       (Claude Desktop, Cursor, Windsurf, Gemini)        │
+│  (Claude, Cursor, Windsurf, Roo Code, Goose, Zed, etc.) │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -103,15 +103,16 @@ Navigate to `http://localhost:6161`. Journey automatically creates a starter roa
 
 ---
 
-## AI Agent & MCP Integration
+## Agent Configuration Guide (MCP Setup)
 
-Journey connects to AI assistants via direct file access or the Model Context Protocol.
+Journey supports any agent using the Model Context Protocol (MCP). Find your agent below for copy-paste setup instructions:
 
-### Method 1: Model Context Protocol (MCP)
+### 1. Claude Desktop
+Add to your `claude_desktop_config.json`:
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Linux**: `~/.config/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
-Add `journey-mcp` to your client's MCP configuration (`mcpServers`):
-
-#### Global Install Command Configuration
 ```json
 {
   "mcpServers": {
@@ -122,7 +123,82 @@ Add `journey-mcp` to your client's MCP configuration (`mcpServers`):
 }
 ```
 
-#### NPX (Zero-Install) Configuration
+---
+
+### 2. Cursor IDE
+Open **Cursor Settings → Features → MCP** or edit `.cursor/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "journey": {
+      "command": "journey-mcp"
+    }
+  }
+}
+```
+
+---
+
+### 3. Windsurf (Codeium)
+Add to `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "journey": {
+      "command": "journey-mcp"
+    }
+  }
+}
+```
+
+---
+
+### 4. Roo Code / Cline (VS Code)
+Open **Roo Code Settings → MCP Servers → Add New MCP Server** or edit `cline_mcp_settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "journey": {
+      "command": "journey-mcp"
+    }
+  }
+}
+```
+
+---
+
+### 5. Zed Editor
+Add to `~/.config/zed/settings.json`:
+
+```json
+{
+  "context_servers": {
+    "journey": {
+      "command": "journey-mcp"
+    }
+  }
+}
+```
+
+---
+
+### 6. Goose CLI
+Add to `~/.config/goose/config.yaml`:
+
+```yaml
+mcpServers:
+  journey:
+    command: journey-mcp
+```
+
+---
+
+### 7. Zero-Install Alternative (NPX)
+If you prefer not to install globally, you can use `npx` in any MCP client config:
+
 ```json
 {
   "mcpServers": {
@@ -134,34 +210,31 @@ Add `journey-mcp` to your client's MCP configuration (`mcpServers`):
 }
 ```
 
-#### Common MCP Config Locations:
-- **Claude Desktop**: 
-  - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-  - Linux: `~/.config/Claude/claude_desktop_config.json`
-  - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-- **Cursor**: Workspace `.cursor/mcp.json` or *Features → MCP*
-- **Windsurf**: `~/.codeium/windsurf/mcp_config.json`
-- **Roo Code / Cline**: VS Code extension settings for MCP
+---
 
-#### Available MCP Tools
+## MCP Tools Reference
 
-| Tool Name | Parameters | Description |
+When connected, AI agents automatically discover and execute these 3 tools:
+
+| Tool | Input Parameters | Description |
 |---|---|---|
-| `get_roadmap` | *None* | Retrieves the full JSON roadmap data structure from `~/.journey/data/roadmap.json`. |
-| `add_goal` | `layerId`, `title`, `goal` | Appends a new goal item into the specified layer ID. |
+| `get_roadmap` | *None* | Reads the user's complete roadmap and goal tree from `~/.journey/data/roadmap.json`. |
+| `add_goal` | `layerId`, `title`, `goal` | Inserts a new goal into a specified roadmap layer. |
 | `update_item_status` | `type`, `itemId`, `status` | Updates target item status (`pending` or `done`). |
 
 ---
 
-### Method 2: Direct File Reference
+## Direct File Reference (For Non-MCP Agents)
 
-Instruct any local AI agent or LLM CLI to read `~/.journey/data/roadmap.json`.
+For agents without native MCP support (e.g. Gemini CLI, ChatGPT Web, custom scripts), simply inform your agent:
 
-| Environment | Setup Instructions |
+> *"My goal roadmap is stored at `~/.journey/data/roadmap.json`. Read this file to track my active goals and progress."*
+
+| Environment | Strategy |
 |---|---|
-| **Gemini CLI** | Reference [`GEMINI.md`](./GEMINI.md) in your session context. |
-| **Claude Code** | Load [`AGENTS.md`](./AGENTS.md) at project workspace root. |
-| **Cursor / Windsurf** | Add `~/.journey/data/roadmap.json` into `.cursorrules` or context window. |
+| **Gemini CLI** | Reference [`GEMINI.md`](./GEMINI.md) in your workspace context. |
+| **Claude Code** | Include [`AGENTS.md`](./AGENTS.md) at your project root. |
+| **Custom Agents** | Read/write directly to `~/.journey/data/roadmap.json`. |
 
 ---
 
