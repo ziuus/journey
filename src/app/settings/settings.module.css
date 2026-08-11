@@ -230,3 +230,69 @@
     font-size: 28px;
   }
 }
+
+/* Theme Grid */
+.themeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.themeCardBtn {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.themeCardBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-ambient);
+}
+
+.themeCardBtnActive {
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.themePreviewHeader {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.themePreviewDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.themePreviewBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.themePreviewLine {
+  height: 6px;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.themePreviewAccent {
+  height: 12px;
+  border-radius: 4px;
+  width: 60%;
+}
+
+.themeName {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}

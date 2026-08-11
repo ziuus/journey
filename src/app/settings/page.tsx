@@ -2,19 +2,21 @@
 import React from 'react';
 import styles from './settings.module.css';
 import { useConfig } from '../../context/ConfigContext';
-import { Settings, Palette, Eye, Layout, Sliders, Moon, Sun, Monitor } from 'lucide-react';
+import { Settings, Palette, Eye, Layout, Sliders, Monitor } from 'lucide-react';
+import { THEME_COMBOS } from '../../config/themes';
 
 export default function SettingsView() {
   const { config, updateConfig } = useConfig();
 
-  const accentColors = [
-    { label: 'Neon Green', value: '#a8ff60' },
-    { label: 'Royal Blue', value: '#007aff' },
-    { label: 'Electric Purple', value: '#bf5af2' },
-    { label: 'Flame Orange', value: '#ff9500' },
-    { label: 'Crimson Red', value: '#ff3b30' },
-    { label: 'Cyber Cyan', value: '#60efff' },
-  ];
+  const handleThemeSelect = (themeId: string, defaultAccent: string) => {
+    updateConfig({ 
+      ui: { 
+        ...config.ui, 
+        theme: themeId as any, 
+        accentColor: defaultAccent 
+      } 
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -27,54 +29,50 @@ export default function SettingsView() {
       </header>
 
       <div className={styles.grid}>
-        <section className={styles.card}>
+        <section className={styles.card} style={{ gridColumn: "1 / -1" }}>
           <div className={styles.cardHeader}>
             <Palette className={styles.cardIcon} size={20} />
-            <h2 className={styles.cardTitle}>Appearance & Theme</h2>
+            <h2 className={styles.cardTitle}>Color Themes</h2>
           </div>
           
-          <div className={styles.field}>
-            <label className={styles.label}>Visual Mode</label>
-            <div className={styles.themeToggle}>
+          <div className={styles.themeGrid}>
+            {THEME_COMBOS.map(theme => (
               <button 
-                onClick={() => updateConfig({ ui: { ...config.ui, theme: 'light' } })}
-                className={`${styles.themeBtn} ${config.ui.theme === 'light' ? styles.themeBtnActive : ''}`}
+                key={theme.id}
+                className={`${styles.themeCardBtn} ${config.ui.theme === theme.id ? styles.themeCardBtnActive : ''}`}
+                onClick={() => handleThemeSelect(theme.id, theme.previewAccent)}
+                style={{ 
+                  background: theme.previewBg,
+                  borderColor: config.ui.theme === theme.id ? theme.previewAccent : 'var(--border-color)'
+                }}
+                title={theme.name}
               >
-                <Sun size={16} /> Light
+                <div className={styles.themePreviewHeader}>
+                  <span className={styles.themePreviewDot} style={{ background: theme.type === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }} />
+                  <span className={styles.themePreviewDot} style={{ background: theme.type === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }} />
+                  <span className={styles.themePreviewDot} style={{ background: theme.type === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }} />
+                </div>
+                <div className={styles.themePreviewBody}>
+                  <div className={styles.themePreviewLine} style={{ background: theme.type === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }} />
+                  <div className={styles.themePreviewAccent} style={{ background: theme.previewAccent }} />
+                </div>
+                <div className={styles.themeName} style={{ color: theme.type === 'dark' ? '#fff' : '#000' }}>
+                  {theme.name}
+                </div>
               </button>
-              <button 
-                onClick={() => updateConfig({ ui: { ...config.ui, theme: 'dark' } })}
-                className={`${styles.themeBtn} ${config.ui.theme === 'dark' ? styles.themeBtnActive : ''}`}
-              >
-                <Moon size={16} /> Dark
-              </button>
-              <button 
-                onClick={() => updateConfig({ ui: { ...config.ui, theme: 'system' } })}
-                className={`${styles.themeBtn} ${config.ui.theme === 'system' ? styles.themeBtnActive : ''}`}
-              >
-                <Monitor size={16} /> System
-              </button>
-            </div>
+            ))}
           </div>
 
-          <div className={styles.field}>
-            <label className={styles.label}>Accent Highlight</label>
+          <div className={styles.field} style={{ marginTop: '24px' }}>
+            <label className={styles.label}>Custom Accent Override</label>
             <div className={styles.colorGrid}>
-              {accentColors.map(color => (
-                <button 
-                  key={color.value}
-                  className={`${styles.colorCircle} ${config.ui.accentColor === color.value ? styles.colorCircleActive : ''}`}
-                  style={{ backgroundColor: color.value }}
-                  onClick={() => updateConfig({ ui: { ...config.ui, accentColor: color.value } })}
-                  title={color.label}
-                />
-              ))}
               <input 
                 type="color" 
                 value={config.ui.accentColor} 
                 onChange={(e) => updateConfig({ ui: { ...config.ui, accentColor: e.target.value } })}
                 className={styles.customColor}
               />
+              <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>You can override the theme's default accent color here.</span>
             </div>
           </div>
         </section>
