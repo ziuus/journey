@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import styles from './Footer.module.css';
 import { Terminal, Shield, Code, Layout } from 'lucide-react';
+import LogoIcon from '../LogoIcon';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -14,7 +15,7 @@ export default function Footer() {
         <div className={styles.topSection}>
           <div className={styles.brand}>
             <div className={styles.logoGroup}>
-              <div className={styles.logoBox}>J</div>
+              <div className={styles.logoBox}><LogoIcon size={18} /></div>
               <span className={styles.logoText}>Journey</span>
             </div>
             <p className={styles.description}>

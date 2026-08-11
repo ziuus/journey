@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Navigation.module.css";
-import { LayoutDashboard, GitBranch, Settings, Home, Compass, Sun, Moon } from "lucide-react";
+import { LayoutDashboard, GitBranch, Settings, Home, Sun, Moon } from "lucide-react";
 import { useConfig } from "../context/ConfigContext";
+import LogoIcon from "./LogoIcon";
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -35,7 +36,7 @@ export default function Navigation() {
         {/* Brand */}
         <Link href="/" className={styles.brand}>
           <div className={styles.brandIcon}>
-            <Compass size={16} />
+            <LogoIcon size={18} />
           </div>
           <span className={styles.brandText}>Journey</span>
         </Link>
