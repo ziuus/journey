@@ -48,7 +48,7 @@
                              │ MCP / Stdin-Stdout
 ┌────────────────────────────┴────────────────────────────┐
 │             AI Assistants & MCP Clients                 │
-│       (Gemini CLI, Claude Code, Cursor, Windsurf)       │
+│       (Claude Desktop, Cursor, Windsurf, Gemini)        │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -75,7 +75,7 @@ Install Journey globally via npm:
 npm install -g @ziuus/journey
 ```
 
-> **Upgrading**: To update an existing global installation to the latest build:
+> **Upgrading**: To update an existing global installation:
 > ```bash
 > npm install -g @ziuus/journey@latest
 > ```
@@ -88,7 +88,7 @@ Start the background web service:
 journey
 ```
 
-Navigate to `http://localhost:6161`. Journey creates a starter roadmap file at `~/.journey/data/roadmap.json` on initial launch if one does not exist.
+Navigate to `http://localhost:6161`. Journey automatically creates a starter roadmap file at `~/.journey/data/roadmap.json` on initial launch if one does not exist.
 
 ---
 
@@ -103,11 +103,57 @@ Navigate to `http://localhost:6161`. Journey creates a starter roadmap file at `
 
 ---
 
-## AI Agent Integration
+## AI Agent & MCP Integration
 
 Journey connects to AI assistants via direct file access or the Model Context Protocol.
 
-### Method 1: Direct File Context
+### Method 1: Model Context Protocol (MCP)
+
+Add `journey-mcp` to your client's MCP configuration (`mcpServers`):
+
+#### Global Install Command Configuration
+```json
+{
+  "mcpServers": {
+    "journey": {
+      "command": "journey-mcp"
+    }
+  }
+}
+```
+
+#### NPX (Zero-Install) Configuration
+```json
+{
+  "mcpServers": {
+    "journey": {
+      "command": "npx",
+      "args": ["-y", "@ziuus/journey", "journey-mcp"]
+    }
+  }
+}
+```
+
+#### Common MCP Config Locations:
+- **Claude Desktop**: 
+  - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+  - Linux: `~/.config/Claude/claude_desktop_config.json`
+  - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- **Cursor**: Workspace `.cursor/mcp.json` or *Features → MCP*
+- **Windsurf**: `~/.codeium/windsurf/mcp_config.json`
+- **Roo Code / Cline**: VS Code extension settings for MCP
+
+#### Available MCP Tools
+
+| Tool Name | Parameters | Description |
+|---|---|---|
+| `get_roadmap` | *None* | Retrieves the full JSON roadmap data structure from `~/.journey/data/roadmap.json`. |
+| `add_goal` | `layerId`, `title`, `goal` | Appends a new goal item into the specified layer ID. |
+| `update_item_status` | `type`, `itemId`, `status` | Updates target item status (`pending` or `done`). |
+
+---
+
+### Method 2: Direct File Reference
 
 Instruct any local AI agent or LLM CLI to read `~/.journey/data/roadmap.json`.
 
@@ -116,29 +162,6 @@ Instruct any local AI agent or LLM CLI to read `~/.journey/data/roadmap.json`.
 | **Gemini CLI** | Reference [`GEMINI.md`](./GEMINI.md) in your session context. |
 | **Claude Code** | Load [`AGENTS.md`](./AGENTS.md) at project workspace root. |
 | **Cursor / Windsurf** | Add `~/.journey/data/roadmap.json` into `.cursorrules` or context window. |
-
-### Method 2: MCP Server Protocol
-
-Configure `journey-mcp` in your agent's MCP setup (`mcpServers`):
-
-```json
-{
-  "mcpServers": {
-    "journey": {
-      "command": "journey-mcp",
-      "args": []
-    }
-  }
-}
-```
-
-#### Available MCP Tools
-
-| Tool Name | Parameters | Description |
-|---|---|---|
-| `get_roadmap` | *None* | Retrieves the full JSON roadmap data structure from `~/.journey/data/roadmap.json`. |
-| `add_goal` | `layer_id`, `title` | Appends a new goal item into the specified layer ID. |
-| `update_item_status` | `item_id`, `status` | Updates target item status (`pending` or `done`). |
 
 ---
 
