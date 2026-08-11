@@ -48,7 +48,7 @@
                              │ MCP / Stdin-Stdout
 ┌────────────────────────────┴────────────────────────────┐
 │             AI Assistants & MCP Clients                 │
-│  (Claude, Cursor, Windsurf, Roo Code, Goose, Zed, etc.) │
+│ (Claude Code, OpenCode, Hermes, Cursor, Windsurf, etc.) │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -105,9 +105,57 @@ Navigate to `http://localhost:6161`. Journey automatically creates a starter roa
 
 ## Agent Configuration Guide (MCP Setup)
 
-Journey supports any agent using the Model Context Protocol (MCP). Find your agent below for copy-paste setup instructions:
+Journey supports any agent using the Model Context Protocol (MCP). Since different AI CLI tools and IDEs use different configuration formats, find your agent below for step-by-step setup instructions:
 
-### 1. Claude Desktop
+### 1. Claude Code (CLI)
+Run the built-in MCP CLI command:
+```bash
+claude mcp add journey journey-mcp
+```
+Or with NPX (zero-install):
+```bash
+claude mcp add journey npx -y @ziuus/journey journey-mcp
+```
+
+---
+
+### 2. OpenCode Interpreter
+Run in your terminal:
+```bash
+opencode mcp add journey journey-mcp
+```
+Or add to `~/.config/opencode/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "journey": {
+      "command": "journey-mcp"
+    }
+  }
+}
+```
+
+---
+
+### 3. Hermes Agent
+Run in terminal:
+```bash
+hermes mcp add journey journey-mcp
+```
+Or add to `~/.hermes/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "journey": {
+      "command": "journey-mcp"
+    }
+  }
+}
+```
+
+---
+
+### 4. Claude Desktop
 Add to your `claude_desktop_config.json`:
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Linux**: `~/.config/Claude/claude_desktop_config.json`
@@ -125,7 +173,7 @@ Add to your `claude_desktop_config.json`:
 
 ---
 
-### 2. Cursor IDE
+### 5. Cursor IDE
 Open **Cursor Settings → Features → MCP** or edit `.cursor/mcp.json` in your project root:
 
 ```json
@@ -140,7 +188,7 @@ Open **Cursor Settings → Features → MCP** or edit `.cursor/mcp.json` in your
 
 ---
 
-### 3. Windsurf (Codeium)
+### 6. Windsurf (Codeium)
 Add to `~/.codeium/windsurf/mcp_config.json`:
 
 ```json
@@ -155,7 +203,7 @@ Add to `~/.codeium/windsurf/mcp_config.json`:
 
 ---
 
-### 4. Roo Code / Cline (VS Code)
+### 7. Roo Code / Cline (VS Code)
 Open **Roo Code Settings → MCP Servers → Add New MCP Server** or edit `cline_mcp_settings.json`:
 
 ```json
@@ -170,7 +218,7 @@ Open **Roo Code Settings → MCP Servers → Add New MCP Server** or edit `cline
 
 ---
 
-### 5. Zed Editor
+### 8. Zed Editor
 Add to `~/.config/zed/settings.json`:
 
 ```json
@@ -185,7 +233,7 @@ Add to `~/.config/zed/settings.json`:
 
 ---
 
-### 6. Goose CLI
+### 9. Goose CLI
 Add to `~/.config/goose/config.yaml`:
 
 ```yaml
@@ -196,8 +244,24 @@ mcpServers:
 
 ---
 
-### 7. Zero-Install Alternative (NPX)
-If you prefer not to install globally, you can use `npx` in any MCP client config:
+### 10. Continue.dev (VS Code & JetBrains)
+Add to `~/.continue/config.json`:
+
+```json
+{
+  "mcpServers": [
+    {
+      "name": "journey",
+      "command": "journey-mcp"
+    }
+  ]
+}
+```
+
+---
+
+### 11. Zero-Install Alternative (NPX)
+If you prefer not to install globally, you can use `npx` in any MCP config:
 
 ```json
 {
