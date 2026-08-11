@@ -49,18 +49,17 @@
 .brandIcon {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--accent-fg);
+  border-radius: 8px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px var(--accent-glow);
   transition: transform 0.2s ease;
+  overflow: hidden;
 }
 
 .brand:hover .brandIcon {
-  transform: rotate(45deg);
+  transform: scale(1.08);
 }
 
 .brandText {
