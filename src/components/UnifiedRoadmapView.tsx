@@ -534,7 +534,7 @@ export default function UnifiedRoadmapView({ initialViewMode = "graph" }: Props)
                     </div>
 
                     <div className={styles.graphNodesRow}>
-                      {layer.items.map((item) => {
+                      {layer.items.map((item, itemIdx) => {
                         const isDone = item.status === "done";
                         const hasChildren = item.children && item.children.length > 0;
                         const isExpanded = expandedNodes.has(item.id);
@@ -544,7 +544,7 @@ export default function UnifiedRoadmapView({ initialViewMode = "graph" }: Props)
                         const isEditingItem = editingId === item.id;
 
                         return (
-                          <div key={item.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+                          <div key={`${layer.id}_${item.id}_${itemIdx}`} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
                             <div
                               ref={(el) => registerNodeRef(item.id, el)}
                               className={`${styles.graphNodePill} ${isDone ? styles.graphNodeDone : ""} ${focusedItem?.id === item.id ? styles.graphNodeSelected : ""}`}
@@ -697,7 +697,7 @@ export default function UnifiedRoadmapView({ initialViewMode = "graph" }: Props)
                 </div>
 
                 <div className={styles.branchesContainer}>
-                  {layer.items.map((item) => {
+                  {layer.items.map((item, itemIdx) => {
                     const isEditingItem = editingId === item.id;
                     const hasChildren = item.children && item.children.length > 0;
                     const isExpanded = expandedNodes.has(item.id);
@@ -706,7 +706,7 @@ export default function UnifiedRoadmapView({ initialViewMode = "graph" }: Props)
 
                     return (
                       <div
-                        key={item.id}
+                        key={`ladder_${layer.id}_${item.id}_${itemIdx}`}
                         className={`${styles.itemBoxWrapper} ${item.status === "done" ? styles.doneWrapper : ""}`}
                         style={{ display: "flex", flexDirection: "column", width: "100%" }}
                       >
@@ -824,10 +824,10 @@ export default function UnifiedRoadmapView({ initialViewMode = "graph" }: Props)
 
                 {isExpanded && (
                   <div className={styles.itemsList}>
-                    {layer.items.map((item) => {
+                    {layer.items.map((item, itemIdx) => {
                       const isDone = item.status === "done";
                       return (
-                        <div key={item.id} className={styles.listItemRow} onClick={() => void handleToggleItemStatus(item.id, item.status)}>
+                        <div key={`list_${layer.id}_${item.id}_${itemIdx}`} className={styles.listItemRow} onClick={() => void handleToggleItemStatus(item.id, item.status)}>
                           {isDone ? <CheckCircle2 size={18} style={{ color: "#10b981" }} /> : <Circle size={18} style={{ color: "var(--text-muted)" }} />}
                           <span style={{ fontSize: "14.5px", fontWeight: "500", textDecoration: isDone ? "line-through" : "none", flex: 1 }}>{item.title}</span>
                           <button
@@ -867,13 +867,13 @@ export default function UnifiedRoadmapView({ initialViewMode = "graph" }: Props)
             </thead>
             <tbody>
               {filteredLayers.flatMap((layer) =>
-                layer.items.map((item) => {
+                layer.items.map((item, itemIdx) => {
                   const isDone = item.status === "done";
                   const subTasks = item.children || [];
                   const subDone = subTasks.filter((s) => s.status === "done").length;
 
                   return (
-                    <tr key={item.id}>
+                    <tr key={`table_${layer.id}_${item.id}_${itemIdx}`}>
                       <td style={{ fontWeight: "700", color: "var(--text-muted)", fontSize: "12.5px" }}>
                         {layer.title.split("—")[0].trim()}
                       </td>
