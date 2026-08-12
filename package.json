@@ -1,6 +1,6 @@
 {
   "name": "@ziuus/journey",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "A universal goal-tracking engine with a Next.js portal, MCP server, and local-first data model.",
   "author": "ziuus",
   "license": "MIT",
