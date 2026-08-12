@@ -1,0 +1,1075 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  max-width: 580px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── VIEW SWITCHER BAR ───────────────────────────────────────── */
+
+.viewSwitcherBar {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 5px;
+  border-radius: 14px;
+  gap: 4px;
+  box-shadow: 0 4px 16px var(--shadow-ambient);
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.viewBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.viewBtnActive {
+  background: var(--accent) !important;
+  color: var(--accent-fg) !important;
+  font-weight: 700;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+/* Pencil Edit Toggle */
+.pencilBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pencilBtn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pencilBtnActive {
+  background: var(--accent);
+  color: var(--accent-fg) !important;
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+/* Secondary Controls Row */
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+  max-width: 360px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 14px 10px 38px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.searchInput:focus {
+  border-color: var(--accent);
+}
+
+.trackTabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+  max-width: 100%;
+  scrollbar-width: none;
+}
+
+.trackTab {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.trackTab:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.trackTabActive {
+  background: var(--accent);
+  color: var(--accent-fg) !important;
+  border-color: var(--accent);
+  font-weight: 700;
+  box-shadow: 0 2px 12px var(--accent-glow);
+}
+
+/* ─── 1. DAG GRAPH VIEW CANVAS ───────────────────────────────── */
+
+.graphCanvasViewport {
+  width: 100%;
+  min-height: 700px;
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(var(--border-color) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px var(--shadow-ambient);
+  display: flex;
+  flex-direction: column;
+}
+
+.canvasToolbar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 4px 16px var(--shadow-ambient);
+}
+
+.toolBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.toolBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.graphContent {
+  position: relative;
+  width: 100%;
+  min-height: 720px;
+  padding: 60px 40px;
+  transition: transform 0.2s ease;
+  transform-origin: center top;
+}
+
+.svgOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bezierCable {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 2px;
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+}
+
+.bezierCableActive {
+  stroke: var(--accent);
+  stroke-width: 2.5px;
+}
+
+.bezierCableDone {
+  stroke: #10b981;
+  stroke-width: 2.5px;
+}
+
+.graphTreeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.graphLayerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.graphLayerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  box-shadow: 0 4px 16px var(--shadow-ambient);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.graphLayerNumber {
+  background: var(--accent);
+  color: var(--accent-fg);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.graphNodesRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px 32px;
+  width: 100%;
+}
+
+.graphNodePill {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 18px 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 210px;
+  max-width: 280px;
+  z-index: 2;
+  box-shadow: 0 4px 20px var(--shadow-ambient);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.graphNodePill:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 28px var(--accent-glow);
+  transform: translateY(-3px);
+}
+
+.graphNodeSelected {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px var(--accent), 0 10px 30px var(--accent-glow) !important;
+}
+
+.graphNodeDone {
+  background: var(--bg-secondary);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.graphNodeDone:hover {
+  border-color: #10b981;
+  box-shadow: 0 8px 28px rgba(16, 185, 129, 0.25);
+}
+
+.nodeHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nodeTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.nodeDoneTitle {
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.nodeFooterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.nodeSubTaskBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-glow);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.nodeBottomProgressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--border-color);
+  overflow: hidden;
+}
+
+.nodeBottomProgressFill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.nodeBottomProgressFillDone {
+  background: #10b981 !important;
+}
+
+.graphSubTreeBranch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.graphSubNodesRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.graphSubNodePill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.graphSubNodePill:hover {
+  border-color: var(--accent);
+  background: var(--card-bg);
+}
+
+.graphSubNodeDone {
+  opacity: 0.65;
+  text-decoration: line-through;
+}
+
+/* ─── 2. LADDER / SPINE VIEW ──────────────────────────────────── */
+
+.ladderContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 40px;
+}
+
+.roadmapSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.layerNode {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 14px 32px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 2;
+  box-shadow: 0 6px 20px var(--shadow-ambient);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.layerTitle {
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.layerNumber {
+  background: var(--accent);
+  color: var(--accent-fg);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.branchesContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 56px;
+  width: 100%;
+  max-width: 1050px;
+  padding: 44px 0;
+  position: relative;
+}
+
+.branchesContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: var(--border-color);
+  z-index: 0;
+}
+
+.itemBoxWrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.itemBoxWrapper:nth-child(odd) { justify-content: flex-end; }
+.itemBoxWrapper:nth-child(even) { justify-content: flex-start; }
+
+.itemBox {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  z-index: 2;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all var(--transition);
+  width: calc(100% - 44px);
+  box-shadow: 0 2px 12px var(--shadow-ambient);
+}
+
+.itemBox:hover {
+  border-color: var(--accent);
+  box-shadow: 0 6px 20px var(--accent-glow);
+  transform: translateY(-2px);
+}
+
+.itemBoxWrapper:nth-child(odd) .itemBox { margin-right: 44px; }
+.itemBoxWrapper:nth-child(even) .itemBox { margin-left: 44px; }
+
+.itemBoxWrapper:nth-child(odd)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 44px;
+  height: 2px;
+  background: var(--border-color);
+}
+
+.itemBoxWrapper:nth-child(even)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 44px;
+  height: 2px;
+  background: var(--border-color);
+}
+
+.itemBoxWrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.itemBoxWrapper:nth-child(odd)::before { right: -6px; }
+.itemBoxWrapper:nth-child(even)::before { left: -6px; }
+
+.itemDone {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  opacity: 0.8;
+}
+
+.doneWrapper::after { background: var(--accent) !important; }
+.doneWrapper::before { 
+  border-color: var(--accent) !important; 
+  background: var(--accent) !important; 
+}
+
+.itemText {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.spineConnector {
+  width: 2px;
+  height: 44px;
+  background: var(--border-color);
+}
+
+/* ─── 3. LIST CARDS VIEW ──────────────────────────────────────── */
+
+.listViewContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.layerCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px 24px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.layerCard:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px var(--shadow-ambient);
+}
+
+.layerCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.itemsList {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.listItemRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.listItemRow:hover {
+  background: var(--card-bg);
+}
+
+/* ─── 4. TABLE VIEW ────────────────────────────────────────────── */
+
+.tableWrapper {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--shadow-ambient);
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13.5px;
+}
+
+.dataTable th {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dataTable td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.dataTable tr:last-child td {
+  border-bottom: none;
+}
+
+.dataTable tr:hover td {
+  background: var(--bg-secondary);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.statusDone {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.statusActive {
+  background: var(--accent-glow);
+  color: var(--accent);
+}
+
+.statusPending {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+}
+
+/* Common Edit & Action Icons */
+.hoverActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.isEditMode .graphNodePill:hover .hoverActions,
+.isEditMode .layerNode:hover .hoverActions,
+.isEditMode .itemBox:hover .hoverActions,
+.isEditMode .layerCard:hover .hoverActions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.iconBtnDanger:hover {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.inlineEditInput {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+}
+
+.subTaskProgress {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-glow);
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: auto;
+}
+
+.focusSubTreeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.focusSubTreeBtn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--card-bg);
+}
+
+.subTreeContainer {
+  margin-top: 8px;
+  margin-left: 20px;
+  padding-left: 12px;
+  border-left: 2px dashed var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.subItemBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.subItemBox:hover {
+  border-color: var(--accent);
+}
+
+.subItemDone {
+  opacity: 0.65;
+  text-decoration: line-through;
+}
+
+/* Focused Sub-Tree Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modalCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 760px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.modalHeader {
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-secondary);
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.breadcrumbItem {
+  color: var(--accent);
+}
+
+.modalTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.modalTitle {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.closeBtn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: var(--card-bg);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.modalBody {
+  padding: 24px 28px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.masteredBanner {
+  background: var(--accent-glow);
+  border: 1px solid var(--accent);
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: var(--accent-fg);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subGoalList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subGoalCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.subGoalDone {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+.addSubGoalRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.addSubGoalInput {
+  flex: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+}
+
+.addSubGoalInput:focus {
+  border-color: var(--accent);
+}
+
+.addSubGoalSubmit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.loading {
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .branchesContainer { grid-template-columns: 1fr; }
+  .branchesContainer::before { left: 0; }
+  .itemBoxWrapper:nth-child(odd), .itemBoxWrapper:nth-child(even) { justify-content: flex-start; }
+  .itemBoxWrapper:nth-child(odd) .itemBox, .itemBoxWrapper:nth-child(even) .itemBox {
+    margin-left: 30px;
+    width: calc(100% - 30px);
+  }
+}
