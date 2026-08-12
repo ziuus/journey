@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  padding: 60px 24px 100px;
+  padding: 40px 24px 80px;
   background: var(--bg-primary);
   display: flex;
   flex-direction: column;
@@ -9,11 +9,11 @@
 
 .header {
   width: 100%;
-  max-width: 1100px;
-  margin-bottom: 48px;
+  max-width: 1200px;
+  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .topRow {
@@ -41,11 +41,11 @@
 .titleGroup {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .title {
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--text-primary);
@@ -53,8 +53,8 @@
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: 16px;
-  max-width: 560px;
+  font-size: 15px;
+  max-width: 580px;
 }
 
 .controlsRow {
@@ -66,13 +66,44 @@
   flex-wrap: wrap;
 }
 
+.viewModeToggle {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+}
+
+.viewModeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.viewModeBtnActive {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px var(--shadow-ambient);
+}
+
 /* Pencil Edit Mode Toggle Button */
 .pencilToggleBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 10px;
   border: 1px solid var(--border-color);
   background: var(--card-bg);
@@ -94,13 +125,13 @@
   box-shadow: 0 4px 14px var(--accent-glow);
 }
 
-/* Track Pills Bar (Single Row Scrollable) */
+/* Track Pills Bar */
 .trackTabs {
   display: flex;
   align-items: center;
   gap: 8px;
   overflow-x: auto;
-  padding: 6px 0;
+  padding: 4px 0;
   max-width: 100%;
   scrollbar-width: none;
 }
@@ -136,13 +167,344 @@
   box-shadow: 0 2px 12px var(--accent-glow);
 }
 
-/* Tree Structure */
+/* ─── GRAPH CANVAS VIEWPORT ─────────────────────────────────────── */
+
+.graphCanvasViewport {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 680px;
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(var(--border-color) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px var(--shadow-ambient);
+  display: flex;
+  flex-direction: column;
+}
+
+.canvasToolbar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 4px 16px var(--shadow-ambient);
+}
+
+.toolBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.toolBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.graphContent {
+  position: relative;
+  width: 100%;
+  min-height: 700px;
+  padding: 60px 40px;
+  transition: transform 0.2s ease;
+  transform-origin: center top;
+}
+
+.svgOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bezierCable {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 2px;
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+}
+
+.bezierCableActive {
+  stroke: var(--accent);
+  stroke-width: 2.5px;
+}
+
+.bezierCableDone {
+  stroke: #10b981;
+  stroke-width: 2.5px;
+}
+
+/* ─── NODE GRAPH TREE LAYOUT ───────────────────────────────────── */
+
+.graphTreeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.graphLayerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.graphLayerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  box-shadow: 0 4px 16px var(--shadow-ambient);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.graphLayerNumber {
+  background: var(--accent);
+  color: var(--accent-fg);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.graphNodesRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px 32px;
+  width: 100%;
+}
+
+/* ─── SLEEK GRAPH NODE PILL (Reference Match) ──────────────────── */
+
+.graphNodePill {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 18px 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+  max-width: 280px;
+  z-index: 2;
+  box-shadow: 0 4px 20px var(--shadow-ambient);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.graphNodePill:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 28px var(--accent-glow);
+  transform: translateY(-3px);
+}
+
+.graphNodeSelected {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px var(--accent), 0 10px 30px var(--accent-glow) !important;
+}
+
+.graphNodeDone {
+  background: var(--bg-secondary);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.graphNodeDone:hover {
+  border-color: #10b981;
+  box-shadow: 0 8px 28px rgba(16, 185, 129, 0.25);
+}
+
+.nodeHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nodeTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.nodeDoneTitle {
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.nodeFooterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.nodeSubTaskBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-glow);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* Bottom Node Progress Bar Line (Matching NeetCode / Reference Image) */
+.nodeBottomProgressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--border-color);
+  overflow: hidden;
+}
+
+.nodeBottomProgressFill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.nodeBottomProgressFillDone {
+  background: #10b981 !important;
+}
+
+/* Sub-Tree Branch Container under graph node */
+.graphSubTreeBranch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.graphSubNodesRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.graphSubNodePill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.graphSubNodePill:hover {
+  border-color: var(--accent);
+  background: var(--card-bg);
+}
+
+.graphSubNodeDone {
+  opacity: 0.65;
+  text-decoration: line-through;
+}
+
+/* ─── SIDE INSPECTOR DRAWER ─────────────────────────────────────── */
+
+.inspectorDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 420px;
+  max-width: 90vw;
+  background: var(--card-bg);
+  border-left: 1px solid var(--border-color);
+  z-index: 2500;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  animation: slideLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.inspectorHeader {
+  padding: 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-secondary);
+}
+
+.inspectorBody {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ─── STRUCTURED SPINE VIEW (Fallback List Mode) ─────────────── */
+
 .treeContainer {
   width: 100%;
   max-width: 1100px;
   flex: 1;
-  position: relative;
-  z-index: 1;
 }
 
 .roadmapSpine {
@@ -175,12 +537,6 @@
   transition: all 0.2s ease;
 }
 
-.layerNode:hover {
-  border-color: var(--accent);
-  box-shadow: 0 8px 24px var(--accent-glow);
-  transform: translateY(-2px);
-}
-
 .layerTitle {
   font-size: 17px;
   font-weight: 800;
@@ -201,7 +557,6 @@
   font-weight: 800;
   font-size: 14px;
   border: 1px solid var(--accent);
-  box-shadow: 0 2px 10px var(--accent-glow);
 }
 
 .branchesContainer {
@@ -355,7 +710,8 @@
 }
 
 .isEditMode .layerNode:hover .hoverActions,
-.isEditMode .itemBox:hover .hoverActions {
+.isEditMode .itemBox:hover .hoverActions,
+.isEditMode .graphNodePill:hover .hoverActions {
   opacity: 1;
   pointer-events: auto;
 }
@@ -389,7 +745,7 @@
   outline: none;
 }
 
-.checkIcon { color: var(--accent); }
+.checkIcon { color: #10b981; }
 .pendingIcon { color: var(--text-muted); }
 
 .spineConnector {
@@ -416,18 +772,15 @@
     margin-left: 30px;
     width: calc(100% - 30px);
   }
-  
   .itemBoxWrapper:nth-child(odd)::after, .itemBoxWrapper:nth-child(even)::after {
     left: 0;
     width: 30px;
   }
-  
   .itemBoxWrapper:nth-child(odd)::before, .itemBoxWrapper:nth-child(even)::before {
     left: -6px;
   }
 }
 
-/* Subtree & Sub-task Styles */
 .subTaskProgress {
   display: inline-flex;
   align-items: center;
@@ -703,5 +1056,3 @@ input:focus-visible {
   outline: 2px solid var(--accent) !important;
   outline-offset: 2px !important;
 }
-
-
