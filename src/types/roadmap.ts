@@ -117,6 +117,8 @@ export interface RawRoadmapItem {
   };
   /** Type of work: 'deep_work' | 'interview_prep' | 'project' | 'light_review' | 'other' */
   work_type?: string;
+  /** Sub-tasks / sub-nodes for nested subtree breakdown */
+  children?: RawRoadmapItem[];
 }
 
 // ─── Layer ────────────────────────────────────────────────────

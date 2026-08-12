@@ -42,31 +42,19 @@ export default function Home() {
     });
   };
 
-  const toggleItem = async (itemId: string) => {
-    if (!data) return;
-    const newData: RawRoadmapData = JSON.parse(JSON.stringify(data));
-    let updated = false;
-
-    for (const layer of newData.layers) {
-      const item = layer.items.find((i) => i.id === itemId);
-      if (item) {
-        item.status = item.status === "done" ? "pending" : "done";
-        updated = true;
-        break;
+  const toggleItem = async (itemId: string, currentStatus?: string) => {
+    const nextStatus = currentStatus === "done" ? "pending" : "done";
+    try {
+      const res = await fetch(`/api/roadmap/item?userId=local_user`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itemId, updates: { status: nextStatus } }),
+      });
+      if (res.ok) {
+        await fetchRoadmap();
       }
-    }
-
-    if (updated) {
-      setData(newData);
-      try {
-        await fetch(`/api/roadmap?userId=local_user`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newData),
-        });
-      } catch (err) {
-        console.error("Failed to sync changes:", err);
-      }
+    } catch (err) {
+      console.error("Failed to toggle item status:", err);
     }
   };
 
@@ -284,7 +272,7 @@ export default function Home() {
                   {layer.items.map((item) => (
                     <div
                       key={item.id}
-                      onClick={() => toggleItem(item.id)}
+                      onClick={() => toggleItem(item.id, item.status)}
                       style={{
                         display: "flex",
                         alignItems: "center",

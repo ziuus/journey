@@ -2,16 +2,110 @@ import { NextResponse } from 'next/server';
 import { getRoadmap, saveRoadmap } from '@/lib/storage';
 import type { RawRoadmapData, RawRoadmapItem, RawLayerData } from '@/types/roadmap';
 
-function findItemRecursive(
-  layers: RawLayerData[],
+/**
+ * Recursively search an array of RawRoadmapItem for target itemId.
+ * Returns the target item and an array of ancestors ordered from immediate parent to root parent.
+ */
+function findInItemsRecursive(
+  items: RawRoadmapItem[],
   itemId: string,
-): RawRoadmapItem | null {
-  for (const layer of layers) {
-    for (const item of layer.items) {
-      if (item.id === itemId) return item;
+  ancestors: RawRoadmapItem[] = []
+): { target: RawRoadmapItem | null; ancestors: RawRoadmapItem[] } {
+  for (const item of items) {
+    if (item.id === itemId) {
+      return { target: item, ancestors };
+    }
+    if (item.children && item.children.length > 0) {
+      const res = findInItemsRecursive(item.children, itemId, [item, ...ancestors]);
+      if (res.target) return res;
     }
   }
-  return null;
+  return { target: null, ancestors: [] };
+}
+
+/**
+ * Searches across all sections of RawRoadmapData (layers, milestones, mlops_devops, security_ethics).
+ */
+function findItemAndAncestors(
+  data: RawRoadmapData,
+  itemId: string
+): { target: RawRoadmapItem | null; ancestors: RawRoadmapItem[] } {
+  // Search layers
+  if (data.layers) {
+    for (const layer of data.layers) {
+      if (layer.items) {
+        const res = findInItemsRecursive(layer.items, itemId, []);
+        if (res.target) return res;
+      }
+    }
+  }
+
+  // Search top-level collections
+  const extraCollections = [data.milestones, data.mlops_devops, data.security_ethics];
+  for (const collection of extraCollections) {
+    if (collection && Array.isArray(collection)) {
+      const res = findInItemsRecursive(collection, itemId, []);
+      if (res.target) return res;
+    }
+  }
+
+  return { target: null, ancestors: [] };
+}
+
+/**
+ * Recursively sets status and auto-timestamps for item and all nested descendants.
+ */
+function setStatusRecursively(
+  item: RawRoadmapItem,
+  status: RawRoadmapItem['status'],
+  dateStr: string
+) {
+  item.status = status;
+  if (status === 'done') {
+    item.completed_at = dateStr;
+    if (!item.last_worked_on) item.last_worked_on = dateStr;
+  } else if (status === 'active') {
+    item.last_worked_on = dateStr;
+    delete item.completed_at;
+  } else if (status === 'pending') {
+    delete item.completed_at;
+  }
+
+  if (item.children && item.children.length > 0) {
+    for (const child of item.children) {
+      setStatusRecursively(child, status, dateStr);
+    }
+  }
+}
+
+/**
+ * Propagates completion/active status upward through ancestor chain.
+ */
+function propagateStatusUpward(ancestors: RawRoadmapItem[], dateStr: string) {
+  for (const parent of ancestors) {
+    if (!parent.children || parent.children.length === 0) continue;
+
+    const allDone = parent.children.every((c) => c.status === 'done');
+    if (allDone) {
+      parent.status = 'done';
+      parent.completed_at = dateStr;
+    } else {
+      const anyActiveOrDone = parent.children.some(
+        (c) => c.status === 'active' || c.status === 'done'
+      );
+      if (anyActiveOrDone) {
+        if (parent.status === 'pending' || parent.status === 'done') {
+          parent.status = 'active';
+          delete parent.completed_at;
+        }
+      } else {
+        if (parent.status === 'done' || parent.status === 'active') {
+          parent.status = 'pending';
+          delete parent.completed_at;
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -25,14 +119,9 @@ function findItemRecursive(
  *     next_action?: string,
  *     snoozed_until?: string,
  *     notes?: string,
+ *     children?: RawRoadmapItem[]
  *   }
  * }
- *
- * Auto-timestamps:
- *   status → "active"   → last_worked_on = today
- *   status → "done"     → completed_at = today
- *   status → "blocked"  → blocked_metadata = { blocked_at: today, reason: ... }
- *   snoozed_until set   → status = "pending" (implicitly)
  */
 export async function PATCH(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -59,7 +148,7 @@ export async function PATCH(request: Request) {
 
   try {
     const data = await getRoadmap(userId);
-    const target = findItemRecursive(data.layers, itemId);
+    const { target, ancestors } = findItemAndAncestors(data, itemId);
 
     if (!target) {
       return NextResponse.json({ error: `Item "${itemId}" not found` }, { status: 404 });
@@ -67,25 +156,25 @@ export async function PATCH(request: Request) {
 
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
-    // ─── Apply status changes with auto-timestamps ──────────
-    const status = updates.status as string | undefined;
+    // ─── Apply status changes with auto-timestamps & child propagation ───
+    const status = updates.status as RawRoadmapItem['status'] | undefined;
 
     if (status && status !== target.status) {
-      target.status = status as RawRoadmapItem['status'];
-
-      if (status === 'active') {
+      if (status === 'done') {
+        setStatusRecursively(target, 'done', today);
+      } else if (status === 'pending') {
+        setStatusRecursively(target, 'pending', today);
+      } else if (status === 'active') {
+        target.status = 'active';
         target.last_worked_on = today;
-      } else if (status === 'done') {
-        target.completed_at = today;
-        if (!target.last_worked_on) target.last_worked_on = today;
+        delete target.completed_at;
       } else if (status === 'blocked') {
-        // Add blocked metadata if not present
+        target.status = 'blocked';
         const blockedMeta = target.blocked_metadata ?? {};
         blockedMeta.blocked_at = today;
         blockedMeta.reason = (updates.notes as string) ?? 'Manually blocked';
         target.blocked_metadata = blockedMeta;
       }
-      // 'pending' — no timestamp change needed
     }
 
     // ─── Apply snoozed_until ─────────────────────────────────
@@ -97,20 +186,24 @@ export async function PATCH(request: Request) {
           target.status = 'pending';
         }
       } else {
-        // Clear snooze
         delete target.snoozed_until;
       }
     }
 
-    // ─── Apply next_action ──────────────────────────────────
+    // ─── Apply next_action, notes, children ─────────────────
     if (updates.next_action !== undefined) {
-      const na = updates.next_action as string;
-      target.next_action = na || '';
+      target.next_action = (updates.next_action as string) || '';
     }
-
-    // ─── Apply notes ─────────────────────────────────────────
     if (updates.notes !== undefined) {
       target.notes = (updates.notes as string) || '';
+    }
+    if (updates.children !== undefined && Array.isArray(updates.children)) {
+      target.children = updates.children as RawRoadmapItem[];
+    }
+
+    // ─── Auto-update parent/ancestor completion status ──────────
+    if (ancestors.length > 0) {
+      propagateStatusUpward(ancestors, today);
     }
 
     // ─── Persist ────────────────────────────────────────────
@@ -119,9 +212,10 @@ export async function PATCH(request: Request) {
     return NextResponse.json({
       success: true,
       item: target,
+      parent: ancestors[0] ?? undefined,
     });
   } catch (err) {
-    console.error('API PATCH Error:', err);
-    return NextResponse.json({ error: 'Failed to update item' }, { status: 500 });
+    console.error('Failed to update item:', err);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

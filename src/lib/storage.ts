@@ -1,5 +1,7 @@
-import fs from "node:fs/promises";
+import fs from "node:fs";
+import fsp from "node:fs/promises";
 import path from "node:path";
+import os from "node:os";
 import type { RawRoadmapData, RawRoadmapItem, RawLayerData } from "@/types/roadmap";
 
 type Primitive = string | number | boolean | null;
@@ -45,7 +47,13 @@ export interface HistoryData {
   activeChatId?: string;
 }
 
-const DATA_DIR = process.env.JOURNEY_DATA_PATH || path.join(process.cwd(), "data");
+const USER_JOURNEY_DATA = path.join(os.homedir(), ".journey", "data");
+const DATA_DIR =
+  process.env.JOURNEY_DATA_PATH ||
+  (fs.existsSync(path.join(USER_JOURNEY_DATA, "roadmap.json"))
+    ? USER_JOURNEY_DATA
+    : path.join(process.cwd(), "data"));
+
 const TEMPLATE_PATH = path.join(DATA_DIR, "roadmap.json");
 const HISTORY_PATH = path.join(DATA_DIR, "history.json");
 const PROGRESS_HISTORY_PATH = path.join(DATA_DIR, "progress_history.json");
@@ -74,7 +82,7 @@ function getDocumentId(userId: string) {
 }
 
 async function readTemplateRoadmap(): Promise<RawRoadmapData> {
-  const data = await fs.readFile(TEMPLATE_PATH, "utf-8");
+  const data = await fsp.readFile(TEMPLATE_PATH, "utf-8");
   return JSON.parse(data) as RawRoadmapData;
 }
 
@@ -239,7 +247,7 @@ export async function saveRoadmap(userId: string, data: RawRoadmapData) {
   if (didWriteToFirestore) return;
 
   try {
-    await fs.writeFile(TEMPLATE_PATH, JSON.stringify(data, null, 2));
+    await fsp.writeFile(TEMPLATE_PATH, JSON.stringify(data, null, 2));
     return;
   } catch (err) {
     console.error("Failed to write to local storage:", err);
@@ -261,7 +269,7 @@ export async function getHistory(userId: string): Promise<HistoryData> {
 
   try {
     const historyPath = path.join(process.cwd(), "data", "history.json");
-    const data = await fs.readFile(historyPath, "utf-8");
+    const data = await fsp.readFile(historyPath, "utf-8");
     return JSON.parse(data) as HistoryData;
   } catch (err) {
     return HISTORY_TEMPLATE;
@@ -278,7 +286,7 @@ export async function saveHistory(userId: string, data: HistoryData) {
 
   try {
     const historyPath = path.join(process.cwd(), "data", "history.json");
-    await fs.writeFile(historyPath, JSON.stringify(data, null, 2));
+    await fsp.writeFile(historyPath, JSON.stringify(data, null, 2));
     return;
   } catch (err) {
     console.error("Failed to write history to local storage:", err);
