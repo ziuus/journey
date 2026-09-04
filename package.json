@@ -1,6 +1,6 @@
 {
   "name": "@ziuus/journey",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "A universal goal-tracking engine with a Next.js portal, MCP server, and local-first data model.",
   "author": "ziuus",
   "license": "MIT",
@@ -58,12 +58,12 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.10.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "typescript": "^5.6.0"
   }
 }
