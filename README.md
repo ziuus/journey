@@ -67,6 +67,7 @@
 
 ## Quick Start
 
+
 ### 1. Installation
 
 Install Journey globally via npm:
