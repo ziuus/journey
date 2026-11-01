@@ -289,6 +289,45 @@ When connected, AI agents automatically discover and execute these 3 tools:
 
 ---
 
+## Journey Roadmap Skill (Hermes Agent)
+
+For users of **Hermes Agent**, a comprehensive skill is available that provides full workflow guidance for maintaining and auditing your roadmap:
+
+**Location**: `agent-skills/journey/SKILL.md` in this repository.
+
+**What the skill covers**:
+- Complete v3 schema with minimal format (`id`, `title`, `status`, `notes`, `track` + optional execution fields)
+- Dual-goal system: ₹50 LPA in 12 months + Top AI/Systems Engineer in 5 years
+- Execution Dashboard scoring algorithm (5 daily slots, 5 dashboard sections)
+- Interactive PATCH API (`/api/roadmap/item`) — Start/Done/Snooze/Block/Next actions
+- Roadmap Engine 4 views: DAG Graph, Ladder, List, Table + nested sub-trees
+- MCP tool limitations (only 3 operations supported — structural changes require direct JSON edit)
+- Bulk migration scripts for 50+ items (badge stripping, enrichment, layer consolidation)
+- Verification procedures: build → browser (all 4 views) → MCP check
+- 50+ documented pitfalls
+
+**To use the skill in Hermes**:
+
+```bash
+# Option 1: Copy to your Hermes profile (one-time)
+cp -r agent-skills/journey ~/.hermes/skills/journey-roadmap
+
+# Option 2: Symlink from a shared dotfiles repo
+ln -s $(pwd)/agent-skills/journey ~/.hermes/skills/journey-roadmap
+```
+
+Then in Hermes, the skill auto-loads when you mention "journey roadmap", "update our journey", "add missing goals", "sync resume gaps", "career audit", etc.
+
+**Key triggers** (from skill):
+- `update our journey` / `add missing goals` / `sync resume gaps into journey`
+- `check the roadmap` / `adding or removing roadmap items`
+- `career or skill audit` / `execution dashboard work`
+- `roadmap engine` / `sub-tree` / `multi-view (DAG / Ladder / List / Table)`
+
+**For non-Hermes agents** (Claude Code, OpenCode, Cursor, etc.): The MCP tools (`get_roadmap`, `add_goal`, `update_item_status`) work directly — no skill needed. For structural changes (delete layer, rename, move items), edit `~/.journey/data/roadmap.json` directly using Python `execute_code` (see skill for patterns).
+
+---
+
 ## Direct File Reference (For Non-MCP Agents)
 
 For agents without native MCP support (e.g. Gemini CLI, ChatGPT Web, custom scripts), simply inform your agent:
