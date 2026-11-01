@@ -57,7 +57,7 @@ readlink -f $(which journey)     # → ~/.npm-global/lib/node_modules/@ziuus/jou
 ```
 The personal roadmap lives at `~/.journey/data/roadmap.json` (user-specific — **never** the repo template at `~/Projects/journey/data/roadmap.json`). The global npm package at `~/.npm-global/lib/node_modules/@ziuus/journey` is the source of truth for the web UI and MCP server.
 
-**Repo skill note**: The journey GitHub repo (`github.com/ziuus/journey`) contains a minimal agent skill at `agent-skills/journey/SKILL.md` (23 lines, basic MCP usage only). It is **excluded from the npm package** via `.npmignore` and is NOT a substitute for this comprehensive skill.
+**Repo skill (updated 2026-11-01)**: The journey GitHub repo (`github.com/ziuus/journey`) now contains the **comprehensive skill** at `agent-skills/journey/SKILL.md` (600+ lines, identical to this Hermes profile skill). It is **included in the npm package** (not excluded by `.npmignore`). The README documents it under "Journey Roadmap Skill (Hermes Agent)" with copy/symlink instructions. **Keep both locations in sync**: after any significant update to either the Hermes profile skill or the repo skill, copy the updated file to the other location and commit/push the repo. Run `diff` to verify they're identical before declaring sync complete.
 
 ### Large File Writing Workaround
 
