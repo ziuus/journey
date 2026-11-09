@@ -17,6 +17,10 @@
   Journey is a local-first goal tracking and mastery engine with a Next.js web portal and a built-in MCP server. It manages skill trees, mastery roadmaps, and daily task priorities through a single JSON file (<code>~/.journey/data/roadmap.json</code>) accessible by both humans and AI agents in real time.
 </p>
 
+> Building this in the open — if it saves you time, a star helps others find it.
+> Found a bug, or have an idea? [Open an issue](https://github.com/ziuus/journey/issues).
+> Bug reports and goal-tree / MCP ideas welcome.
+
 ---
 
 <p align="center">
