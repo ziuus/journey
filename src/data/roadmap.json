@@ -1,0 +1,364 @@
+{
+  "version": "2.1",
+  "source": "Airtribe AI-First Software Engineering Program + Custom Rust Track",
+  "programDuration": "24 weeks",
+  "lastUpdated": "2026-10-31",
+  "layers": [
+    {
+      "id": "layer1",
+      "title": "Phase 1: Core Backend Engineering with AI-Assisted Development",
+      "description": "Master backend fundamentals with AI coding agents integrated from day one. Choose one track.",
+      "tracks": [
+        {
+          "id": "java-spring",
+          "name": "Java & Spring Boot Track",
+          "modules": [
+            { "id": "m1", "title": "Backend Systems & the Java Runtime", "topics": ["HTTP", "Web Architecture", "JVM", "Memory Management"] },
+            { "id": "m2", "title": "Object-Oriented Java", "topics": ["Classes", "Interfaces", "Encapsulation", "Inheritance", "Polymorphism"] },
+            { "id": "m3", "title": "API Development with Spring Boot", "topics": ["Controllers", "Services", "Dependency Injection"] },
+            { "id": "m4", "title": "Relational Data with JPA", "topics": ["Entity Modeling", "Hibernate", "Queries", "Transactions"] },
+            { "id": "m5", "title": "API Contracts", "topics": ["Validation", "Error Handling", "Pagination"] },
+            { "id": "m6", "title": "Testing Java Services", "topics": ["JUnit", "Mockito", "Spring Test", "Integration Testing"] },
+            { "id": "m7", "title": "Authentication & Application Security", "topics": ["JWT", "OAuth", "RBAC", "Secure API Design"] },
+            { "id": "m8", "title": "Working with AI Coding Agents", "topics": ["Repository Context", "Change Plans", "Tests", "Diff Review"] },
+            { "id": "m9", "title": "Concurrency & Performance", "topics": ["Threads", "Async Processing", "Caching", "Profiling"] },
+            { "id": "m10", "title": "Taking a Java Service Live", "topics": ["Logging", "Health Checks", "Deployment"] }
+          ]
+        },
+        {
+          "id": "js-node",
+          "name": "JavaScript & Node.js Track",
+          "modules": [
+            { "id": "m1", "title": "Backend Systems & the Node.js Runtime", "topics": ["HTTP", "Modules", "Event Loop", "Non-blocking I/O"] },
+            { "id": "m2", "title": "Modern JavaScript", "topics": ["Functions", "Closures", "Promises", "async/await", "Error Handling"] },
+            { "id": "m3", "title": "Building Services with Node.js & Express", "topics": ["Routing", "Middleware", "Service Structure"] },
+            { "id": "m4", "title": "Data Modeling with MongoDB", "topics": ["Schemas", "Mongoose", "Indexes", "Query Design"] },
+            { "id": "m5", "title": "API Contracts", "topics": ["Validation", "Error Handling", "Pagination", "OpenAPI Documentation"] },
+            { "id": "m6", "title": "Authentication & Application Security", "topics": ["JWT", "RBAC", "Rate Limiting", "Input Security"] },
+            { "id": "m7", "title": "Testing Node.js Services", "topics": ["Jest", "Supertest", "Mocks", "Integration Testing"] },
+            { "id": "m8", "title": "Working with AI Coding Agents", "topics": ["Codebase Navigation", "Change Plans", "Tests", "Diff Review"] },
+            { "id": "m9", "title": "Event-Driven Backend Systems", "topics": ["Streams", "WebSockets"] },
+            { "id": "m10", "title": "Taking a Node.js Service Live", "topics": ["Performance", "Logging", "Health Checks", "Deployment"] }
+          ]
+        },
+        {
+          "id": "python-django",
+          "name": "Python & Django Track",
+          "modules": [
+            { "id": "m1", "title": "Python for Backend Engineering", "topics": ["OOP", "Iterators", "Packaging", "Environments"] },
+            { "id": "m2", "title": "Django Architecture", "topics": ["Applications", "Settings", "Middleware", "Request Lifecycle"] },
+            { "id": "m3", "title": "API Development with Django REST Framework", "topics": ["Serializers", "Views", "Validation"] },
+            { "id": "m4", "title": "Building with FastAPI", "topics": ["Routing", "Pydantic Schemas", "Dependency Injection", "Auto API Docs", "DRF Comparison"] },
+            { "id": "m5", "title": "Relational Data with Django ORM", "topics": ["Models", "Relations", "Migrations", "Transactions"] },
+            { "id": "m6", "title": "API Contracts", "topics": ["Filtering", "Pagination", "Error Handling", "OpenAPI Documentation"] },
+            { "id": "m7", "title": "Authentication & Application Security", "topics": ["JWT", "Permissions", "RBAC", "Rate Limiting"] },
+            { "id": "m8", "title": "Testing Django Services", "topics": ["Pytest", "Fixtures", "Factories", "Integration Testing"] },
+            { "id": "m9", "title": "Working with AI Coding Agents", "topics": ["Repository Context", "Change Plans", "Tests", "Diff Review"] },
+            { "id": "m10", "title": "Background Work & Performance", "topics": ["Celery", "Redis", "Retries", "Caching", "Query Profiling"] },
+            { "id": "m11", "title": "Taking a Python Service Live", "topics": ["Performance", "Logging", "Health Checks", "Deployment"] }
+          ]
+        },
+        {
+          "id": "rust-axum",
+          "name": "Rust & Axum Track",
+          "modules": [
+            { "id": "m1", "title": "Backend Systems & the Rust Runtime", "topics": ["HTTP", "Web Architecture", "Ownership", "Borrowing", "Lifetimes", "Memory Safety Without GC"] },
+            { "id": "m2", "title": "Async Rust & Tokio", "topics": ["Futures", "Async/Await", "Tokio Runtime", "Tasks", "Backpressure", "Cancellation Safety"] },
+            { "id": "m3", "title": "Building Services with Axum", "topics": ["Routing", "Extractors", "Middleware", "State Management", "Error Handling", "OpenAPI with utoipa"] },
+            { "id": "m4", "title": "Data Modeling with SQLx & PostgreSQL", "topics": ["Compile-Time Checked Queries", "Migrations", "Connection Pooling", "Transactions", "Row Mapping"] },
+            { "id": "m5", "title": "API Contracts", "topics": ["Validation with validator", "Error Handling", "Pagination", "OpenAPI Documentation", "Versioning"] },
+            { "id": "m6", "title": "Authentication & Application Security", "topics": ["JWT with jsonwebtoken", "OAuth2", "RBAC", "Rate Limiting with governor", "Input Sanitization"] },
+            { "id": "m7", "title": "Testing Rust Services", "topics": ["Unit Tests", "Integration Tests with testcontainers", "Mocking with mockall", "Property-Based Testing with proptest"] },
+            { "id": "m8", "title": "Working with AI Coding Agents", "topics": ["Repository Context", "Change Plans", "Tests", "Diff Review", "Rust Analyzer Integration"] },
+            { "id": "m9", "title": "Concurrency & Performance", "topics": ["Lock-Free Data Structures", "Channels", "Rayon for Parallelism", "Profiling with perf/flamegraph", "Zero-Cost Abstractions"] },
+            { "id": "m10", "title": "Taking a Rust Service Live", "topics": ["Logging with tracing", "Metrics with prometheus", "Health Checks", "Docker Multi-Stage Builds", "Deployment to AWS/GCP/K8s"] }
+          ]
+        }
+      ],
+      "status": "pending",
+      "estimatedWeeks": 6
+    },
+    {
+      "id": "layer2",
+      "title": "Phase 2: Low-Level Design (LLD) & AI-Assisted Engineering",
+      "description": "Design maintainable, production-grade software. Learn to write specs that AI agents can execute reliably.",
+      "modules": [
+        { "id": "m1", "title": "Requirement Clarification & Domain Modeling", "topics": ["Actors", "Use Cases", "Entities", "Invariants", "Ambiguity Resolution", "Bounded Contexts", "Event Storming"] },
+        { "id": "m2", "title": "Object-Oriented Design", "topics": ["Responsibilities", "Abstractions", "Cohesion", "Coupling", "Law of Demeter", "Testability", "God Object Prevention"] },
+        { "id": "m3", "title": "Designing Stable Software", "topics": ["SOLID Under Trade-offs", "Dependency Inversion", "Plugin Architectures", "Composition over Inheritance"] },
+        { "id": "m4", "title": "Design Patterns in Context", "topics": ["Selection", "Trade-offs", "Anti-patterns", "Pattern Combination (Strategy+Factory+Observer)"] },
+        { "id": "m5", "title": "Applied LLD & Machine Coding", "topics": ["State", "Persistence", "Concurrency", "Failure Handling", "Concurrency-Safe State Machines", "Locking Strategies", "Idempotent Write Paths"] },
+        { "id": "m6", "title": "Spec-Driven Engineering with AI Agents", "topics": ["Agent-Executable Specs", "Invariants", "Acceptance Criteria", "Adversarial Code Review", "Spec-to-Test-to-Code Loops"] }
+      ],
+      "status": "pending",
+      "estimatedWeeks": 4
+    },
+    {
+      "id": "layer3",
+      "title": "Phase 3: Applied AI Engineering",
+      "description": "Build production-ready AI systems: RAG, agents, evals, safety, and observability.",
+      "modules": [
+        { "id": "m1", "title": "Agentic Software Development", "topics": ["Planning", "Task Delegation", "Code Review", "Verification"] },
+        { "id": "m2", "title": "LLM Application Foundations", "topics": ["Model Behavior", "Tokens", "Model Selection", "Prompting", "Structured Outputs"] },
+        { "id": "m3", "title": "Context Engineering", "topics": ["System Instructions", "Context Assembly", "Memory", "Tool Outputs", "Context Compression", "Token Budgets"] },
+        { "id": "m4", "title": "Reliable Model Integrations", "topics": ["Streaming", "Schema Validation", "Timeouts", "Retries", "Rate Limits", "Provider Fallbacks"] },
+        { "id": "m5", "title": "Retrieval-Augmented Generation (RAG)", "topics": ["Embeddings", "Chunking", "Hybrid Search", "Reranking", "Citations"] },
+        { "id": "m6", "title": "Agents & Tool Use", "topics": ["Function Calling", "MCP", "Orchestration", "State", "Human Approval"] },
+        { "id": "m7", "title": "AI Evals & Quality Measurement", "topics": ["Golden Datasets", "Task-Specific Metrics", "LLM-as-Judge", "Human Review", "Regression Gates"] },
+        { "id": "m8", "title": "AI Safety, Observability & Operations", "topics": ["Guardrails", "Prompt Injection", "Data Security", "Tracing", "Monitoring", "Latency", "Cost"] }
+      ],
+      "status": "pending",
+      "estimatedWeeks": 5
+    },
+    {
+      "id": "layer4",
+      "title": "Phase 4: Data Modeling, Databases & Retrieval Systems",
+      "description": "Master data systems at scale — from relational modeling to vector retrieval for AI.",
+      "modules": [
+        { "id": "m1", "title": "Data Modeling for Production Systems", "topics": ["Entities", "Relationships", "Normalization", "Constraints"] },
+        { "id": "m2", "title": "Transactions & Consistency", "topics": ["ACID", "Isolation Levels", "Locking", "Concurrent Updates"] },
+        { "id": "m3", "title": "Advanced SQL & Query Performance", "topics": ["Joins", "Window Functions", "Indexes", "Execution Plans"] },
+        { "id": "m4", "title": "Scaling Data Systems", "topics": ["Caching", "Replication", "Partitioning", "NoSQL", "Read/Write Trade-offs"] },
+        { "id": "m5", "title": "Retrieval Systems for AI", "topics": ["Vector Indexes", "Hybrid Search", "Metadata Filtering", "Permissions"] }
+      ],
+      "status": "pending",
+      "estimatedWeeks": 4
+    },
+    {
+      "id": "layer5",
+      "title": "Phase 5: High-Level System Design & Production Architecture",
+      "description": "Architect scalable, reliable, AI-integrated systems. Senior/Staff-level design thinking.",
+      "modules": [
+        { "id": "m1", "title": "System Design Foundations", "topics": ["Functional/Non-Functional Requirements", "Capacity Estimation", "API/Data Flows", "Bottleneck Analysis", "Back-of-Envelope Estimation", "Tail-Latency Planning"] },
+        { "id": "m2", "title": "Scaling Web Systems", "topics": ["Horizontal/Vertical Scaling", "Load Balancing", "Multi-Layer Caching", "Cache Invalidation", "Adaptive Rate Limiting", "Hot Partition Mitigation"] },
+        { "id": "m3", "title": "Data Stores & Distributed Data", "topics": ["SQL vs NoSQL", "Replication", "Sharding", "Consistent Hashing", "CAP", "Consistency Trade-offs", "Cross-Shard Transactions"] },
+        { "id": "m4", "title": "Service Architecture & Real-Time Systems", "topics": ["Service Boundaries", "Monoliths vs Microservices", "API Gateways", "Queues", "Streams", "WebSockets", "Saga Pattern", "Event Sourcing", "CQRS"] },
+        { "id": "m5", "title": "Reliability & Failure Recovery", "topics": ["Timeouts", "Retries", "Idempotency", "Circuit Breakers", "Failover", "Disaster Recovery", "Cascading Failure Prevention", "Chaos Engineering", "Multi-Region Active-Active"] },
+        { "id": "m6", "title": "Architecting AI-Integrated Systems", "topics": ["Model Gateways", "Retrieval Services", "Agent Runtimes", "Eval Pipelines", "Long-Running Workflows", "Model Routing", "Cost-Aware Routing", "Guardrails at Scale"] },
+        { "id": "m7", "title": "Production Architecture & Operations", "topics": ["Multi-Tenancy", "Security", "Observability", "SLOs", "Cost Controls", "Incident Response", "Tenant Isolation", "Zero-Trust", "Distributed Tracing", "SLO-Driven Alerting"] },
+        { "id": "m8", "title": "System Design Case Studies", "topics": ["High-Concurrency Booking", "Personalized Feeds", "Real-Time Messaging", "Production RAG at 10K+ QPS"] }
+      ],
+      "status": "pending",
+      "estimatedWeeks": 5
+    },
+    {
+      "id": "layer6",
+      "title": "Phase 6: Forward Deployed Engineering & Applied AI Systems",
+      "description": "Ship AI systems directly with customers. End-to-end ownership from discovery to production handoff.",
+      "modules": [
+        { "id": "m1", "title": "FDE Discovery, Scope & Applied AI Architecture", "topics": ["Customer Workflow Mapping", "Constraint Identification", "Success Metrics", "Rules vs Automation vs RAG vs Agents Decision Framework"] },
+        { "id": "m2", "title": "Customer Workflow Build: Backend, RAG/Agents & Integrations", "topics": ["APIs", "Ingestion Pipelines", "Retrieval", "Tool-Calling Workflows", "External Systems", "Queues", "Enterprise Data"] },
+        { "id": "m3", "title": "Deployment Readiness: AI Evals, Guardrails & Observability", "topics": ["Evaluation Datasets", "Failure-Case Testing", "Approval Boundaries", "Monitoring for Quality/Latency/Cost/Workflow Failures"] },
+        { "id": "m4", "title": "Production Deployment, Handoff & Field Readiness", "topics": ["Containerization", "Deployment", "Pilot Runs", "Rollback Procedures", "Incident Procedures", "Documentation", "Operational Ownership Handoff"] }
+      ],
+      "status": "pending",
+      "estimatedWeeks": 4
+    },
+    {
+      "id": "layer7",
+      "title": "Data Structures, Algorithms & Interview Problem Solving",
+      "description": "Parallel track running throughout the program. Build interview-ready problem-solving skills.",
+      "sections": [
+        { "id": "s1", "title": "Complexity & Brute-to-Optimal Thinking", "topics": ["Time/Space Complexity", "Complexity Trade-offs", "Framework for Improving Brute-Force Solutions"] },
+        { "id": "s2", "title": "Core Linear Patterns", "topics": ["Arrays", "Hashing", "Prefix Sums", "Two Pointers", "Sliding Windows", "Binary Search", "Stacks", "Queues", "Deques"] },
+        { "id": "s3", "title": "Linked Structures, Recursion & Backtracking", "topics": ["Linked-List Transformations", "Slow/Fast Pointers", "Recursion Trees", "Subsets", "Permutations", "Pruning", "Constraint-Based Search"] },
+        { "id": "s4", "title": "Trees, BSTs & Tries", "topics": ["Recursive/Iterative Traversals", "BFS/DFS", "Tree Decomposition", "LCA", "BST Validation", "Prefix Search"] },
+        { "id": "s5", "title": "Heaps, Intervals, Greedy & Bit Manipulation", "topics": ["Top-K Selection", "Two-Heap Patterns", "Sweep-Line", "Scheduling", "Greedy Proofs", "Compact State"] },
+        { "id": "s6", "title": "Graph Algorithms & Connectivity", "topics": ["Graph Modeling", "BFS/DFS", "Topological Sort", "Cycle Detection", "Dijkstra", "Union-Find", "Weighted Shortest Paths"] },
+        { "id": "s7", "title": "Dynamic Programming", "topics": ["State Design", "Memoization", "Tabulation", "Knapsack Variants", "String/Grid DP", "Tree DP", "State-Machine Problems"] },
+        { "id": "s8", "title": "Integrated Interview Practice", "topics": ["Mixed-Pattern Solving", "Machine-Coding Framing", "Complexity Defense", "Timed Practice", "Structured Communication"] },
+        { "id": "s9", "title": "Optional Advanced DSA", "topics": ["Bellman-Ford", "MST", "Interval DP", "Bitmasking", "KMP/Rabin-Karp", "Fenwick Trees", "Segment Trees", "Tree Serialization"] }
+      ],
+      "status": "pending",
+      "estimatedWeeks": "ongoing"
+    }
+  ],
+  "milestones": [
+    { "id": "milestone1", "title": "Track Selection & Environment Setup", "description": "Choose Java/Node.js/Python/Rust track. Set up IDE, AI coding agents (Cursor, GitHub Copilot, Hermes), Git workflow.", "layer": "layer1", "status": "pending", "week": 1 },
+    { "id": "milestone2", "title": "First Production-Grade API Live", "description": "Complete Phase 1 capstone: deploy a REST API with authentication, database, testing, and AI-assisted development.", "layer": "layer1", "status": "pending", "week": 6 },
+    { "id": "milestone3", "title": "LLD Machine Coding Fluency", "description": "Complete Phase 2: Design and implement a complex system (rate limiter, LRU cache, job scheduler) with AI spec-driven workflow.", "layer": "layer2", "status": "pending", "week": 10 },
+    { "id": "milestone4", "title": "Production RAG System Shipped", "description": "Complete Phase 3: Build a RAG pipeline with hybrid search, citations, evals, and guardrails. Deploy with observability.", "layer": "layer3", "status": "pending", "week": 15 },
+    { "id": "milestone5", "title": "Distributed Data Systems Mastery", "description": "Complete Phase 4: Implement sharding, replication, vector retrieval, and caching layers for AI workloads.", "layer": "layer4", "status": "pending", "week": 19 },
+    { "id": "milestone6", "title": "System Design Case Study Portfolio", "description": "Complete Phase 5: Document 4 production case studies (booking, feeds, messaging, RAG) with architecture decisions and trade-offs.", "layer": "layer5", "status": "pending", "week": 24 },
+    { "id": "milestone7", "title": "Forward Deployed Pilot Delivery", "description": "Complete Phase 6: Ship an AI system for a real/simulated customer with evals, guardrails, rollback procedures, and handoff docs.", "layer": "layer6", "status": "pending", "week": 24 },
+    { "id": "milestone8", "title": "DSA Interview Ready", "description": "Complete all 8 core DSA sections + integrated practice. Solve 200+ problems with complexity defense.", "layer": "layer7", "status": "pending", "week": 24 },
+    { "id": "milestone9", "title": "Capstone Project: AI-Powered Backend System", "description": "End-to-end capstone integrating all phases: backend + AI + data + system design + deployment. Portfolio centerpiece.", "layer": "capstone", "status": "pending", "week": 24 },
+    { "id": "milestone10", "title": "Career Transition: Interview Loop", "description": "Mock interviews (DSA, backend, system design, behavioral). Resume/LinkedIn/GitHub optimization. Referral network activation.", "layer": "career", "status": "pending", "week": 24 },
+    { "id": "milestone11", "title": "Offer Negotiation & Role Selection", "description": "Evaluate offers against career trajectory. Negotiate compensation. Plan 90-day ramp at new role.", "layer": "career", "status": "pending", "week": 26 },
+    { "id": "milestone12", "title": "Alumni & Community Engagement", "description": "Join 5000+ alumni network. Attend meetups. Mentor next cohort. Contribute to hiring referrals.", "layer": "community", "status": "pending", "week": 26 }
+  ],
+  "roles": [
+    { "id": "role1", "title": "Current Role", "options": ["College Graduate/Fresher", "Intern/Backend Engineer", "SDE I/Junior Engineer", "Backend/Full-Stack Developer", "Services/Consulting Engineer", "Senior Backend Engineer/SDE II+"] },
+    { "id": "role2", "title": "Target Role (Immediate)", "options": ["AI-First Engineer", "Full-Stack Engineer", "SDE II/Full-Stack Developer", "Forward Deployed Engineer/Applied AI Engineer", "Senior Backend Engineer/SDE II+", "AI-First Senior Engineer/Tech Lead/Staff Engineer"] },
+    { "id": "role3", "title": "Target Role (2-3 Years)", "options": ["Senior AI-First Engineer", "Tech Lead/Staff Engineer", "Forward Deployed Engineer/Applied AI Engineer", "Engineering Manager/Director", "Founding Engineer/CTO Track"] }
+  ],
+  "timelinePhases": [
+    { "id": "phase1", "name": "Foundation (Weeks 1-6)", "layers": ["layer1"], "focus": "Backend fundamentals + AI coding agents", "outcome": "Deployed production API with AI feature" },
+    { "id": "phase2", "name": "Design Mastery (Weeks 7-10)", "layers": ["layer2"], "focus": "LLD, spec-driven engineering, AI-assisted design", "outcome": "Machine-coding fluency; spec-to-code workflow" },
+    { "id": "phase3", "name": "AI Engineering (Weeks 11-15)", "layers": ["layer3"], "focus": "RAG, agents, evals, safety, observability", "outcome": "Production RAG/agent system with evals" },
+    { "id": "phase4", "name": "Data & Scale (Weeks 16-19)", "layers": ["layer4"], "focus": "Advanced SQL, distributed data, vector retrieval", "outcome": "Scalable data layer for AI workloads" },
+    { "id": "phase5", "name": "Architecture & Operations (Weeks 20-24)", "layers": ["layer5", "layer6"], "focus": "System design, production architecture, FDE", "outcome": "4 case studies + customer pilot delivery" }
+  ],
+  "projects": [
+    {
+      "id": "proj1",
+      "title": "AI-Native Task API",
+      "level": "Beginner",
+      "phase": "Phase 1",
+      "description": "REST API converting plain English to structured recurring tasks via LLM structured outputs. Idempotent endpoints, AI-generated tests hardened by you, OpenAPI docs.",
+      "skills": ["Production REST API Design", "LLM Structured Outputs", "Request Validation", "Idempotent Endpoints", "AI Test Generation", "OpenAPI Documentation"],
+      "standout": "First project ships a working LLM feature — most portfolios never get past plain CRUD."
+    },
+    {
+      "id": "proj2",
+      "title": "Digital Wallet & Ledger Service",
+      "level": "Intermediate",
+      "phase": "Phase 1-2",
+      "description": "Payments-grade wallet on double-entry ledger. Atomic transfers under concurrency. Idempotency keys prevent double-charges. Nightly reconciliation. LLM+rules anomaly detection.",
+      "skills": ["Double-Entry Ledger Modeling", "ACID Transactions", "Isolation Levels", "Idempotency Keys", "Concurrency Control", "Background Jobs", "LLM Anomaly Flagging"],
+      "standout": "Money moves through this system — correctness under concurrent load is the whole job. Exact bar fintech interviews test."
+    },
+    {
+      "id": "proj3",
+      "title": "AI-Personalized News Feed",
+      "level": "Intermediate",
+      "phase": "Phase 3-4",
+      "description": "Feed service ingesting external news APIs. Near-dup detection via embeddings. Personalized feeds from reading interests. AI summaries (3 sentences). Redis caching. Retry/timeout resilience.",
+      "skills": ["External API Ingestion", "Embeddings for Dedup", "Personalization", "AI Summaries", "Redis Caching/TTL", "Retry/Timeout Handling"],
+      "standout": "Dedup + personalization makes this a small recommender system, not another fetch-and-cache exercise."
+    },
+    {
+      "id": "proj4",
+      "title": "High-Concurrency Booking Engine",
+      "level": "Advanced",
+      "phase": "Phase 4-5",
+      "description": "BookMyShow-scale ticketing. Seat-level locking prevents double-booking. Timed holds with Redis. Idempotent payment webhooks. Load test designed by you.",
+      "skills": ["Pessimistic vs Optimistic Locking", "Seat Locking + Timed Holds", "Idempotent Webhooks", "Indexing/Query Optimization", "Load/Concurrency Testing", "Burst Handling with Queues"],
+      "standout": "\"Zero oversells at 5000 concurrent users\" — a claim you can defend in any interview. Classic system design question, built for real."
+    },
+    {
+      "id": "proj5",
+      "title": "Distributed Workflow Engine",
+      "level": "Advanced",
+      "phase": "Phase 5-6",
+      "description": "Zapier-style automation backend. Triggers→actions with retries, exponential backoff, dead-letter queues. End-to-end tracing. LLM action node with output validation.",
+      "skills": ["Event-Driven Architecture (Kafka)", "Multi-Step Orchestration", "Retries/Backoff/DLQ", "At-Least-Once Delivery", "Idempotent Steps", "E2E Tracing", "Safe LLM Action Nodes"],
+      "standout": "Companies like Temporal were built to solve exactly this problem. You will have built one yourself."
+    },
+    {
+      "id": "proj6",
+      "title": "LLM Gateway & Semantic Cache",
+      "level": "Advanced",
+      "phase": "Phase 3-5",
+      "description": "Infrastructure layer for AI companies. Model routing across providers, fallback on degradation, token-by-token streaming, per-tenant metering, cost budgets, semantic cache with embeddings.",
+      "skills": ["Model Routing/Fallbacks", "SSE Streaming", "Semantic Caching", "Token Metering/Cost Budgets", "Distributed Rate Limiting", "Multi-Tenant API Keys"],
+      "standout": "Keeping LLM traffic fast, cheap, reliable is what AI infrastructure teams do all day. They are hiring for it right now."
+    },
+    {
+      "id": "proj7",
+      "title": "Enterprise RAG Knowledge Copilot",
+      "level": "Advanced",
+      "phase": "Phase 3-4",
+      "description": "Production QA over company docs. Hybrid keyword+semantic search. Cited answers. Permission-aware retrieval (finance docs never leak to interns). Eval suite in CI catching regressions.",
+      "skills": ["Hybrid Search", "Cited Answers", "Permission-Aware Retrieval", "Answer-Quality Eval Suite", "E2E Tracing", "Ingestion/Chunking Pipelines"],
+      "standout": "Evals and permissions separate production RAG from a weekend demo. Few candidates can show either."
+    },
+    {
+      "id": "proj8",
+      "title": "Text-to-SQL Analyst Agent",
+      "level": "Advanced",
+      "phase": "Phase 3-6",
+      "description": "Agent turning natural language to safe SQL. Schema-aware retrieval. Tool-calling generation. Read-only sandbox execution. Self-correction on failure. Query cost guards.",
+      "skills": ["Tool Calling", "Schema-Aware Retrieval", "SQL Sandboxing", "Self-Correction Loops", "Query Cost Guards"],
+      "standout": "Safety work turns a text-to-SQL demo into something a company would let near its database."
+    },
+    {
+      "id": "proj9",
+      "title": "AI Support Ops Agent with Guardrails",
+      "level": "Advanced",
+      "phase": "Phase 3-6",
+      "description": "Support agent that does real work reliably. Plans steps, picks tools from registry, executes with retries/idempotency. Audit logs. Human approval for irreversible actions. Guardrails against prompt injection/PII.",
+      "skills": ["Tool Registry/Safe Interfaces", "Multi-Step Planning", "Retries/Idempotent Execution", "Prompt Injection/PII Guardrails", "Audit Logs", "Human Approval Gates", "Behavioral Evals"],
+      "standout": "\"Design a multi-step agentic workflow\" is now a real take-home at AI companies. You will have already built one."
+    },
+    {
+      "id": "proj10",
+      "title": "Multi-Agent Research System",
+      "level": "Advanced",
+      "phase": "Phase 6",
+      "description": "Agent team (planner, researchers, critic) breaking questions down, searching via MCP tool servers, cross-checking claims, producing cited reports. Human checkpoints. Full traceability.",
+      "skills": ["Multi-Agent Orchestration (LangGraph)", "MCP Tool Servers", "Task Decomposition", "Source-Grounded Synthesis", "Human-in-the-Loop", "Agent Tracing/Evals"],
+      "standout": "This is the agent stack as companies actually run it in 2026, not one prompt in a loop."
+    }
+  ],
+  "careerSupport": {
+    "resumeOptimization": ["Project- and impact-focused rewrites", "Clear outcome-driven bullets", "Iterative mentor feedback"],
+    "linkedInOptimization": ["Recruiter-friendly positioning", "Strong headlines/experience sections", "Improved inbound visibility"],
+    "portfolioBuilding": ["AI-first backend project portfolio", "Capstone-led interview narratives", "Clear explanation of decisions/trade-offs"],
+    "mockInterviews": ["DSA, backend, system design rounds", "Behavioral interview practice", "Targeted feedback for improvement"],
+    "jobApplicationStrategy": ["Role shortlisting", "Focused applications", "Smarter job search", "Offer/negotiation guidance"],
+    "hiringNetworkReferrals": ["Curated hiring opportunities", "Referral support via 50+ hiring partners", "Alumni network access (1000+ companies)"],
+    "exclusiveEvents": ["25+ city meetups", "90% active alumni network", "5000+ tech professionals"]
+  },
+  "salaryOutcomes": {
+    "medianSalary": "13 LPA",
+    "averageSalary": "16 LPA",
+    "highestSalary": "67 LPA",
+    "highestIncrease": "170%",
+    "averageIncrease": "56%",
+    "salaryBands": {
+      "SDE-I": "13-18 LPA",
+      "SDE-II": "20-40 LPA",
+      "SDE-III": "45-60 LPA"
+    }
+  },
+  "cohortComposition": {
+    "experience": {
+      "fresher": "15.02%",
+      "earlyStage_1_3_years": "27.16%",
+      "midSenior_3_5_years": "35.8%",
+      "senior_5plus_years": "21.96%"
+    },
+    "industries": ["Ed-tech", "Mobile Computing", "Software Products", "Professional Services", "Business Consulting", "Internet Publishing", "IT Services", "Telecommunications", "Outsourcing/Offshoring", "Fintech", "Travel", "Software Development", "E-Commerce"]
+  },
+  "knowledgePartner": "IIT Delhi Entrepreneurship Development Cell",
+  "instructors": [
+    { "name": "Pawan Panjwani", "title": "Staff Software Engineer" },
+    { "name": "Jay Chakra", "title": "Principal Consulting Engineer" },
+    { "name": "Gurmandeep Singh Bedi", "title": "Senior Software Developer" },
+    { "name": "Dhaval Trivedi", "title": "Co-founder, Airtribe" },
+    { "name": "Aashray Agarwal", "title": "Software Engineer" },
+    { "name": "Prerna Sharma", "title": "Software Engineer II" },
+    { "name": "Ankush Gupta", "title": "Software Engineer II" },
+    { "name": "Ankit Raj", "title": "Software Engineer II" },
+    { "name": "Sanchit Tanwar", "title": "Senior Software Engineer" }
+  ],
+  "toolsAndTechnologies": {
+    "aiToolStack": ["OpenAI", "LangChain", "Hugging Face", "Claude", "Cursor", "GitHub Copilot", "VectorDB", "Hermes Agent"],
+    "backendStack": ["Node.js", "Express", "Java", "Spring Boot", "Python", "Django", "FastAPI", "Rust", "Axum", "Tokio", "SQLx", "Redis", "PostgreSQL", "MongoDB", "AWS", "Docker", "Kafka", "Nginx"]
+  },
+  "progressTracking": {
+    "totalModules": 57,
+    "completedModules": 0,
+    "totalMilestones": 12,
+    "completedMilestones": 0,
+    "totalProjects": 10,
+    "completedProjects": 0,
+    "currentLayer": "layer1",
+    "currentWeek": 0,
+    "track": "js-node",
+    "overallProgressPercent": 0
+  },
+  "suggestedStudentPath": [
+    "layer1 (choose one track: Java, Node.js, Python, or Rust)",
+    "layer2",
+    "layer3",
+    "layer4",
+    "layer5",
+    "layer6",
+    "layer7 (parallel throughout)",
+    "capstone project",
+    "career transition"
+  ],
+  "notes": "This roadmap is derived from the Airtribe AI-First Software Engineering 24-week program curriculum with a custom Rust & Axum track added. It combines backend engineering, AI/GenAI, system design, DSA, and career support into a single structured journey. The program emphasizes hands-on building (10+ real projects), spec-driven AI-assisted development, and production-grade engineering practices. Knowledge partner: IIT Delhi EDC. Instructors from Google, Meta, Razorpay, CRED, and top product companies. User has selected Node.js track for Phase 1."
+}

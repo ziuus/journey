@@ -1,295 +1,517 @@
-import fs from "node:fs";
-import fsp from "node:fs/promises";
-import path from "node:path";
-import os from "node:os";
-import type { RawRoadmapData, RawRoadmapItem, RawLayerData } from "@/types/roadmap";
+import defaultRoadmapData from '../data/roadmap.json'
+import type { Roadmap, Layer, Milestone, Project, Track, Module, ProgressTracking } from './types'
+export type { RawRoadmapData, RawLayerData, RawRoadmapItem } from '@/types/roadmap'
 
-type Primitive = string | number | boolean | null;
-type JsonValue = Primitive | JsonValue[] | { [key: string]: JsonValue };
+export const STORAGE_KEY = 'journey_current_trip'
+export const EXPORT_SCHEMA_VERSION = '1.0.0'
 
-type FirestoreValue = {
-  arrayValue?: { values?: FirestoreValue[] };
-  booleanValue?: boolean;
-  doubleValue?: number;
-  integerValue?: string;
-  mapValue?: { fields?: Record<string, FirestoreValue> };
-  nullValue?: null;
-  stringValue?: string;
-};
-
-// Re-export types so pages can import from @/lib/storage
-export type { RawRoadmapData, RawRoadmapItem, RawLayerData };
-
-// Backward-compatible aliases for old import names
-export type RoadmapItem = RawRoadmapItem;
-export type LayerData = RawLayerData;
-export type RoadmapData = RawRoadmapData;
-
-export interface ChatMessage {
-  id?: string;
-  role: "user" | "assistant" | "system";
-  content: string;
-  command?: string;
-  imagePreview?: string;
-  timestamp?: number;
+export interface TripExportWrapper {
+  app: 'journey'
+  schemaVersion: string
+  exportedAt: string
+  source: string
+  metadata: {
+    totalLayers: number
+    totalMilestones: number
+    totalProjects: number
+    overallProgressPercent: number
+  }
+  data: Roadmap
 }
 
-export interface ChatSession {
-  id: string;
-  title: string;
-  messages: ChatMessage[];
-  createdAt: number;
-  updatedAt: number;
+export interface ValidationResult {
+  valid: boolean
+  errors: string[]
+  data?: Roadmap
 }
 
-export interface HistoryData {
-  chats: ChatSession[];
-  activeChatId?: string;
+export class TripValidationError extends Error {
+  public readonly errors: string[]
+
+  constructor(message: string, errors: string[] = []) {
+    super(message)
+    this.name = 'TripValidationError'
+    this.errors = errors
+  }
 }
 
-const USER_JOURNEY_DATA = path.join(os.homedir(), ".journey", "data");
-const DATA_DIR =
-  process.env.JOURNEY_DATA_PATH ||
-  (fs.existsSync(path.join(USER_JOURNEY_DATA, "roadmap.json"))
-    ? USER_JOURNEY_DATA
-    : path.join(process.cwd(), "data"));
+/**
+ * Returns a clean, deep-cloned copy of the default roadmap data.
+ */
+export function getDefaultRoadmap(): Roadmap {
+  return JSON.parse(JSON.stringify(defaultRoadmapData)) as Roadmap
+}
 
-const TEMPLATE_PATH = path.join(DATA_DIR, "roadmap.json");
-const HISTORY_PATH = path.join(DATA_DIR, "history.json");
-const PROGRESS_HISTORY_PATH = path.join(DATA_DIR, "progress_history.json");
-const HISTORY_TEMPLATE: HistoryData = { chats: [] };
+function isObject(val: unknown): val is Record<string, unknown> {
+  return typeof val === 'object' && val !== null && !Array.isArray(val)
+}
 
-function getFirebaseConfig() {
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const apiKey = process.env.FIREBASE_WEB_API_KEY;
-  const collectionPrefix = process.env.FIREBASE_COLLECTION_PREFIX || "journ";
+function isNonEmptyString(val: unknown): val is string {
+  return typeof val === 'string' && val.trim().length > 0
+}
 
-  if (!projectId || !apiKey) {
-    return null;
+function isValidNumber(val: unknown): val is number {
+  return typeof val === 'number' && !Number.isNaN(val) && Number.isFinite(val)
+}
+
+function validateModule(mod: unknown, path: string, errors: string[]): mod is Module {
+  if (!isObject(mod)) {
+    errors.push(`${path}: must be an object`)
+    return false
+  }
+  if (!isNonEmptyString(mod.id)) {
+    errors.push(`${path}.id: must be a non-empty string`)
+  }
+  if (!isNonEmptyString(mod.title)) {
+    errors.push(`${path}.title: must be a non-empty string`)
+  }
+  if (!Array.isArray(mod.topics)) {
+    errors.push(`${path}.topics: must be an array of strings`)
+  } else {
+    for (let i = 0; i < mod.topics.length; i++) {
+      if (typeof mod.topics[i] !== 'string') {
+        errors.push(`${path}.topics[${i}]: must be a string`)
+      }
+    }
+  }
+  return true
+}
+
+function validateTrack(track: unknown, path: string, errors: string[]): track is Track {
+  if (!isObject(track)) {
+    errors.push(`${path}: must be an object`)
+    return false
+  }
+  if (!isNonEmptyString(track.id)) {
+    errors.push(`${path}.id: must be a non-empty string`)
+  }
+  if (!isNonEmptyString(track.name)) {
+    errors.push(`${path}.name: must be a non-empty string`)
+  }
+  if (!Array.isArray(track.modules)) {
+    errors.push(`${path}.modules: must be an array of modules`)
+  } else {
+    track.modules.forEach((mod, idx) => {
+      validateModule(mod, `${path}.modules[${idx}]`, errors)
+    })
+  }
+  return true
+}
+
+function validateLayer(layer: unknown, index: number, errors: string[]): layer is Layer {
+  const prefix = `layers[${index}]`
+  if (!isObject(layer)) {
+    errors.push(`${prefix}: must be an object`)
+    return false
+  }
+  if (!isNonEmptyString(layer.id)) {
+    errors.push(`${prefix}.id: missing or invalid string`)
+  }
+  if (!isNonEmptyString(layer.title)) {
+    errors.push(`${prefix}.title: missing or invalid string`)
+  }
+  if (typeof layer.description !== 'string') {
+    errors.push(`${prefix}.description: must be a string`)
+  }
+  const validStatuses = ['pending', 'in-progress', 'completed']
+  if (!validStatuses.includes(layer.status as string)) {
+    errors.push(`${prefix}.status: '${layer.status}' is invalid. Expected one of: ${validStatuses.join(', ')}`)
+  }
+  if (typeof layer.estimatedWeeks !== 'number' && typeof layer.estimatedWeeks !== 'string') {
+    errors.push(`${prefix}.estimatedWeeks: must be a number or string`)
+  }
+
+  if (layer.tracks !== undefined) {
+    if (!Array.isArray(layer.tracks)) {
+      errors.push(`${prefix}.tracks: must be an array if defined`)
+    } else {
+      layer.tracks.forEach((t, tidx) => validateTrack(t, `${prefix}.tracks[${tidx}]`, errors))
+    }
+  }
+
+  if (layer.modules !== undefined) {
+    if (!Array.isArray(layer.modules)) {
+      errors.push(`${prefix}.modules: must be an array if defined`)
+    } else {
+      layer.modules.forEach((m, midx) => validateModule(m, `${prefix}.modules[${midx}]`, errors))
+    }
+  }
+
+  if (layer.sections !== undefined) {
+    if (!Array.isArray(layer.sections)) {
+      errors.push(`${prefix}.sections: must be an array if defined`)
+    } else {
+      layer.sections.forEach((s, sidx) => validateModule(s, `${prefix}.sections[${sidx}]`, errors))
+    }
+  }
+
+  return true
+}
+
+function validateMilestone(ms: unknown, index: number, errors: string[]): ms is Milestone {
+  const prefix = `milestones[${index}]`
+  if (!isObject(ms)) {
+    errors.push(`${prefix}: must be an object`)
+    return false
+  }
+  if (!isNonEmptyString(ms.id)) {
+    errors.push(`${prefix}.id: missing or invalid string`)
+  }
+  if (!isNonEmptyString(ms.title)) {
+    errors.push(`${prefix}.title: missing or invalid string`)
+  }
+  if (typeof ms.description !== 'string') {
+    errors.push(`${prefix}.description: must be a string`)
+  }
+  if (!isNonEmptyString(ms.layer)) {
+    errors.push(`${prefix}.layer: missing or invalid string`)
+  }
+  const validStatuses = ['pending', 'completed']
+  if (!validStatuses.includes(ms.status as string)) {
+    errors.push(`${prefix}.status: '${ms.status}' is invalid. Expected one of: ${validStatuses.join(', ')}`)
+  }
+  if (!isValidNumber(ms.week) || (ms.week as number) < 0) {
+    errors.push(`${prefix}.week: must be a non-negative number`)
+  }
+  if (ms.subtasks !== undefined) {
+    if (!Array.isArray(ms.subtasks)) {
+      errors.push(`${prefix}.subtasks: must be an array if defined`)
+    } else {
+      ms.subtasks.forEach((st: unknown, sidx: number) => {
+        const stPrefix = `${prefix}.subtasks[${sidx}]`
+        if (!isObject(st)) {
+          errors.push(`${stPrefix}: must be an object`)
+        } else {
+          if (!isNonEmptyString(st.id)) {
+            errors.push(`${stPrefix}.id: missing or invalid string`)
+          }
+          if (!isNonEmptyString(st.title)) {
+            errors.push(`${stPrefix}.title: missing or invalid string`)
+          }
+          if (typeof st.completed !== 'boolean') {
+            errors.push(`${stPrefix}.completed: must be a boolean`)
+          }
+        }
+      })
+    }
+  }
+  return true
+}
+
+function validateProject(proj: unknown, index: number, errors: string[]): proj is Project {
+  const prefix = `projects[${index}]`
+  if (!isObject(proj)) {
+    errors.push(`${prefix}: must be an object`)
+    return false
+  }
+  if (!isNonEmptyString(proj.id)) {
+    errors.push(`${prefix}.id: missing or invalid string`)
+  }
+  if (!isNonEmptyString(proj.title)) {
+    errors.push(`${prefix}.title: missing or invalid string`)
+  }
+  if (typeof proj.level !== 'string') {
+    errors.push(`${prefix}.level: must be a string`)
+  }
+  if (typeof proj.phase !== 'string') {
+    errors.push(`${prefix}.phase: must be a string`)
+  }
+  if (typeof proj.description !== 'string') {
+    errors.push(`${prefix}.description: must be a string`)
+  }
+  if (!Array.isArray(proj.skills)) {
+    errors.push(`${prefix}.skills: must be an array of strings`)
+  }
+  if (typeof proj.standout !== 'string') {
+    errors.push(`${prefix}.standout: must be a string`)
+  }
+  return true
+}
+
+function validateProgressTracking(pt: unknown, errors: string[]): pt is ProgressTracking {
+  if (!isObject(pt)) {
+    errors.push(`progressTracking: must be an object`)
+    return false
+  }
+  const numFields: Array<keyof ProgressTracking> = [
+    'totalModules',
+    'completedModules',
+    'totalMilestones',
+    'completedMilestones',
+    'totalProjects',
+    'completedProjects',
+    'currentWeek',
+    'overallProgressPercent',
+  ]
+  for (const field of numFields) {
+    if (!isValidNumber(pt[field])) {
+      errors.push(`progressTracking.${field}: must be a valid number`)
+    }
+  }
+  if (typeof pt.currentLayer !== 'string') {
+    errors.push(`progressTracking.currentLayer: must be a string`)
+  }
+  if (pt.track !== null && typeof pt.track !== 'string') {
+    errors.push(`progressTracking.track: must be a string or null`)
+  }
+  return true
+}
+
+/**
+ * Validates any parsed JavaScript object against the Roadmap schema.
+ * Supports both wrapped export format ({ app: 'journey', data: Roadmap })
+ * and raw Roadmap objects.
+ */
+export function validateRoadmap(input: unknown): ValidationResult {
+  const errors: string[] = []
+
+  if (!isObject(input)) {
+    return {
+      valid: false,
+      errors: ['Input is not a valid JSON object'],
+    }
+  }
+
+  // Handle export wrapper envelope
+  let candidate: Record<string, unknown> = input
+  if (input.app === 'journey' && isObject(input.data)) {
+    candidate = input.data as Record<string, unknown>
+  } else if (isObject(input.data) && (Array.isArray(input.data.layers) || Array.isArray(input.data.milestones))) {
+    candidate = input.data as Record<string, unknown>
+  }
+
+  // Check required core sections
+  if (!Array.isArray(candidate.layers) || candidate.layers.length === 0) {
+    errors.push("Missing required field 'layers' (must be a non-empty array)")
+  } else {
+    candidate.layers.forEach((layer, idx) => validateLayer(layer, idx, errors))
+  }
+
+  if (!Array.isArray(candidate.milestones)) {
+    errors.push("Missing required field 'milestones' (must be an array)")
+  } else {
+    candidate.milestones.forEach((ms, idx) => validateMilestone(ms, idx, errors))
+  }
+
+  if (!Array.isArray(candidate.projects)) {
+    errors.push("Missing required field 'projects' (must be an array)")
+  } else {
+    candidate.projects.forEach((proj, idx) => validateProject(proj, idx, errors))
+  }
+
+  if (!candidate.progressTracking) {
+    errors.push("Missing required field 'progressTracking'")
+  } else {
+    validateProgressTracking(candidate.progressTracking, errors)
+  }
+
+  if (errors.length > 0) {
+    return {
+      valid: false,
+      errors,
+    }
+  }
+
+  // Provide sensible defaults for optional or secondary metadata if missing
+  const defaultBase = getDefaultRoadmap()
+  const completeRoadmap: Roadmap = {
+    version: typeof candidate.version === 'string' ? candidate.version : defaultBase.version,
+    source: typeof candidate.source === 'string' ? candidate.source : 'Imported Trip',
+    programDuration: typeof candidate.programDuration === 'string' ? candidate.programDuration : defaultBase.programDuration,
+    lastUpdated: typeof candidate.lastUpdated === 'string' ? candidate.lastUpdated : new Date().toISOString().split('T')[0],
+    layers: candidate.layers as Layer[],
+    milestones: candidate.milestones as Milestone[],
+    roles: Array.isArray(candidate.roles) ? (candidate.roles as Roadmap['roles']) : defaultBase.roles,
+    timelinePhases: Array.isArray(candidate.timelinePhases) ? (candidate.timelinePhases as Roadmap['timelinePhases']) : defaultBase.timelinePhases,
+    projects: candidate.projects as Project[],
+    careerSupport: isObject(candidate.careerSupport) ? (candidate.careerSupport as unknown as Roadmap['careerSupport']) : defaultBase.careerSupport,
+    salaryOutcomes: isObject(candidate.salaryOutcomes) ? (candidate.salaryOutcomes as unknown as Roadmap['salaryOutcomes']) : defaultBase.salaryOutcomes,
+    cohortComposition: isObject(candidate.cohortComposition) ? (candidate.cohortComposition as unknown as Roadmap['cohortComposition']) : defaultBase.cohortComposition,
+    knowledgePartner: typeof candidate.knowledgePartner === 'string' ? candidate.knowledgePartner : defaultBase.knowledgePartner,
+    instructors: Array.isArray(candidate.instructors) ? (candidate.instructors as Roadmap['instructors']) : defaultBase.instructors,
+    toolsAndTechnologies: isObject(candidate.toolsAndTechnologies) ? (candidate.toolsAndTechnologies as unknown as Roadmap['toolsAndTechnologies']) : defaultBase.toolsAndTechnologies,
+    progressTracking: candidate.progressTracking as ProgressTracking,
+    suggestedStudentPath: Array.isArray(candidate.suggestedStudentPath) ? (candidate.suggestedStudentPath as string[]) : defaultBase.suggestedStudentPath,
+    notes: typeof candidate.notes === 'string' ? candidate.notes : defaultBase.notes,
   }
 
   return {
-    apiKey,
-    collectionHistory: `${collectionPrefix}_history`,
-    collectionRoadmaps: `${collectionPrefix}_roadmaps`,
-    projectId,
-  };
-}
-
-function getDocumentId(userId: string) {
-  const normalized = userId.trim().toLowerCase();
-  return encodeURIComponent(normalized || "default");
-}
-
-async function readTemplateRoadmap(): Promise<RawRoadmapData> {
-  const data = await fsp.readFile(TEMPLATE_PATH, "utf-8");
-  return JSON.parse(data) as RawRoadmapData;
-}
-
-function toFirestoreValue(value: JsonValue): FirestoreValue {
-  if (value === null) {
-    return { nullValue: null };
+    valid: true,
+    errors: [],
+    data: completeRoadmap,
   }
+}
 
-  if (Array.isArray(value)) {
-    return { arrayValue: { values: value.map((item) => toFirestoreValue(item)) } };
-  }
-
-  if (typeof value === "object") {
+/**
+ * Parses a JSON string and validates it against the Roadmap schema.
+ * Gracefully handles syntax errors and semantic validation failures.
+ */
+export function parseAndValidateTripJson(rawJson: string): ValidationResult {
+  if (typeof rawJson !== 'string' || rawJson.trim().length === 0) {
     return {
-      mapValue: {
-        fields: Object.fromEntries(
-          Object.entries(value).map(([key, nestedValue]) => [key, toFirestoreValue(nestedValue)]),
-        ),
-      },
-    };
+      valid: false,
+      errors: ['Input JSON string is empty or invalid.'],
+    }
   }
 
-  if (typeof value === "boolean") {
-    return { booleanValue: value };
-  }
-
-  if (typeof value === "number") {
-    return Number.isInteger(value) ? { integerValue: String(value) } : { doubleValue: value };
-  }
-
-  return { stringValue: String(value) };
-}
-
-function fromFirestoreValue(value?: FirestoreValue): JsonValue {
-  if (!value) return null;
-  if (value.stringValue !== undefined) return value.stringValue;
-  if (value.booleanValue !== undefined) return value.booleanValue;
-  if (value.integerValue !== undefined) return Number(value.integerValue);
-  if (value.doubleValue !== undefined) return value.doubleValue;
-  if ("nullValue" in value) return null;
-  if (value.arrayValue) return (value.arrayValue.values || []).map((item) => fromFirestoreValue(item));
-  if (value.mapValue) {
-    return Object.fromEntries(
-      Object.entries(value.mapValue.fields || {}).map(([key, nestedValue]) => [key, fromFirestoreValue(nestedValue)]),
-    );
-  }
-  return null;
-}
-
-function toFirestoreFields(data: Record<string, unknown>) {
-  return Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [key, toFirestoreValue(value as JsonValue)]),
-  );
-}
-
-/** Hydrate a RawRoadmapData from Firestore fields, tolerating missing fields. */
-function fromFirestoreRoadmap(fields?: Record<string, FirestoreValue>): RawRoadmapData {
-  return {
-    target_roles: (fromFirestoreValue(fields?.target_roles) as string[]) || [],
-    layers: (fromFirestoreValue(fields?.layers) as unknown as RawLayerData[]) || [],
-    milestones: (fromFirestoreValue(fields?.milestones) as unknown as RawRoadmapItem[]) || [],
-    mlops_devops: (fromFirestoreValue(fields?.mlops_devops) as unknown as RawRoadmapItem[]) || undefined,
-    security_ethics: (fromFirestoreValue(fields?.security_ethics) as unknown as RawRoadmapItem[]) || undefined,
-    domains: (fromFirestoreValue(fields?.domains) as unknown as RawRoadmapData["domains"]) || undefined,
-    goals: (fromFirestoreValue(fields?.goals) as unknown as RawRoadmapData["goals"]) || undefined,
-    tracks: (fromFirestoreValue(fields?.tracks) as unknown as RawRoadmapData["tracks"]) || undefined,
-    timeline: (fromFirestoreValue(fields?.timeline) as unknown as RawRoadmapData["timeline"]) || undefined,
-    version: (fromFirestoreValue(fields?.version) as string) || undefined,
-  };
-}
-
-function fromFirestoreHistory(fields?: Record<string, FirestoreValue>): HistoryData {
-  const chats = (fromFirestoreValue(fields?.chats) as unknown as ChatSession[]) || [];
-  const legacyMessages = (fromFirestoreValue(fields?.messages) as unknown as ChatMessage[]) || [];
-
-  if (chats.length > 0) {
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(rawJson)
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
     return {
-      activeChatId: (fromFirestoreValue(fields?.activeChatId) as string | null) || chats[0]?.id,
-      chats,
-    };
+      valid: false,
+      errors: [`Corrupted JSON: Failed to parse input string (${message})`],
+    }
   }
 
-  if (legacyMessages.length > 0) {
-    const migratedChat: ChatSession = {
-      createdAt: legacyMessages[0]?.timestamp || Date.now(),
-      id: "chat_legacy",
-      messages: legacyMessages,
-      title: "Imported chat",
-      updatedAt: legacyMessages.at(-1)?.timestamp || Date.now(),
-    };
+  return validateRoadmap(parsed)
+}
 
-    return {
-      activeChatId: migratedChat.id,
-      chats: [migratedChat],
-    };
+/**
+ * Serializes a roadmap into a formatted JSON string with envelope metadata.
+ */
+export function serializeTrip(roadmap: Roadmap, pretty = true): string {
+  const wrapper: TripExportWrapper = {
+    app: 'journey',
+    schemaVersion: EXPORT_SCHEMA_VERSION,
+    exportedAt: new Date().toISOString(),
+    source: roadmap.source || 'Journey Trip',
+    metadata: {
+      totalLayers: roadmap.layers.length,
+      totalMilestones: roadmap.milestones.length,
+      totalProjects: roadmap.projects.length,
+      overallProgressPercent: roadmap.progressTracking.overallProgressPercent,
+    },
+    data: roadmap,
   }
 
-  return {
-    activeChatId: (fromFirestoreValue(fields?.activeChatId) as string | null) || undefined,
-    chats: [],
-  };
+  return JSON.stringify(wrapper, null, pretty ? 2 : undefined)
 }
 
-async function readFirestoreDocument(collection: string, userId: string) {
-  const config = getFirebaseConfig();
-  if (!config) return null;
-
-  const url = `https://firestore.googleapis.com/v1/projects/${config.projectId}/databases/(default)/documents/${collection}/${getDocumentId(userId)}?key=${config.apiKey}`;
-  const response = await fetch(url, { cache: "no-store", method: "GET" });
-
-  if (response.status === 404) return null;
-  if (!response.ok) throw new Error(`Firestore read failed with status ${response.status}`);
-
-  return (await response.json()) as { fields?: Record<string, FirestoreValue> };
-}
-
-async function writeFirestoreData(userId: string, collection: string, data: Record<string, unknown>) {
-  const config = getFirebaseConfig();
-  if (!config) return false;
-
-  const url = `https://firestore.googleapis.com/v1/projects/${config.projectId}/databases/(default)/documents/${collection}/${getDocumentId(userId)}?key=${config.apiKey}`;
-  const response = await fetch(url, {
-    body: JSON.stringify({ fields: toFirestoreFields(data) }),
-    headers: { "Content-Type": "application/json" },
-    method: "PATCH",
-  });
-
-  if (!response.ok) {
-    const errorBody = await response.text();
-    console.error(`Firestore write failed to ${collection}: ${response.status}`, errorBody);
-    return false;
+/**
+ * Triggers a client-side file download of the serialized roadmap trip.
+ */
+export function downloadTripFile(roadmap: Roadmap, customFilename?: string): void {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return
   }
 
-  return true;
+  const jsonContent = serializeTrip(roadmap, true)
+  const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+
+  const dateStr = new Date().toISOString().slice(0, 10)
+  const safeTitle = (roadmap.source || 'trip')
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  const filename = customFilename || `journey-trip-${safeTitle || 'export'}-${dateStr}.json`
+
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  link.style.display = 'none'
+  document.body.appendChild(link)
+  link.click()
+
+  setTimeout(() => {
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }, 100)
 }
 
-export async function getRoadmap(userId: string): Promise<RawRoadmapData> {
-  const config = getFirebaseConfig();
+/**
+ * Reads a File object uploaded by the user, validates its JSON schema,
+ * and returns the parsed Roadmap. Throws TripValidationError on invalid data.
+ */
+export async function readTripFromFile(file: File): Promise<Roadmap> {
+  const content = await file.text()
+  const result = parseAndValidateTripJson(content)
+  if (!result.valid || !result.data) {
+    throw new TripValidationError(
+      `File "${file.name}" failed validation: ${result.errors.join('; ')}`,
+      result.errors
+    )
+  }
+  return result.data
+}
+
+/**
+ * Retrieves the currently saved trip from localStorage.
+ * Falls back to null if no saved trip exists or if stored data is corrupted.
+ */
+export function getStoredTrip(): Roadmap | null {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return null
+  }
 
   try {
-    if (config) {
-      const payload = await readFirestoreDocument(config.collectionRoadmaps, userId);
-      if (payload) return fromFirestoreRoadmap(payload.fields);
+    const raw = window.localStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
 
-      const template = await readTemplateRoadmap();
-      await saveRoadmap(userId, template);
-      return template;
+    const result = parseAndValidateTripJson(raw)
+    if (result.valid && result.data) {
+      return result.data
+    } else {
+      console.warn('Stored trip in localStorage is corrupted or invalid. Falling back to default.', result.errors)
+      window.localStorage.removeItem(STORAGE_KEY)
+      return null
     }
   } catch (err) {
-    console.warn("Cloud read failed, falling back to local template", err);
-  }
-
-  return readTemplateRoadmap();
-}
-
-export async function saveRoadmap(userId: string, data: RawRoadmapData) {
-  const config = getFirebaseConfig();
-  const didWriteToFirestore = config
-    ? await writeFirestoreData(userId, config.collectionRoadmaps, data as unknown as Record<string, unknown>)
-    : false;
-
-  if (didWriteToFirestore) return;
-
-  try {
-    await fsp.writeFile(TEMPLATE_PATH, JSON.stringify(data, null, 2));
-    return;
-  } catch (err) {
-    console.error("Failed to write to local storage:", err);
-    throw new Error("Local storage unavailable.");
+    console.warn('Failed to access localStorage:', err)
+    return null
   }
 }
 
-export async function getHistory(userId: string): Promise<HistoryData> {
-  const config = getFirebaseConfig();
+/**
+ * Saves a validated roadmap to localStorage.
+ * Returns true if successful, false otherwise.
+ */
+export function saveStoredTrip(roadmap: Roadmap): boolean {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return false
+  }
 
   try {
-    if (config) {
-      const payload = await readFirestoreDocument(config.collectionHistory, userId);
-      if (payload) return fromFirestoreHistory(payload.fields);
+    const validation = validateRoadmap(roadmap)
+    if (!validation.valid || !validation.data) {
+      console.error('Cannot save invalid roadmap to localStorage:', validation.errors)
+      return false
     }
+    const serialized = JSON.stringify(validation.data)
+    window.localStorage.setItem(STORAGE_KEY, serialized)
+    return true
   } catch (err) {
-    console.warn("Cloud history read failed", err);
-  }
-
-  try {
-    const historyPath = path.join(process.cwd(), "data", "history.json");
-    const data = await fsp.readFile(historyPath, "utf-8");
-    return JSON.parse(data) as HistoryData;
-  } catch (err) {
-    return HISTORY_TEMPLATE;
+    console.error('Failed to save trip to localStorage:', err)
+    return false
   }
 }
 
-export async function saveHistory(userId: string, data: HistoryData) {
-  const config = getFirebaseConfig();
-  const didWriteToFirestore = config
-    ? await writeFirestoreData(userId, config.collectionHistory, data as unknown as Record<string, unknown>)
-    : false;
-
-  if (didWriteToFirestore) return;
-
+/**
+ * Removes any saved trip from localStorage.
+ */
+export function clearStoredTrip(): void {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return
+  }
   try {
-    const historyPath = path.join(process.cwd(), "data", "history.json");
-    await fsp.writeFile(historyPath, JSON.stringify(data, null, 2));
-    return;
+    window.localStorage.removeItem(STORAGE_KEY)
   } catch (err) {
-    console.error("Failed to write history to local storage:", err);
-    console.warn("Local history storage unavailable.");
+    console.warn('Failed to clear trip from localStorage:', err)
+  }
+}
+
+/**
+ * Checks whether a saved trip is present in localStorage.
+ */
+export function hasStoredTrip(): boolean {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return false
+  }
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) !== null
+  } catch {
+    return false
   }
 }
